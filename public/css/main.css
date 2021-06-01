@@ -1,0 +1,232 @@
+/* Photo thumbnails - always square */
+.photo-card {
+    max-width: 100%;
+    padding-top: 100%;
+    background-size: cover;
+    background-position: center center;
+    border-radius: 0.25rem;
+}
+
+/* Photos flagged for deletion - transparent white overlay */
+.photo-delete {
+    box-shadow: inset 0 0 0 1000px rgba(255,255,255,.7);
+}
+
+/* --------------- */
+/* Font styling */
+/* --------------- */
+
+.italic {
+    font-style: italic;
+}
+
+.text-lite{
+    font-weight: 100;
+    font-size: 0.9rem;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+/* fix text color on toggle buttons with no href (use BS4 defaults) */
+.btn-outline-success {
+    color: #28a745 !important;
+}
+
+.btn-outline-danger {
+    color: #dc3545 !important;
+}
+
+.btn-outline-warning {
+    color: #ffc107 !important;
+}
+
+.btn-outline-secondary {
+    color: #6c757d !important;
+}
+
+.btn-outline-success:hover, .btn-outline-danger:hover, .btn-outline-secondary:hover {
+    color: #ffffff !important;
+}
+
+.btn-outline-warning:hover {
+    color: #000000 !important;
+}
+
+.recipe-label {
+    margin-bottom: 0.1rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* --------------- */
+/* Components */
+/* --------------- */
+
+/* PROGRESS: Background gradient and progress overlay */
+.progress-bar {
+    /* z-index: -1; */
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+.progress {
+    background: linear-gradient(to right, #00b33c, 20%, #ffd900);
+}
+
+/* MODAL: modal sizing */
+.img-fluid {
+    max-height: calc(100vh - 225px);
+}
+
+.modal {
+    text-align:center;
+}
+.modal-dialog {
+    width: auto;
+}
+
+/* --------------- */
+/* Forms, Inputs and Tables */
+/* --------------- */
+
+/* INPUT: reduce left and right padding on inputs inside table cells (override BS4 form-control-sm) */
+td input.form-control-sm {
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+}
+
+
+/* INPUT: needed to only have bottom border with no radius on inputs - BS4 border-bottom doesn't work on inputs */
+.bottom-border {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    border-radius: 0;
+}
+
+/* INPUT: remove blue highlight on focus */
+.form-control:focus {
+    box-shadow: none;
+}
+
+/* INPUT: Hide number input step buttons */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* TABLE: Allow fixed column widths */
+table {
+    table-layout: fixed;
+}
+
+/* TABLE: Force width of water table - specified column widths below don't seem to work when there are only 2 columns */
+
+/* TABLE: First column width */
+#malt-table th:nth-child(1),
+#hop-table th:nth-child(1), 
+#mash-table th:nth-child(1),
+#water-table th:nth-child(1),
+#finings-table th:nth-child(1),
+#next-steps-table th:nth-child(1) {
+        width: 140px;
+}
+
+/* TABLE: Add/Delete Button column width */
+.col-add-del-btn {
+    width: 2.5rem;
+}
+
+/* TABLE: Fix width on selected numeric columns */
+.col-numeric {
+    width: 110px;
+}
+
+/* TABLE: Fix width on columns containing button groups (Hop Usage) to prevent buttons overflowing into other columns at mobile resolution */
+.col-btn-group {
+    width: 110px;
+}
+
+/* TABLE: Fix width on volume and temp columns in water calc table */
+.col-water {
+    width: 180px;
+}
+
+/* TABLE: Lock table width and enable horizontal scroll */
+
+@media (max-width: 775px) {
+    #malt-table, #hop-table {
+        width: 678px;
+    }
+
+    #malt-table-container, #hop-table-container {
+    overflow-x: scroll;
+    display: block;
+    padding-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 520px) {
+    #finings-table {
+        width: 462px;
+    }
+
+    #finings-table-container {
+        overflow-x: scroll;
+        display: block;
+        padding-bottom: 0.5rem;
+    }
+
+}
+
+@media (max-width: 420px) {
+    #mash-table, #ferm-table {
+        width: 360px;
+    }
+
+    #mash-table-container, #ferm-table-container {
+        overflow-x: scroll;
+        display: block;
+        padding-bottom: 0.5rem;
+    }
+
+}
+
+/* TABLE: Fixed first column when scrolling */
+/* Also setting high z-index for this column to resolve an issue with button groups scrolling over this column (caused by relative position and z-index on active button) */
+#malt-table tr th:nth-child(1), #malt-table tr td:nth-child(1),
+#hop-table tr th:nth-child(1), #hop-table tr td:nth-child(1),
+#mash-table tr th:nth-child(1), #mash-table tr td:nth-child(1),
+#water-table tr th:nth-child(1), #water-table tr td:nth-child(1),
+#finings-table tr th:nth-child(1), #finings-table tr td:nth-child(1)  {
+    background: #fff;
+    position: -webkit-sticky;
+    position: sticky;
+    left: -1px;
+    z-index: 10;
+}
+
+/* TABLE: Buttons inside tables min width  */
+td a.btn {
+    min-width: 2rem;
+}
+
+/* INPUT: Button Groups */
+
+label.btn {
+    font-size: 0.875rem;
+}
+
+/* TABLE: Popover buttons on water table to be entire width of cell */
+#water-table td a.btn {
+    width: 100%;
+}
+
+/* TABLE: Popover Width */
+.popover {
+    max-width: 95%;
+}

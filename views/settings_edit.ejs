@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Make site responsive on mobile/tablet -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>_BrewDat - Settings Edit</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js" integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="main.css" type="text/css"/>
+  </head>
+  <body class="mb-5">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+      <a class="navbar-brand" href="/">BrewDat</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/beers">Beers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/recipes">Recipes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/brews">Brews</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-right">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Future Login Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Future Login Link</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      
+      <div class="row mb-2">
+        <div class="col-md-12 px-2 px-md-0">
+          <a href="/brews/5b8449097c435f4be9ffd7b8/edit" class="btn btn-sm btn-outline-warning float-right m-3">Edit</a>
+          <h3 class="d-inline-block mb-0">Cascading Delete</h3><span class="pl-1">APA</span>
+          <p class="text-lite italic">
+            brewed Monday, May 18th 2020
+          </p>
+        </div>
+      </div>
+      <!-- New nav tabs -->
+      <div class="row mb-2">
+        <div class="col-md-12 px-2 px-md-0">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link" href="overview.html">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Recipe</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="notes.html">Notes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Recipe Info -->
+      <div class="row">
+        <div class="col-md-12 px-2 px-md-0">
+          <div class="card">
+            <div class="card-body">
+              
+              <h4>TEMP - Brewhouse Settings - need to separate out defaults/settings. All values in Metric units.</h4>
+                <div class="form-row mb-4">
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="boilOffRateMetric" class="col-sm-12 recipe-label">Boil-Off Rate (L/Hour)</label>
+                      <div class="col-sm-12">
+                        <input id="boilOffRateMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[boilOffrateMetric]" value="4">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="kettleLossMetric" class="col-sm-12 recipe-label">Kettle Loss (L)</label>
+                      <div class="col-sm-12">
+                        <input id="kettleLossMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[kettleLossMetric]" value="4">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="grainAbsorptionMetric" class="col-sm-12 recipe-label">Default Grain Absorption (L/kg)</label>
+                      <div class="col-sm-12">
+                        <input id="grainAbsorptionMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[grainAbsorptionMetric]" value="1.02">
+                      </div>
+                    </div>
+                  </div>                 
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="mashTunHeatLossMetric" class="col-sm-12 recipe-label">Mash Tun Heat Loss (C/hour)</label>
+                      <div class="col-sm-12">
+                        <input id="mashTunHeatLossMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[mashTunHeatLossMetric]" value="1">
+                      </div>
+                    </div>
+                  </div>                 
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="mashOutTempMetric" class="col-sm-12 recipe-label">Default Mash Out Temp (C)</label>
+                      <div class="col-sm-12">
+                        <input id="mashOutTempMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[mashOutTempMetric]" value="77">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="mashOutWaterTempMetric" class="col-sm-12 recipe-label">Mash Out Water Temp (C)</label>
+                      <div class="col-sm-12">
+                        <input id="mashOutWaterTempMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[mashOutWaterTempMetric]" value="100">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="spargeWaterTempMetric" class="col-sm-12 recipe-label">Default Sparge Water Temp (C)</label>
+                      <div class="col-sm-12">
+                        <input id="spargeWaterTempMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[spargeWaterTempMetric]" value="77">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="form-group row mb-1">
+                      <label for="grainSpecificHeatMetric" class="col-sm-12 recipe-label">Grain Specific Heat Metric</label>
+                      <div class="col-sm-12">
+                        <input id="grainSpecificHeatMetric" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="brewhouse[grainSpecificHeatMetric]" value="0.41">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+        
+    
+
+  
+    <!-- jQuery CDN -->
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+
+  <!-- Bootstrap and its dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  
+  <!-- Custom JS & jQuery for recipe form-->
+  <!-- <script src="/js/forms.js" type="text/javascript"></script> -->
+  <script src="script.js" type="text/javascript"></script>
+  
+  </body>
+</html>

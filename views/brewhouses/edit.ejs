@@ -1,0 +1,148 @@
+<%- include('../partials/header') -%>
+    <div class="row">
+        <div class="col-md-12 px-2 px-md-0">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/brewhouses/<%= brewhouse._id %>?_method=PUT" method="POST">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-outline-success">Save</button>
+                        </div>
+                        <h4>Edit Brewhouse</h4>
+                        <p class="text-lite">
+                            Values to use for water volume and temperature calculations. These can be customized at the
+                            recipe level.
+                        </p>
+                        <div class="form-row mt-2 mb-2">
+                            <div class="col-sm-12">
+                                <div class="form-group row mb-1">
+                                    <label for="brewhouseName" class="col-sm-12 recipe-label">Name</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" id="brewhouseName" class="form-control form-control-sm bottom-border" name="brewhouse[name]" value="<%= brewhouse.name %> ">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group row mb-1">
+                                    <label for="brewhouseDesc" class="col-sm-12 recipe-label">Description</label>
+                                    <div class="col-sm-12">
+                                        <textarea id="brewhouseDesc" class="form-control form-control-sm bottom-border"
+                                            name="brewhouse[description]" rows="3"><%= brewhouse.description %> </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6>Volume</h6>
+                        <div class="form-row mb-4">
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="boilOffRate" class="col-sm-12 recipe-label">Boil-Off
+                                        (L/Hour)</label>
+                                    <div class="col-sm-12">
+                                        <input id="boilOffRate" class="form-control form-control-sm bottom-border"
+                                            type="number" min="0" step="0.01" name="brewhouse[boilOffRate]"
+                                            value="<%= brewhouse.boilOffRate %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="kettleLoss" class="col-sm-12 recipe-label">Kettle Loss (L)</label>
+                                    <div class="col-sm-12">
+                                        <input id="kettleLoss" class="form-control form-control-sm bottom-border"
+                                            type="number" min="0" step="0.01" name="brewhouse[kettleLoss]"
+                                            value="<%= brewhouse.kettleLoss %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="grainAbsorption" class="col-sm-12 recipe-label">Grain
+                                        Absorption (L/kg)</label>
+                                    <div class="col-sm-12">
+                                        <input id="grainAbsorption"
+                                            class="form-control form-control-sm bottom-border" type="number" min="0"
+                                            step="0.01" name="brewhouse[grainAbsorption]" value="<%= brewhouse.grainAbsorption %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6>Temperature</h6>
+                        <div class="form-row mb-4">
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="mashHeatLoss" class="col-sm-12 recipe-label">Mash Tun Heat Loss
+                                        (C/hour)</label>
+                                    <div class="col-sm-12">
+                                        <input id="mashHeatLoss"
+                                            class="form-control form-control-sm bottom-border" type="number" min="0"
+                                            step="0.01" name="brewhouse[mashHeatLoss]" value="<%= brewhouse.mashHeatLoss %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="mashOutTargetTemp" class="col-sm-12 recipe-label">Mash Out Target Temp
+                                        (C)</label>
+                                    <div class="col-sm-12">
+                                        <input id="mashOutTargetTemp" class="form-control form-control-sm bottom-border"
+                                            type="number" min="0" step="0.01" name="brewhouse[mashOutTargetTemp]"
+                                            value="<%= brewhouse.mashOutTargetTemp %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="mashOutWaterTemp" class="col-sm-12 recipe-label">Mash Out Water
+                                        Temp
+                                        (C)</label>
+                                    <div class="col-sm-12">
+                                        <input id="mashOutWaterTemp"
+                                            class="form-control form-control-sm bottom-border" type="number" min="0"
+                                            step="0.01" name="brewhouse[mashOutWaterTemp]" value="<%= brewhouse.mashOutWaterTemp %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="spargeWaterTemp" class="col-sm-12 recipe-label">Sparge Water Temp
+                                        (C)</label>
+                                    <div class="col-sm-12">
+                                        <input id="spargeWaterTemp"
+                                            class="form-control form-control-sm bottom-border" type="number" min="0"
+                                            step="0.01" name="brewhouse[spargeWaterTemp]" value="<%= brewhouse.spargeWaterTemp %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="grainSpecificHeat" class="col-sm-12 recipe-label">Grain Specific
+                                        Heat (Metric)</label>
+                                    <div class="col-sm-12">
+                                        <input id="grainSpecificHeat"
+                                            class="form-control form-control-sm bottom-border" type="number" min="0"
+                                            step="0.01" name="brewhouse[grainSpecificHeat]" value="<%= brewhouse.grainSpecificHeat %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6>Efficiency</h6>
+                        <div class="form-row mb-4">
+                            <div class="col-6 col-md-3">
+                                <div class="form-group row mb-1">
+                                    <label for="conversionPercent" class="col-sm-12 recipe-label">Expected Conversion (%)</label>
+                                    <div class="col-sm-12">
+                                        <input id="conversionPercent"
+                                            class="form-control form-control-sm bottom-border" type="number" min="0"
+                                            step="0.01" name="brewhouse[conversionPercent]" value="<%= brewhouse.conversionPercent %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') -%>

@@ -1,0 +1,817 @@
+<%- include('../partials/header') -%>
+      
+      <div class="row mb-2">
+        <div class="col-md-12 px-2 px-md-0">
+          <h3 class="d-inline-block mb-0"><%= beer.name %></h3><span class="pl-1"><%= beer.style %></span>
+        </div>
+      </div>
+      <!-- Recipe Info -->
+      <div class="row">
+        <div class="col-md-12 px-2 px-md-0">
+          <form action="/beers/<%= beer._id %>/recipes" method="POST">
+            <!-- Save and Edit buttons should just show one or the other -->
+            <div class="card mb-2">
+              <div class="card-body">
+                <div class="float-right">
+                  <button class="btn btn-sm btn-outline-success">Save</button>
+                </div>
+                <h4>General</h4>
+                <!-- General -->
+                <div class="form-row mt-2 mb-2">
+                  <div class="col-md-12">
+                    <div class="form-group row mb-1">
+                      <label for="brewDesc" class="col-sm-12 recipe-label">Description</label>
+                      <div class="col-sm-12">
+                        <textarea id="brewDesc" class="form-control form-control-sm bottom-border" name="recipe[description]" rows="3"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <h6>Recipe Notes</h6> -->
+                <div id="notes-table-container">
+                  <table id="notes-table" class="table table-sm mb-1">
+                    <thead>
+                      <tr>
+                        <th class="recipe-label" scope="col">Recipe Notes</th>
+                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="notes-list">
+                      <!-- Note 1 -->
+                      <tr class="notes-row">
+                        <td>
+                          <label class="sr-only" for="noteDetails[0]">Details</label>
+                          <textarea id="noteDetails[0]" class="form-control form-control-sm border-0" name="recipeNotes[0]" rows="2"></textarea>
+                        </td>
+                        <td class="border-0">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                        </td>
+                      </tr>
+                    </tbody>                     
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Target Batch Size, Boil Mins, OG, FG-->
+            <div id="target-container" class="card mb-2">
+              <div class="card-body">
+                <h4>Targets</h4>
+                <div class="form-row mb-4">
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group row mb-1">
+                      <label for="batchSize" class="col-sm-12 recipe-label">Batch Size (L)</label>
+                      <div class="col-sm-12">
+                        <input id="batchSize" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="recipe[batchSize]"> 
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group row mb-1">
+                      <label for="boilMinutes" class="col-sm-12 recipe-label">Boil Minutes</label>
+                      <div class="col-sm-12">
+                        <input id="boilMinutes" class="form-control form-control-sm bottom-border" type="number" min="0" step="1" name="recipe[boilMinutes]"> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row mb-4">
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group row mb-1">
+                      <label for="targetOG" class="col-sm-12 recipe-label">Original Gravity</label>
+                      <div class="col-sm-12">
+                        <input id="targetOG" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.001" name="recipe[targetOG]">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group row mb-1">
+                      <label for="targetFG" class="col-sm-12 recipe-label">Final Gravity</label>
+                      <div class="col-sm-12">
+                        <input id="targetFG" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.001" name="recipe[targetFG]">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <div class="form-group row mb-1">
+                      <label for="targetABV" class="col-sm-12 recipe-label">% ABV</label>
+                      <div class="col-sm-12">
+                        <input id="targetABV" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="recipe[targetABV]"> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Water -->
+            <div class="card mb-2">
+              <div class="card-body">
+                <h4>Water</h4>
+                <div class="form-row mb-4">
+                  <div class="col-md-6">
+                    <div class="form-row mb-4">
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="waterSource" class="col-sm-12 recipe-label">Source</label>
+                          <div class="col-sm-12">
+                            <input id="waterSource" class="form-control form-control-sm bottom-border" type="text" name="water[source]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="waterAdjust-toggle" class="col-sm-12 recipe-label">Adjustments</label>
+                          <div id="waterAdjust-toggle" class="col-sm-12 btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-light">
+                              <input type="radio" name="water[adjustments]" autocomplete="off" value="true">Yes
+                            </label>
+                            <label class="btn btn-light active">
+                              <input type="radio" name="water[adjustments]" autocomplete="off" value="false" checked>No
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div id="waterAdjustmentNotes-row" class="form-row mb-4 d-none">
+                      <div class="col-md-12">
+                        <div class="form-group row mb-1">
+                          <label for="waterAdjustmentNotes" class="col-sm-12 recipe-label">Adjustment Details</label>
+                          <div class="col-sm-12">
+                            <textarea id="waterAdjustmentNotes" class="form-control form-control-sm bottom-border" name="water[adjustmentNotes]" rows="3"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="brewhouse-container">
+                      <h6>Brewhouse Settings</h6>
+                      <% if(brewhouses.length > 0) { %> 
+                      <div class="form-group">
+                        <select name="water[brewhouse]" id="brewhouseSelect" class="form-control">
+                          <option value="" selected>Select a brewhouse</option>
+                          <% for(let brewhouse of brewhouses) { %> 
+                          <option value="<%= brewhouse._id %>"><%= brewhouse.name %></option>
+                          <% } %>
+                        </select>
+                      </div>
+                      <% } else { %>
+                      <p class="text-lite">
+                        No Brewhouses found. Set up a Brewhouse to re-use common water and temperature settings.
+                      </p>
+                      <% } %>
+  
+                      <h6>Volume</h6>
+                      <div class="form-row mb-4">
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="boilOffRate" class="col-sm-12 recipe-label">Boil-Off
+                                    (L/Hour)</label>
+                                <div class="col-sm-12">
+                                    <input id="boilOffRate" class="form-control form-control-sm bottom-border"
+                                        type="number" min="0" step="0.01" name="water[boilOffRate]">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="kettleLoss" class="col-sm-12 recipe-label">Kettle Loss (L)</label>
+                                <div class="col-sm-12">
+                                    <input id="kettleLoss" class="form-control form-control-sm bottom-border"
+                                        type="number" min="0" step="0.01" name="water[kettleLoss]">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="grainAbsorptionRate" class="col-sm-12 recipe-label">Grain
+                                    Absorption (L/kg)</label>
+                                <div class="col-sm-12">
+                                    <input id="grainAbsorptionRate"
+                                        class="form-control form-control-sm bottom-border" type="number" min="0"
+                                        step="0.01" name="water[grainAbsorptionRate]">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group row mb-1">
+                            <label for="gristRatio" class="col-sm-12 recipe-label">Grist Ratio (L/kg)</label>
+                            <div class="col-sm-12">
+                              <input id="gristRatio" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="water[gristRatio]">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <h6>Temperature</h6>
+                      <div class="form-row mb-4">
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="mashOutTargetTemp" class="col-sm-12 recipe-label">Mash Out Target (C)</label>
+                                <div class="col-sm-12">
+                                    <input id="mashOutTargetTemp" class="form-control form-control-sm bottom-border"
+                                        type="number" min="0" step="0.01" name="water[mashOutTargetTemp]">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="mashOutWaterTemp" class="col-sm-12 recipe-label">Mash Out Water (C)</label>
+                                <div class="col-sm-12">
+                                    <input id="mashOutWaterTemp" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="water[mashOutWaterTemp]">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="mashHeatLoss" class="col-sm-12 recipe-label">Mash Tun Heat Loss (C/Hour)</label>
+                                <div class="col-sm-12">
+                                    <input id="mashHeatLoss" class="form-control form-control-sm bottom-border"
+                                        type="number" min="0" step="0.01" name="water[mashHeatLoss]">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row mb-1">
+                                <label for="grainSpecificHeat" class="col-sm-12 recipe-label">Grain Specific Heat (Metric)</label>
+                                <div class="col-sm-12">
+                                    <input id="grainSpecificHeat" class="form-control form-control-sm bottom-border"
+                                        type="number" min="0" step="0.01" name="water[grainSpecificHeat]">
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="form-row mb-4">
+                        <div class="col-6">
+                          <div class="form-group row mb-1">
+                            <label for="mashOutToggle" class="col-sm-12 recipe-label">Mash Out</label>
+                            <div id="mashOutToggle" class="col-sm-12 btn-group btn-group-toggle" data-toggle="buttons">
+                              <label class="btn btn-light">
+                                <input type="radio" name="water[mashOut]" autocomplete="off" value="true">Yes
+                              </label>
+                              <label class="btn btn-light active">
+                                <input type="radio" name="water[mashOut]" autocomplete="off" value="false" checked>No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div id="water-table-container">
+                      <table id="water-table" class="table table-sm mb-1">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th class="col-water recipe-label text-center" scope="col">Volume (L)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Batch Size -->
+                          <tr class="water-row">
+                            <td class="border-0">
+                              <span class="recipe-label">Batch Size</span>
+                            </td>
+                            <td class="border-0">
+                              <a id="water-table-display-batchSize" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<span class='text-lite italic d-block'>Recipe Batch Size</span"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Kettle Loss -->
+                          <tr class="water-row">
+                            <td class="border-0">
+                              <span class="recipe-label">+ Kettle Loss</span>
+                            </td>
+                            <td class="border-0">
+                              <a id="water-table-display-kettleLoss" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<span class='text-lite italic d-block'>Brewhouse Kettle Loss</span>"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Boil Off -->
+                          <tr class="water-row">
+                            <td class="border-0">
+                              <span class="recipe-label">+ Boil-Off</span>
+                            </td>
+                            <td class="border-0">
+                              <label class="sr-only" for="water-table-input-boilOff">Boil-Off</label>
+                              <input id="water-table-input-boilOff" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[boilOffVolume]">  
+                              <a id="water-table-display-boilOff" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>Brewhouse Boil-Off L/hour x (Recipe Boil Minutes / 60 )</span>"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Pre-Boil Volume -->
+                          <tr class="water-row">
+                            <td>
+                              <span class="recipe-label">= Pre-Boil Volume</span>
+                            </td>
+                            <td>
+                              <label class="sr-only" for="water-table-input-preBoilVolume">Pre-Boil Volume</label>
+                              <input id="water-table-input-preBoilVolume" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[preBoilVolume]">  
+                              <a id="water-table-display-preBoilVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>Recipe Batch Size + Brewhouse Kettle Loss + Calculated Boil-Off</span>
+                              "><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Grain Absorption -->
+                          <tr class="water-row">
+                            <td class="border-0">
+                              <span class="recipe-label">+ Grain Absorption</span>
+                            </td>
+                            <td class="border-0">
+                              <label class="sr-only" for="water-table-input-grainAbsorptionVolume">Grain Loss</label>
+                              <input id="water-table-input-grainAbsorptionVolume" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[grainAbsorptionVolume]">  
+                              <a id="water-table-display-grainAbsorptionVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>Recipe Grain Absorption Rate L/kg x Recipe Total Malt Weight kg</span>"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Total Mash Water -->
+                          <tr class="water-row">
+                            <td>
+                              <span class="recipe-label">= Total Mash Water</span>
+                            </td>
+                            <td>
+                              <label class="sr-only" for="water-table-input-totalMashWaterVolume">Total Mash Water</label>
+                              <input id="water-table-input-totalMashWaterVolume" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[totalMashWaterVolume]">  
+                              <a id="water-table-display-totalMashWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>Calculated Pre-Boil Volume L + Calculated Grain Loss L</span>"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Spacer Row -->
+                          <tr>
+                            <td class="bottom-border"></td>
+                            <td class="bottom-border"></td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <!-- Strike Water -->
+                          <tr class="water-row">
+                            <td>
+                              <span class="recipe-label">Strike Water</span>
+                            </td>
+                            <td>
+                              <label class="sr-only" for="water-table-input-strikeWaterVolume">Strike Water</label>
+                              <input id="water-table-input-strikeWaterVolume" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[strikeVolume]">  
+                              <a id="water-table-display-strikeWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>Brewhouse Grist Ratio L/kg x Receipe Total Malt Weight kg</span>"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Mash Out Water -->
+                          <tr class="water-row">
+                            <td>
+                              <span class="recipe-label">Mash Out Water</span>
+                            </td>
+                            <td>
+                              <label class="sr-only" for="water-table-input-mashOutVolume">Mash Out Water</label>
+                              <input id="water-table-input-mashOutVolume" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[mashOutVolume]">  
+                              <a id="water-table-display-mashOutVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>(T2-T1) x (G + Wm) / (Tw – T2)</span>
+                              <span class='text-lite italic d-block'><span class='bold'>T2</span> = Brewhouse Mash Out Temp C</span>
+                              <span class='text-lite italic d-block'><span class='bold'>T1</span> = Calculated Mash End Temp C (Recipe Mash Temp C, Recipe Mash Length minutes, and Brewhouse Mash Tun Heat Loss C/hour)</span>
+                              <span class='text-lite italic d-block'><span class='bold'>G</span> = Recipe Total Malt Weight x Brewhouse Grain Specific Heat</span>
+                              <span class='text-lite italic d-block'><span class='bold'>Wm</span> = Calculated Strike Water Volume L</span>
+                              <span class='text-lite italic d-block'><span class='bold'>Tw</span> = Brewhouse Mash Out Water Temp C</span>"><span>0</span></a>
+                            </td>
+                          </tr>
+                          <!-- Sparge Water -->
+                          <tr class="water-row">
+                            <td>
+                              <span class="recipe-label">Sparge Water</span>
+                            </td>
+                            <td>
+                              <label class="sr-only" for="water-table-input-spargeWaterVolume">Sparge Water</label>
+                              <input id="water-table-input-spargeWaterVolume" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="water[spargeWaterVolume]">  
+                              <a id="water-table-display-spargeWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
+                              <span class='text-lite italic d-block'>Calculated Total Mash Water L - (Calculated Strike Water L + Calculated Mash Out Water L)</span>
+                              "><span>0</span></a>
+                            </td>
+                          </tr>       
+                        </tfoot>                      
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Malts -->
+            <div class="card mb-2">
+              <div class="card-body">
+                <h4>Malts</h4>
+                <div id="malt-table-container" class="mb-4">
+                  <table id="malt-table" class="table table-sm mb-1">
+                    <thead>
+                      <tr>
+                        <th class="recipe-label" scope="col">Name</th>
+                        <th class="recipe-label text-center" scope="col">Qty (kg)</th>
+                        <th class="recipe-label text-center" scope="col">PPG</th>
+                        <th class="recipe-label text-center" scope="col">Points</th>
+                        <th class="recipe-label text-center" scope="col">SRM/lb/G</th>
+                        <th class="recipe-label text-center" scope="col">MCU</th>
+                        <th class="recipe-label text-center" scope="col">SRM</th>
+                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="malt-list">
+                      <!-- Malt 1 -->
+                      <tr class="malt-row">
+                        <td>
+                          <label class="sr-only" for="maltName[0]">Name</label>
+                          <input id="maltName[0]" class="form-control form-control-sm border-0" type="text" name="malts[0][name]">
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltQty[0]">Qty (kg)</label>
+                          <input id="maltQty[0]" class="form-control form-control-sm border-0 text-center maltQty" type="number" min="0" step="0.001" name="malts[0][qty]">
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltPPG[0]">PPG</label>
+                          <input id="maltPPG[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][ppg]">
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltGravityPoints[0]">Points</label>
+                          <input id="maltGravityPoints[0]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[0][gravityPoints]">
+                          <span id="maltGravityPointsDisplay[0]" class="d-block form-control-sm text-center bold">0</span>
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltSRMLBG[0]">SRM/lb/G</label>
+                          <input id="maltSRMLBG[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][srmLbG]">
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltMCU[0]">MCU</label>
+                          <input id="maltMCU[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][mcu]">
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltSRM[0]">SRM</label>
+                          <input id="maltSRM[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][srm]">
+                        </td>
+                        <td class="border-0">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <!-- Totals -->
+                      <tr>
+                        <td></td>
+                        <td>
+                          <label class="sr-only" for="maltTotalsQtyInput">Total Malt Weight</label>
+                          <input id="maltTotalsQtyInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="maltTotals[qty]" value="0">
+                          <span id="maltTotalsQtyDisplay" class="d-block form-control-sm text-center bold">0</span>                      
+                        </td>
+                        <td></td>
+                        <td>
+                          <label class="sr-only" for="maltTotalsPointsInput">Total Gravity</label>
+                          <input id="maltTotalsPointsInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="maltTotals[points]" value="0">                  
+                          <span id="maltTotalsPointsDisplay" class="d-block form-control-sm text-center bold">0</span>
+                        </td>
+                        <td></td>
+                        <td>
+                          <label class="sr-only" for="maltTotalsMCU">Total MCU</label>
+                          <input id="maltTotalsMCU" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="maltTotals[mcu]" value="0">
+                        </td>
+                        <td>
+                          <label class="sr-only" for="maltTotalsSRM">Total SRM</label>
+                          <input id="maltTotalsSRM" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="maltTotals[srm]" value="0">
+                        </td>
+                        <td class="border-0"></td>
+                      </tr>         
+                    </tfoot>
+                  </table>
+                </div>
+                <ul class="text-lite">
+                  <li id="malts-preBoilVolume">Total Gravity Points based on Pre-Boil Volume of <span class='bold'>0</span> L.</li>
+                  <li id="malts-brewhouseEfficiency">Current Brewhouse typically achieves conversion of approximately <span id="malts-conversionPercent" class='bold'>0</span>%. Pre-Boil Gravity of <span class='bold'>0</span> expected.</li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Hops -->
+            <div class="card mb-2">
+              <div class="card-body">
+                <h4>Hops</h4>
+                <div id="hop-table-container" class="mb-4">
+                  <table id="hop-table" class="table table-sm mb-1">
+                    <thead>
+                      <tr>
+                        <th class="recipe-label" scope="col">Name</th>
+                        <th class="recipe-label text-center" scope="col">AA%</th>
+                        <th class="recipe-label text-center" scope="col">Qty (g)</th>
+                        <th class="recipe-label text-center" scope="col">AAU</th>
+                        <th class="recipe-label text-center col-btn-group" scope="col">Usage</th>
+                        <th class="recipe-label text-center" scope="col">Timing</th>
+                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="hop-list">
+                      <!-- Hop 1 -->
+                      <tr class="hop-row">
+                        <td>
+                          <label class="sr-only" for="hopName[0]">Name</label>
+                          <input id="hopName[0]" class="form-control form-control-sm border-0" type="text" name="hops[0][name]">  
+                        </td>
+                        <td>
+                          <label class="sr-only" for="hopAA[0]">AA%</label>
+                          <input id="hopAA[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" max="100" step="0.01" name="hops[0][aa]">  
+                        </td>
+                        <td>
+                          <label class="sr-only" for="hopQty[0]">Qty (g)</label>
+                          <input id="hopQty[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[0][qty]">  
+                        </td>
+                        <td>
+                          <label class="sr-only" for="hopAAU[0]">AAU</label>
+                          <input id="hopAAU[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[0][aau]">  
+                        </td>
+                        <td class="text-center">
+                          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-light active">
+                              <input type="radio" name="hops[0][usage]" autocomplete="off" value="Boil" checked>Boil
+                            </label>
+                            <label class="btn btn-light">
+                              <input type="radio" name="hops[0][usage]" autocomplete="off" value="Dry">Dry
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <label class="sr-only" for="hopTime[0]">Timing</label>
+                          <input id="hopTime[0]" class="form-control form-control-sm border-0 text-center" type="text" name="hops[0][timing]">
+                        </td>
+                        <td class="border-0">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <!-- Totals -->
+                      <tr class="text-center">
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <label class="sr-only" for="hopTotalsQty">Total Hop Qty</label>
+                          <input id="hopTotalsQty" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="hopTotals[qty]" value="0">  
+                        </td>
+                        <td>
+                          <label class="sr-only" for="hopTotalsAAU">Total Hop AAU</label>
+                          <input id="hopTotalsAAU" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="hopTotals[aau]" value="0">  
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="border-0"></td>
+                      </tr>         
+                    </tfoot>                      
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Everything below here is displayed on a col-6 card. We want these to tile nicely and stack vertically on tablet and mobile -->
+            <div class="form-row">
+            <!-- <div class="d-flex flex-column flex-wrap"> -->
+              <div class="col-md-6">
+                <!-- Yeast -->
+                <div class="card mb-2">
+                  <div class="card-body">
+                    <h4>Yeast</h4>
+                    <div class="form-row">
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="yeastLab" class="col-sm-12 recipe-label">Lab</label>
+                          <div class="col-sm-12">
+                            <input id="yeastLab" class="form-control form-control-sm bottom-border" type="text" name="yeast[lab]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="yeastStrain" class="col-sm-12 recipe-label">Strain</label>
+                          <div class="col-sm-12">
+                            <input id="yeastStrain" class="form-control form-control-sm bottom-border" type="text" name="yeast[strain]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="yeastState" class="col-sm-12 recipe-label">State</label>
+                          <div class="col-sm-12">
+                            <input id="yeastState" class="form-control form-control-sm bottom-border" type="text" name="yeast[state]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="yeastQty" class="col-sm-12 recipe-label">Qty</label>
+                          <div class="col-sm-12">
+                            <input id="yeastQty" class="form-control form-control-sm bottom-border" type="text" name="yeast[qty]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-row mb-4">
+                          <label for="yeastTemp" class="col-sm-12 recipe-label">Pitch Temp (°C)</label>
+                          <div class="col-sm-12">
+                            <input id="yeastTemp" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="yeast[pitchTemp]">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-12">
+                        <div class="form-group row mb-4">
+                          <label for="yeastPrep-toggle" class="col-sm-12 recipe-label">Starter/Rehydration Required</label>
+                          <div id="yeastPrep-toggle" class="col-sm-12 btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-light">
+                              <input type="radio" name="yeast[starter]" autocomplete="off" value="true">Yes
+                            </label>
+                            <label class="btn btn-light active">
+                              <input type="radio" name="yeast[starter]" autocomplete="off" value="false" checked>No
+                            </label>
+                          </div>
+                        </div>
+                        <div id="yeastPrepDesc-row" class="form-row mb-4 d-none">
+                          <div class="col-12">
+                            <div class="form-group row mb-1">
+                              <label for="yeastStarterNotes" class="col-sm-12 recipe-label">Starter/Rehydration Steps</label>
+                              <div class="col-sm-12">
+                                <textarea id="yeastStarterNotes" class="form-control form-control-sm bottom-border" name="yeast[starterNotes]" rows="3"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+              
+              <div class="col-md-6">
+                <!-- Mash -->
+                <div class="card mb-2">
+                  <div class="card-body">
+                    <h4>Mash</h4>
+                    <div class="form-row mb-4">
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="mashMethod" class="col-sm-12 recipe-label">Mash Method</label>
+                          <div class="col-sm-12">
+                            <input id="mashMethod" class="form-control form-control-sm bottom-border" type="text" name="mash[method]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="spargeMethod" class="col-sm-12 recipe-label">Sparge Method</label>
+                          <div class="col-sm-12">
+                            <input id="spargeMethod" class="form-control form-control-sm bottom-border" type="text" name="mash[spargeMethod]">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Mash Schedule -->   
+                    <h6>Schedule</h6>
+                    <div id="mash-table-container">
+                      <table id="mash-table" class="table table-sm mb-1">
+                        <thead>
+                          <tr>
+                            <th class="recipe-label" scope="col">Rest Type</th>
+                            <th class="recipe-label text-center" scope="col">Temp (C)</th>
+                            <th class="recipe-label text-center" scope="col">Minutes</th>
+                            <th class="border-0 col-add-del-btn" scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="mash-list">
+                          <!-- Mash 1 -->
+                          <tr class="mash-row">
+                            <td>
+                              <label class="sr-only" for="mashRestType[0]">Rest Type</label>
+                              <input id="mashRestType[0]" class="form-control form-control-sm border-0" type="text" name="mashSched[0][restType]">  
+                            </td>
+                            <td>
+                              <label class="sr-only" for="mashTemp[0]">Temp (C)</label>
+                              <input id="mashTemp[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="mashSched[0][temp]">  
+                            </td>
+                            <td>
+                              <label class="sr-only" for="mashMins[0]">Minutes</label>
+                              <input id="mashMins[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="1" name="mashSched[0][minutes]">  
+                            </td>
+                            <td class="border-0">
+                              <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <!-- Totals -->
+                          <tr class="text-center">
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <label class="sr-only" for="mashTotalMinutes">Total Mash Minutes</label>
+                              <input id="mashTotalMinutes" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="mash[totalMinutes]" value="0">  
+                            </td>
+                            <td class="border-0"></td>
+                          </tr>         
+                        </tfoot>                      
+                      </table>
+                    </div>                   
+                  </div>
+                </div> 
+              </div>
+              
+              <div class="col-md-6">
+                <!-- Finings -->
+                <div class="card mb-2">
+                  <div class="card-body">
+                    <h4>Finings</h4>
+                    <div class="form-row mb-4">
+                      <div class="col-md-12">
+                        <div id="finings-table-container">
+                          <table id="finings-table" class="table table-sm mb-1">
+                            <thead>
+                              <tr>
+                                <th class="recipe-label" scope="col">Type</th>
+                                <th class="recipe-label text-center" scope="col">Qty</th>
+                                <th class="recipe-label text-left" scope="col">Usage</th>
+                                <th class="border-0 col-add-del-btn" scope="col"></th>
+                              </tr>
+                            </thead>
+                            <tbody id="finings-list">
+                              <!-- Finings 1 -->
+                              <tr class="finings-row">
+                                <td>
+                                  <label class="sr-only" for="finingsName[0]">Type</label>
+                                  <input id="finingsName[0]" class="form-control form-control-sm border-0" type="text" name="finings[0][name]">  
+                                </td>
+                                <td>
+                                  <label class="sr-only" for="finingsQty[0]">Qty</label>
+                                  <input id="finingsQty[0]" class="form-control form-control-sm border-0 text-center" type="text" name="finings[0][qty]">  
+                                </td>
+                                <td>
+                                  <label class="sr-only" for="finingsUsage[0]">Usage</label>
+                                  <input id="finingsUsage[0]" class="form-control form-control-sm border-0 text-left" type="text" name="finings[0][usage]">  
+                                </td>
+                                <td class="border-0">
+                                  <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                                </td>
+                              </tr>
+                            </tbody>                     
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- Fermentation & Conditioning -->
+                <div class="card mb-2">
+                  <div class="card-body">
+                    <h4>Fermentation & Conditioning</h4>
+                    <h6>Schedule</h6>
+                    <div id="ferm-table-container">
+                      <table id="ferm-table" class="table table-sm mb-1">
+                        <thead>
+                          <tr>
+                            <th class="recipe-label" scope="col">Stage</th>
+                            <th class="recipe-label text-center" scope="col">Temp (C)</th>
+                            <th class="recipe-label text-center" scope="col">Days</th>
+                            <th class="border-0 col-add-del-btn" scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="ferm-list">
+                          <!-- Ferm 1 -->
+                          <tr class="ferm-row">
+                            <td>
+                              <label class="sr-only" for="fermStage[0]">Stage</label>
+                              <input id="fermStage[0]" class="form-control form-control-sm border-0" type="text" name="ferm[0][stage]">  
+                            </td>
+                            <td>
+                              <label class="sr-only" for="fermTemp[0]">Temp (C)</label>
+                              <input id="fermTemp[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="ferm[0][temp]">  
+                            </td>
+                            <td>
+                              <label class="sr-only" for="fermDays[0]">Days</label>
+                              <input id="fermDays[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="1" name="ferm[0][days]">  
+                            </td>
+                            <td class="border-0">
+                              <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <!-- Totals -->
+                          <tr class="text-center">
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <label class="sr-only" for="fermTotalsDays">Total Ferm Days</label>
+                              <input id="fermTotalsDays" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="fermTotals[days]" value="0">  
+                            </td>
+                            <td class="border-0"></td>
+                          </tr>         
+                        </tfoot>                      
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+<%- include('../partials/footer') -%>

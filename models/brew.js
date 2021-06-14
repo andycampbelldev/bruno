@@ -1,20 +1,26 @@
 const mongoose = require('mongoose');
 
-const beerSchema = new mongoose.Schema({
-    name: String,
-    style: String,
-    description: String,
-    recipes: [{
+const brewSchema = new mongoose.Schema({
+    batchSize: Number,
+    brewhouseProfile: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Recipe"
-    }],
-    brews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Brew"
-    }]
+        ref: "BrewhouseProfile"
+    },
+    water: {
+        expectedBoilOff: Number, // calculate from Brewhouse Settings
+        preBoilVolume: Number,
+        expectedAbsorption: Number,
+        totalMashVolume: Number,
+        strikeVolume: Number,
+        spargeVolume: Number,
+        mashOutVolume: Number,
+        grainTemp: Number,
+        strikeTemp: Number,
+        spargeTemp: Number
+    },
 })
 
-module.exports = mongoose.model('Beer', beerSchema);
+module.exports = mongoose.model('Brew', brewSchema);
 
 // const beer = {
 //     id: '1',

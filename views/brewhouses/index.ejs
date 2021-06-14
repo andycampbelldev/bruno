@@ -1,0 +1,45 @@
+<%- include('../partials/header') -%>
+<div class="float-right">
+  <a href="brewhouses/new" class="btn btn-outline-success btn-sm mb-1"
+  role="button">New Brewhouse</a>
+</div>
+<h3>Brewhouses</h3>
+  <div class="row justify-content-center mb-2">
+    <% for(let brewhouse of brewhouses) { %>
+      <div class="col-12 mb-2 px-2">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="d-inline-block mb-0">
+              <%= brewhouse.name %>
+            </h3>
+            <p class="text-lite">
+              <%= brewhouse.description %>
+            </p>
+            <p class="text-lite">Mash Conversion <span class="bold">~<%= brewhouse.conversionPercent %>%</span></p>
+            <div class="row">
+              <div class="col-6">
+                <ul class="text-lite">
+                  <li>Boil-Off Rate <span class="bold"><%= brewhouse.boilOffRate %> L/h</span></li>
+                  <li>Kettle Loss <span class="bold"><%= brewhouse.kettleLoss %> L</span></li>
+                  <li>Grain Absorption Rate <span class="bold"><%= brewhouse.grainAbsorption %> L/kg</span></li>
+                  <li>Grist Ratio <span class="bold"><%= brewhouse.gristRatio %> L/kg</span></li>
+                  <li>Grain Specific Heat <span class="bold"><%= brewhouse.grainSpecificHeat %></span></li>
+                </ul>
+              </div>
+              <div class="col-6">
+                <ul class="text-lite">
+                  <li>Mash Tun Heat Loss <span class="bold"><%= brewhouse.mashHeatLoss %> C/h</span></li>
+                  <li>Mash Out Water Temp <span class="bold"><%= brewhouse.mashOutWaterTemp %> C</span></li>
+                  <li>Mash Out Target Temp <span class="bold"><%= brewhouse.mashOutTargetTemp %> C</span></li>
+                  <li>Sparge Water Temp <span class="bold"><%= brewhouse.spargeWaterTemp %> C</span></li>
+                </ul>
+              </div>
+            </div>
+            <a type="button" class="btn btn-outline-secondary" href="/brewhouses/<%= brewhouse._id %>/edit">Edit</a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <%- include('../partials/footer') -%>

@@ -9,7 +9,8 @@ const methodOverride = require('method-override');
 mongoose.connect('mongodb://localhost:27017/bruno-dev', {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -20,10 +21,12 @@ db.once('open', () => {
 
 //models
 const Beer = require('./models/beer');
+const Recipe = require('./models/recipe');
+const Brew = require('./models/brew');
+const Brewhouse = require('./models/brewhouse');
 
-
-// temp sample data from js file
-//const { beers, brews, recipes, notes } = require('./data');
+// temp sample data from js file -- remove this soon
+const { beers, brews, recipes, notes } = require('./data');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
@@ -34,13 +37,84 @@ app.use(methodOverride('_method'));
 // index for beers
 app.get('/beers', async (req, res) => {
     const beers = await Beer.find({});
-    res.render('beers/show', { beers });
+    res.render('beers/index', { beers });
+})
+
+app.post('/beers', async (req, res) => {
+    const beer = new Beer(req.body.beer);
+    await beer.save();
+    res.redirect('/beers');
+})
+
+app.put('/beers/:id', async (req, res) => {
+    await Beer.findByIdAndUpdate(req.params.id, req.body.beer);
+    res.redirect('/beers');
+})
+
+app.get('/beers/:id/edit', async (req, res) => {
+    const beer = await Beer.findById(req.params.id);
+    res.render('beers/edit', { beer });
+})
+
+// new beer
+app.get('/beers/new', async (req, res) => {
+    res.render('beers/new');
+})
+
+// index for brewhouse
+app.get('/brewhouses', async (req, res) => {
+    const brewhouses = await Brewhouse.find({});
+    res.render('brewhouses/index', { brewhouses });
+})
+
+// create brewhouse
+app.post('/brewhouses', async (req, res) => {
+    const brewhouse = new Brewhouse(req.body.brewhouse);
+    await brewhouse.save();
+    res.redirect('/brewhouses');
+})
+
+// new brewhouse
+app.get('/brewhouses/new', (req, res) => {
+    res.render('brewhouses/new');
+})
+
+// edit brewhouse
+app.get('/brewhouses/:id/edit', async (req, res) => {
+    const brewhouse = await Brewhouse.findById(req.params.id);
+    res.render('brewhouses/edit', { brewhouse });
+})
+
+// update brewhouse
+app.put('/brewhouses/:id', async (req, res) => {
+    await Brewhouse.findByIdAndUpdate(req.params.id, req.body.brewhouse);
+    res.redirect('/brewhouses');
+})
+
+// get brewhouse (for recipe new/edit)
+app.get('/brewhouses/:id', async (req, res) => {
+    const brewhouse = await Brewhouse.findById(req.params.id);
+    res.send(brewhouse);
 })
 
 // other beer routes
 // GET /beers/:id - show all info for a given beer - e.g. all recipes, brews, a section containing all photos
 // GET /beers/:id/edit - edit form to edit the beer name, style, description.
 // PATCH /beers/:id/ - update a particular beer
+
+// new recipe form
+app.get('/beers/:beer/recipes/new', async (req, res) => {
+    const beer = await Beer.findById(req.params.beer);
+    const brewhouses = await Brewhouse.find({});
+    res.render('recipes/new', { beer, brewhouses });
+})
+
+// create new recipe
+app.post('/beers/:beer/recipes', async (req, res) => {
+    const beer = await Beer.findById(req.params.beer);
+    const recipe = req.body;
+    res.send(recipe);
+})
 
 // read particular recipe
 app.get('/beers/:beer/recipes/:recipe', (req, res) => {

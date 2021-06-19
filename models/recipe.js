@@ -22,7 +22,7 @@ const recipeSchema = new mongoose.Schema({
         qty: Number,
         ppg: Number,
         gravityPoints: Number,
-        srmLbG: Number, //consider whether we can record this in metric terms to be consistent
+        lovibond: Number, //consider whether we can record this in metric terms to be consistent
         mcu: Number,
         srm: Number
     }],

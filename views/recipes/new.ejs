@@ -68,16 +68,6 @@
                   </div>
                   <div class="col-6 col-sm-3">
                     <div class="form-group row mb-1">
-                      <label for="boilMinutes" class="col-sm-12 recipe-label">Boil Minutes</label>
-                      <div class="col-sm-12">
-                        <input id="boilMinutes" class="form-control form-control-sm bottom-border" type="number" min="0" step="1" name="recipe[boilMinutes]"> 
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row mb-4">
-                  <div class="col-6 col-sm-3">
-                    <div class="form-group row mb-1">
                       <label for="targetOG" class="col-sm-12 recipe-label">Original Gravity</label>
                       <div class="col-sm-12">
                         <input id="targetOG" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.001" name="recipe[targetOG]">
@@ -119,6 +109,17 @@
                           </div>
                         </div>
                       </div>
+
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="boilMinutes" class="col-sm-12 recipe-label">Boil Minutes</label>
+                          <div class="col-sm-12">
+                            <input id="boilMinutes" class="form-control form-control-sm bottom-border" type="number" min="0" step="1" name="water[boilMinutes]"> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row mb-4">
                       <div class="col-6">
                         <div class="form-group row mb-1">
                           <label for="waterAdjust-toggle" class="col-sm-12 recipe-label">Adjustments</label>
@@ -128,6 +129,19 @@
                             </label>
                             <label class="btn btn-light active">
                               <input type="radio" name="water[adjustments]" autocomplete="off" value="false" checked>No
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="mashOutToggle" class="col-sm-12 recipe-label">Mash Out</label>
+                          <div id="mashOutToggle" class="col-sm-12 btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-light">
+                              <input type="radio" name="water[mashOut]" autocomplete="off" value="true">Yes
+                            </label>
+                            <label class="btn btn-light active">
+                              <input type="radio" name="water[mashOut]" autocomplete="off" value="false" checked>No
                             </label>
                           </div>
                         </div>
@@ -241,21 +255,6 @@
                             </div>
                         </div>
                       </div>
-                      <div class="form-row mb-4">
-                        <div class="col-6">
-                          <div class="form-group row mb-1">
-                            <label for="mashOutToggle" class="col-sm-12 recipe-label">Mash Out</label>
-                            <div id="mashOutToggle" class="col-sm-12 btn-group btn-group-toggle" data-toggle="buttons">
-                              <label class="btn btn-light">
-                                <input type="radio" name="water[mashOut]" autocomplete="off" value="true">Yes
-                              </label>
-                              <label class="btn btn-light active">
-                                <input type="radio" name="water[mashOut]" autocomplete="off" value="false" checked>No
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div> 
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -404,8 +403,8 @@
                         <th class="recipe-label text-center" scope="col">Qty (kg)</th>
                         <th class="recipe-label text-center" scope="col">PPG</th>
                         <th class="recipe-label text-center" scope="col">Points</th>
-                        <th class="recipe-label text-center" scope="col">SRM/lb/G</th>
-                        <th class="recipe-label text-center" scope="col">MCU</th>
+                        <th class="recipe-label text-center" scope="col">Lovibond</th>
+                        <th class="recipe-label text-center" scope="col">MCU </th>
                         <th class="recipe-label text-center" scope="col">SRM</th>
                         <th class="border-0 col-add-del-btn" scope="col"></th>
                       </tr>
@@ -419,28 +418,30 @@
                         </td>
                         <td>
                           <label class="sr-only" for="maltQty[0]">Qty (kg)</label>
-                          <input id="maltQty[0]" class="form-control form-control-sm border-0 text-center maltQty" type="number" min="0" step="0.001" name="malts[0][qty]">
+                          <input id="maltQty[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.001" name="malts[0][qty]">
                         </td>
                         <td>
                           <label class="sr-only" for="maltPPG[0]">PPG</label>
                           <input id="maltPPG[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][ppg]">
                         </td>
                         <td>
-                          <label class="sr-only" for="maltGravityPoints[0]">Points</label>
-                          <input id="maltGravityPoints[0]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[0][gravityPoints]">
+                          <label class="sr-only" for="maltGravityPointsInput[0]">Points</label>
+                          <input id="maltGravityPointsInput[0]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[0][gravityPoints]">
                           <span id="maltGravityPointsDisplay[0]" class="d-block form-control-sm text-center bold">0</span>
                         </td>
                         <td>
-                          <label class="sr-only" for="maltSRMLBG[0]">SRM/lb/G</label>
-                          <input id="maltSRMLBG[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][srmLbG]">
+                          <label class="sr-only" for="maltLovibond[0]">Lovibond</label>
+                          <input id="maltLovibond[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="1" name="malts[0][lovibond]">
                         </td>
                         <td>
-                          <label class="sr-only" for="maltMCU[0]">MCU</label>
-                          <input id="maltMCU[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][mcu]">
+                          <label class="sr-only" for="maltMCUInput[0]">MCU</label>
+                          <input id="maltMCUInput[0]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[0][mcu]">
+                          <span id="maltMCUDisplay[0]" class="d-block form-control-sm text-center bold">0</span>
                         </td>
                         <td>
-                          <label class="sr-only" for="maltSRM[0]">SRM</label>
-                          <input id="maltSRM[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[0][srm]">
+                          <label class="sr-only" for="maltSRMInput[0]">SRM</label>
+                          <input id="maltSRMInput[0]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[0][srm]">
+                          <span id="maltSRMDisplay[0]" class="d-block form-control-sm text-center bold">0</span>
                         </td>
                         <td class="border-0">
                           <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
@@ -464,12 +465,14 @@
                         </td>
                         <td></td>
                         <td>
-                          <label class="sr-only" for="maltTotalsMCU">Total MCU</label>
-                          <input id="maltTotalsMCU" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="maltTotals[mcu]" value="0">
+                          <label class="sr-only" for="maltTotalsMCUInput">Total MCU</label>
+                          <input id="maltTotalsMCUInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="maltTotals[mcu]" value="0">
+                          <span id="maltTotalsMCUDisplay" class="d-block form-control-sm text-center bold">0</span>
                         </td>
                         <td>
-                          <label class="sr-only" for="maltTotalsSRM">Total SRM</label>
-                          <input id="maltTotalsSRM" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="maltTotals[srm]" value="0">
+                          <label class="sr-only" for="maltTotalsSRMInput">Total SRM</label>
+                          <input id="maltTotalsSRMInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="maltTotals[srm]" value="0">
+                          <span id="maltTotalsSRMDisplay" class="d-block form-control-sm text-center bold">0</span>
                         </td>
                         <td class="border-0"></td>
                       </tr>         
@@ -478,7 +481,7 @@
                 </div>
                 <ul class="text-lite">
                   <li id="malts-preBoilVolume">Total Gravity Points based on Pre-Boil Volume of <span class='bold'>0</span> L.</li>
-                  <li id="malts-brewhouseEfficiency">Current Brewhouse typically achieves conversion of approximately <span id="malts-conversionPercent" class='bold'>0</span>%. Pre-Boil Gravity of <span class='bold'>0</span> expected.</li>
+                  <li id="malts-brewhouseEfficiency">Current Brewhouse typically achieves conversion of approximately <span id="malts-conversionPercent" class='bold'>0</span>%. Pre-Boil Gravity of <span id="malts-expectedPreBoilGravity" class='bold'>0</span> expected.</li>
                 </ul>
               </div>
             </div>

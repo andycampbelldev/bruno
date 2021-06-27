@@ -161,6 +161,11 @@ $("#malt-table").on("click", ".delete-malt", function () {
                 // increment i
                 i++;
             });
+            // re-run the calculator methods after removing the row
+            const m = new Malt();
+            const maltRow = $(".malt-row")[0];
+            m.malt(r.values, maltRow);
+            r.water();
         });
     });
 });

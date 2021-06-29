@@ -519,8 +519,9 @@
                           <input id="hopQty[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[0][qty]">  
                         </td>
                         <td>
-                          <label class="sr-only" for="hopAAU[0]">AAU</label>
-                          <input id="hopAAU[0]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[0][aau]">  
+                          <label class="sr-only" for="hopAAUInput[0]">AAU</label>
+                          <input id="hopAAUInput[0]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="hops[0][aau]">
+                          <span id="hopAAUDisplay[0]" class="d-block form-control-sm text-center bold">0</span>
                         </td>
                         <td class="text-center">
                           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -547,12 +548,14 @@
                         <td></td>
                         <td></td>
                         <td>
-                          <label class="sr-only" for="hopTotalsQty">Total Hop Qty</label>
-                          <input id="hopTotalsQty" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="hopTotals[qty]" value="0">  
+                          <label class="sr-only" for="hopTotalsQtyInput">Total Hop Qty</label>
+                          <input id="hopTotalsQtyInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="hopTotals[qty]" value="0">
+                          <span id="hopTotalsQtyDisplay" class="d-block form-control-sm text-center bold">0</span>  
                         </td>
                         <td>
-                          <label class="sr-only" for="hopTotalsAAU">Total Hop AAU</label>
-                          <input id="hopTotalsAAU" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="hopTotals[aau]" value="0">  
+                          <label class="sr-only" for="hopTotalsAAUInput">Total Hop AAU</label>
+                          <input id="hopTotalsAAUInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="hopTotals[aau]" value="0"> 
+                          <span id="hopTotalsAAUDisplay" class="d-block form-control-sm text-center bold">0</span>  
                         </td>
                         <td></td>
                         <td></td>

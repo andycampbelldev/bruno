@@ -142,15 +142,12 @@ class Recipe {
   }
 }
 
-//class for malts
-//for malts and any other type of data with multiple instances, the individual instance will be responsible for updating any totals or other calcluated values that are affected by the individual instance.
 class Malt {
   constructor() {
     this.values = {};
     this.recipeValues = {};
   }
-  // individual malt methods
-  refreshInputs = function(row, recipe) {
+  refreshInputs = function(recipe, row) {
     this.values.qty = getFloat('input[id^="maltQty"]', row);
     this.values.ppg = getFloat('input[id^="maltPPG"]', row);
     this.values.lovibond = getFloat('input[id^="maltLovibond"]', row);
@@ -223,7 +220,7 @@ class Malt {
     document.querySelector('#maltTotalsSRMInput').parentElement.style.backgroundColor = this.values.srmHex;
   }
   malt = function(recipe, row) {
-    this.refreshInputs(row, recipe);
+    this.refreshInputs(recipe, row);
     this.points();
     this.mcu();
     this.srm();
@@ -234,6 +231,48 @@ class Malt {
     this.totalMaltSrm();
     this.expectedGravity();
     this.srmHex();
+    this.outputValues(row);
+  }
+}
+
+class Hop {
+  constructor() {
+    this.values = {};
+    this.recipeValues = {};
+  }
+  refreshInputs = function(recipe, row) {
+    this.values.qty = getFloat('input[id^="hopQty"]', row);
+    this.values.aa = getFloat('input[id^="hopAA"]', row);
+    this.recipeValues = recipe;
+  }
+  aau = function() {
+    const { qty, aa } = this.values;
+    this.values.aau = parseFloat((qty * (aa / 100)).toFixed(2));
+    return this.aau;
+  }
+  // add methods for hop total qty and total aau
+  totalHopQty = function() {
+    this.values.totalHopQty = parseFloat((sumValues('input[id^="hopQty\\["]').toFixed(2)));
+    return this.values.totalHopQty;
+  }
+  totalHopAAU = function() {
+    this.values.totalHopAAU = parseFloat((sumValues('input[id^="hopAAUInput\\["]').toFixed(2)));
+    return this.values.totalHopAAU
+  }
+  outputValues = function(row) {
+    updateValue('input[id^="hopAAUInput"]', this.values.aau, row);
+    updateValue('span[id^="hopAAUDisplay"]', this.values.aau, row);
+    updateValue('#hopTotalsQtyInput', this.values.totalHopQty);
+    updateValue('#hopTotalsQtyDisplay', this.values.totalHopQty);
+    updateValue('#hopTotalsAAUInput', this.values.totalHopAAU);
+    updateValue('#hopTotalsAAUDisplay', this.values.totalHopAAU);
+  }
+  hop = function(recipe, row) {
+    this.refreshInputs(recipe,row);
+    this.aau();
+    this.outputValues(row); // output row-level results to DOM so that totals below update immediately
+    this.totalHopQty();
+    this.totalHopAAU();
     this.outputValues(row);
   }
 }
@@ -266,10 +305,15 @@ const updateValue = function(cssSelector, val, domNode = document) {
 }
 
 //EVENT LISTENERS
-
+// hop table
+document.querySelector('#hop-table-container').addEventListener('input', (e) => {
+  const h = new Hop();
+  const hopRow = e.target.parentElement.parentElement;
+  h.hop(r.values, hopRow);
+})
 
 // malt table
-document.querySelector('#malt-table-container').addEventListener('input', async (e) => {
+document.querySelector('#malt-table-container').addEventListener('input', (e) => {
   const m = new Malt();
   const maltRow = e.target.parentElement.parentElement;
   m.malt(r.values, maltRow);

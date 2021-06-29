@@ -189,8 +189,9 @@ $("#hop-table").on("click", ".add-hop", function () {
           <input id="hopQty[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[${i}][qty]">  
         </td>
         <td>
-          <label class="sr-only" for="hopAAU[${i}]">AAU</label>
-          <input id="hopAAU[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[${i}][aau]">  
+          <label class="sr-only" for="hopAAUInput[${i}]">AAU</label>
+          <input id="hopAAUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="hops[${i}][aau]">
+          <span id="hopAAUDisplay[${i}]" class="d-block form-control-sm text-center bold">0</span>
         </td>
         <td class="text-center">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -233,9 +234,10 @@ $("#hop-table").on("click", ".delete-hop", function () {
                 $(this).find("input[id^=hopQty\\[]").attr("id", `hopQty[${i}]`);
                 $(this).find("input[id^=hopQty\\[]").attr("name", `hops[${i}][qty]`);
                 // hop aau - label for attribute, input id & name attributes
-                $(this).find("label[for^=hopAAU\\[]").attr("for", `hopAAU[${i}]`);
-                $(this).find("input[id^=hopAAU\\[]").attr("id", `hopAAU[${i}]`);
-                $(this).find("input[id^=hopAAU\\[]").attr("name", `hops[${i}][aau]`);
+                $(this).find("label[for^=hopAAUInput\\[]").attr("for", `hopAAUInput[${i}]`);
+                $(this).find("input[id^=hopAAUInput\\[]").attr("id", `hopAAUInput[${i}]`);
+                $(this).find("input[id^=hopAAUInput\\[]").attr("name", `hops[${i}][aau]`);
+                $(this).find("span[id^=hopAAUDisplay\\[]").attr("id", `hopAAUDisplay[${i}]`)
                 // hop usage - input name attribute
                 $(this).find("input[name$=\\[usage\\]]").attr("name", `hops[${i}][usage]`);
                 // hop time - label for attribute, input id & name attributes
@@ -245,6 +247,10 @@ $("#hop-table").on("click", ".delete-hop", function () {
                 // increment i
                 i++;
             });
+            // re-run the calculator methods after removing the row
+            const h = new Hop();
+            const hopRow = $(".hop-row")[0];
+            h.hop(r.values, hopRow);
         });
     });
 });

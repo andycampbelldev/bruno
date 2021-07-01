@@ -1,9 +1,11 @@
 /* 
 ========TO DO==============
-+ Update formControl event handlers to run calculator methods when rows are deleted.
+
 + Review use of input event for firing calculators - ensure this isn't too bad for performance.
 + refactor event listeners - try to find nicer way to listen on boil minutes so it doesn't have to have its own specific event listener.
   - consider adding a class to any inputs that need to fire specific methods on input.
++ Calculator on expected OG, based on post boil volume.
++ Calculator around ABV, OG and FG - maybe where any two of these fields can be input to complete the other
 
 ===========================
 
@@ -71,6 +73,10 @@ class Recipe {
     this.values.preBoilVolume = parseFloat((batchSize + kettleLoss + boilOffVolume).toFixed(2));
     return this.values.preBoilVolume;
   }
+  postBoilVolume = function() {
+    const { boilOffVolume, preBoilVolume } = this.values;
+    this.values.postBoilVolume = parseFloat((preBoilVolume - boilOffVolume).toFixed(2));
+  }
   grainAbsorptionVolume = function() {
     const { maltQtyTotal, grainAbsorptionRate } = this.values;
     this.values.grainAbsorptionVolume = parseFloat((maltQtyTotal * grainAbsorptionRate).toFixed(2));
@@ -108,7 +114,8 @@ class Recipe {
     updateValue('#water-table-display-boilOff span', this.values.boilOffVolume);
     updateValue('#water-table-input-preBoilVolume', this.values.preBoilVolume);
     updateValue('#water-table-display-preBoilVolume span', this.values.preBoilVolume);
-    updateValue('#malts-preBoilVolume span', this.values.preBoilVolume);
+    updateValue('#malts-preBoilVolume', this.values.preBoilVolume);
+    updateValue('#malts-postBoilVolume', this.values.postBoilVolume);
     updateValue('#water-table-input-grainAbsorptionVolume', this.values.grainAbsorptionVolume);
     updateValue('#water-table-display-grainAbsorptionVolume span', this.values.grainAbsorptionVolume);
     updateValue('#water-table-input-totalMashWaterVolume', this.values.totalMashWaterVolume);
@@ -132,6 +139,7 @@ class Recipe {
     this.refreshInputs();
     this.boilOffVolume();
     this.preBoilVolume();
+    this.postBoilVolume();
     this.grainAbsorptionVolume();
     this.totalMashWaterVolume();
     this.strikeWaterVolume();
@@ -188,11 +196,16 @@ class Malt {
     this.values.totalMaltSrm = parseFloat((1.4922 * (totalMaltMcu ** 0.6859)).toFixed(2));
     return this.values.totalMaltSrm;
   }
-  expectedGravity = function() {
+  expectedPreBoilGravity = function() {
     const { totalGravityPoints } = this.values;  
     const { conversionPercent } = this.recipeValues; 
-    this.values.expectedGravity = parseFloat((totalGravityPoints * (conversionPercent / 100)).toFixed(0));
-    return this.values.expectedGravity;
+    this.values.expectedPreBoilGravity = parseFloat((totalGravityPoints * (conversionPercent / 100)).toFixed(0));
+    return this.values.expectedPreBoilGravity;
+  }
+  expectedOriginalGravity = function() {
+    const { expectedPreBoilGravity } = this.values;
+    const { preBoilVolume, postBoilVolume } = this.recipeValues;
+    this.values.expectedOriginalGravity = parseFloat(((expectedPreBoilGravity * preBoilVolume) / (postBoilVolume)).toFixed(0));
   }
   srmHex = function() {
     const { totalMaltSrm } = this.values;
@@ -216,7 +229,8 @@ class Malt {
     updateValue('#maltTotalsMCUInput', this.values.totalMaltMcu);
     updateValue('#maltTotalsSRMDisplay', this.values.totalMaltSrm);
     updateValue('#maltTotalsSRMInput', this.values.totalMaltSrm);
-    updateValue('#malts-expectedPreBoilGravity', this.values.expectedGravity);
+    updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity);
+    updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity);
     document.querySelector('#maltTotalsSRMInput').parentElement.style.backgroundColor = this.values.srmHex;
   }
   malt = function(recipe, row) {
@@ -229,7 +243,8 @@ class Malt {
     this.totalGravityPoints();
     this.totalMaltMcu();
     this.totalMaltSrm();
-    this.expectedGravity();
+    this.expectedPreBoilGravity();
+    this.expectedOriginalGravity();
     this.srmHex();
     this.outputValues(row);
   }

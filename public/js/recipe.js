@@ -4,7 +4,8 @@
 + Review use of input event for firing calculators - ensure this isn't too bad for performance.
 + refactor event listeners - try to find nicer way to listen on boil minutes so it doesn't have to have its own specific event listener.
   - consider adding a class to any inputs that need to fire specific methods on input.
-+ Calculator on expected OG, based on post boil volume.
+  - also need to ensure that recalculations occur in the correct order when any relevant field is updated - e.g. at the moment if you work from top to bottom
+    and complete the mash table entries, then go back and change the Batch Size, the Malt Table and Gravity Calcs do not update.
 + Calculator around ABV, OG and FG - maybe where any two of these fields can be input to complete the other
 
 ===========================
@@ -107,7 +108,17 @@ class Recipe {
     this.values.spargeWaterVolume = parseFloat((totalMashWaterVolume - (strikeWaterVolume + mashOutVolume)).toFixed(2));
     return this.values.spargeWaterVolume;
   }
-  outputValues = function() {
+  water = function() {
+    this.refreshInputs();
+    this.boilOffVolume();
+    this.preBoilVolume();
+    this.postBoilVolume();
+    this.grainAbsorptionVolume();
+    this.totalMashWaterVolume();
+    this.strikeWaterVolume();
+    this.mashEndTemp();
+    this.mashOutVolume();
+    this.spargeWaterVolume();
     updateValue('#water-table-display-batchSize span', this.values.batchSize);
     updateValue('#water-table-display-kettleLoss span', this.values.kettleLoss);
     updateValue('#water-table-input-boilOff', this.values.boilOffVolume);
@@ -134,19 +145,7 @@ class Recipe {
     document.querySelector('#water-table-display-strikeWaterVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Brewhouse Grist Ratio L/kg x Receipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.gristRatio}</span> x <span class='bold'>${this.values.maltQtyTotal}</span></span>    <span class='text-lite italic d-block'>= ${this.values.strikeWaterVolume} L</span>    `);
     document.querySelector('#water-table-display-mashOutVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>(T2-T1) x (G + Wm) / (Tw – T2)</span>    <span class='text-lite italic d-block mb-1'>      ${this.values.mashOut ? '= (<span class="bold">' + this.values.mashOutTargetTemp + '</span> - <span class="bold">' + this.values.mashEndTemp + '</span>) x ((<span class="bold">' + this.values.maltQtyTotal + '</span> x <span class="bold">' + this.values.grainSpecificHeat + '</span>) + <span class="bold">' + this.values.strikeWaterVolume + '</span>) / (<span class="bold">' + this.values.mashOutWaterTemp + '</span> – <span class="bold">' + this.values.mashOutTargetTemp + '</span>)' : ''}    </span>    <span class='text-lite italic d-block mb-1'>      = ${this.values.mashOutVolume} L ${this.values.mashOut ? '' : '(No Mash Out on this Recipe)'}    </span>    <hr>    <span class='text-lite italic d-block'><span class='bold'>T2</span> = Brewhouse Mash Out Target Temp C</span>    <span class='text-lite italic d-block'><span class='bold'>T1</span> = Calculated Mash End Temp C (Recipe Mash Temp C, Recipe Mash Length minutes, and Brewhouse Mash Tun Heat Loss C/hour)</span>    <span class='text-lite italic d-block'><span class='bold'>G</span> = Recipe Total Malt Weight x Brewhouse Grain Specific Heat</span>    <span class='text-lite italic d-block'><span class='bold'>Wm</span> = Calculated Strike Water Volume L</span>    <span class='text-lite italic d-block'><span class='bold'>Tw</span> = Brewhouse Mash Out Water Temp C</span>    `);
     document.querySelector('#water-table-display-spargeWaterVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Calculated Total Mash Water L - (Calculated Strike Water L + Calculated Mash Out Water L)</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.totalMashWaterVolume}</span> - (<span class='bold'>${this.values.strikeWaterVolume}</span> + <span class='bold'>${this.values.mashOutVolume}</span>)</span>    <span class='text-lite italic d-block'>= ${this.values.spargeWaterVolume} L</span>    `)
-  }
-  water = function() {
-    this.refreshInputs();
-    this.boilOffVolume();
-    this.preBoilVolume();
-    this.postBoilVolume();
-    this.grainAbsorptionVolume();
-    this.totalMashWaterVolume();
-    this.strikeWaterVolume();
-    this.mashEndTemp();
-    this.mashOutVolume();
-    this.spargeWaterVolume();
-    this.outputValues()
+  
   }
 }
 
@@ -214,13 +213,25 @@ class Malt {
     this.values.srmHex = hex;
     return this.values.srmHex;
   }
-  outputValues = function(row) { 
+  malt = function(recipe, row) {
+    this.refreshInputs(recipe, row);
+    this.points();
+    this.mcu();
+    this.srm();
+    // output row-level results to DOM so that totals below update immediately
     updateValue('input[id^="maltGravityPointsInput"]', this.values.points, row);
     updateValue('span[id^="maltGravityPointsDisplay"]', this.values.points, row);
     updateValue('input[id^="maltMCUInput"]', this.values.mcu, row);
     updateValue('span[id^="maltMCUDisplay"]', this.values.mcu, row);
     updateValue('input[id^="maltSRMInput\\["]', this.values.srm, row);
     updateValue('span[id^="maltSRMDisplay"]', this.values.srm, row);
+    this.totalMaltQty();
+    this.totalGravityPoints();
+    this.totalMaltMcu();
+    this.totalMaltSrm();
+    this.expectedPreBoilGravity();
+    this.expectedOriginalGravity();
+    this.srmHex();
     updateValue('#maltTotalsQtyDisplay', this.values.totalMaltQty);
     updateValue('#maltTotalsQtyInput', this.values.totalMaltQty);
     updateValue('#maltTotalsPointsDisplay', this.values.totalGravityPoints);
@@ -232,21 +243,6 @@ class Malt {
     updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity);
     updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity);
     document.querySelector('#maltTotalsSRMInput').parentElement.style.backgroundColor = this.values.srmHex;
-  }
-  malt = function(recipe, row) {
-    this.refreshInputs(recipe, row);
-    this.points();
-    this.mcu();
-    this.srm();
-    this.outputValues(row); // output row-level results to DOM so that totals below update immediately
-    this.totalMaltQty();
-    this.totalGravityPoints();
-    this.totalMaltMcu();
-    this.totalMaltSrm();
-    this.expectedPreBoilGravity();
-    this.expectedOriginalGravity();
-    this.srmHex();
-    this.outputValues(row);
   }
 }
 
@@ -274,21 +270,18 @@ class Hop {
     this.values.totalHopAAU = parseFloat((sumValues('input[id^="hopAAUInput\\["]').toFixed(2)));
     return this.values.totalHopAAU
   }
-  outputValues = function(row) {
+  hop = function(recipe, row) {
+    this.refreshInputs(recipe,row);
+    this.aau();
+    // output row-level results to DOM so that totals below update immediately
     updateValue('input[id^="hopAAUInput"]', this.values.aau, row);
     updateValue('span[id^="hopAAUDisplay"]', this.values.aau, row);
+    this.totalHopQty();
+    this.totalHopAAU();
     updateValue('#hopTotalsQtyInput', this.values.totalHopQty);
     updateValue('#hopTotalsQtyDisplay', this.values.totalHopQty);
     updateValue('#hopTotalsAAUInput', this.values.totalHopAAU);
     updateValue('#hopTotalsAAUDisplay', this.values.totalHopAAU);
-  }
-  hop = function(recipe, row) {
-    this.refreshInputs(recipe,row);
-    this.aau();
-    this.outputValues(row); // output row-level results to DOM so that totals below update immediately
-    this.totalHopQty();
-    this.totalHopAAU();
-    this.outputValues(row);
   }
 }
 

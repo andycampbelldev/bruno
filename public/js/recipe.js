@@ -42,8 +42,8 @@ class Recipe {
     this.values.kettleLoss = getFloat('#kettleLoss');
     this.values.targetABV = getFloat('#targetABV');
     this.values.targetFG = getFloat('#targetFG');
-    this.values.targetOG = getFloat('#targetOG');
-    this.values.maltQtyTotal = getFloat('#maltTotalsQtyInput');
+    this.values.expectedOriginalGravity = getFloat('#expectedOriginalGravityInput');
+    this.values.totalMaltQty = getFloat('#maltTotalsQtyInput');
     this.values.mashOutTargetTemp = getFloat('#mashOutTargetTemp');
     this.values.mashOutWaterTemp = getFloat('#mashOutWaterTemp');
     this.values.mashHeatLoss = getFloat('#mashHeatLoss');
@@ -79,8 +79,8 @@ class Recipe {
     this.values.postBoilVolume = parseFloat((preBoilVolume - boilOffVolume).toFixed(2));
   }
   grainAbsorptionVolume = function() {
-    const { maltQtyTotal, grainAbsorptionRate } = this.values;
-    this.values.grainAbsorptionVolume = parseFloat((maltQtyTotal * grainAbsorptionRate).toFixed(2));
+    const { totalMaltQty, grainAbsorptionRate } = this.values;
+    this.values.grainAbsorptionVolume = parseFloat((totalMaltQty * grainAbsorptionRate).toFixed(2));
     return this.values.grainAbsorptionVolume;
   }
   totalMashWaterVolume = function() {
@@ -89,8 +89,8 @@ class Recipe {
     return this.values.totalMashWaterVolume;
   }
   strikeWaterVolume = function() {
-    const { gristRatio, maltQtyTotal } = this.values;  
-    this.values.strikeWaterVolume = parseFloat((gristRatio * maltQtyTotal).toFixed(2));
+    const { gristRatio, totalMaltQty } = this.values;  
+    this.values.strikeWaterVolume = parseFloat((gristRatio * totalMaltQty).toFixed(2));
     return this.values.strikeWaterVolume;
   }
   mashEndTemp = function() {
@@ -99,14 +99,24 @@ class Recipe {
     return this.values.mashEndTemp;
   }
   mashOutVolume = function() {
-    const { mashOut, mashEndTemp, maltQtyTotal, grainSpecificHeat, strikeWaterVolume, mashOutWaterTemp, mashOutTargetTemp } = this.values; 
-    this.values.mashOutVolume = mashOut ? parseFloat(((mashOutTargetTemp - mashEndTemp) * ((maltQtyTotal * grainSpecificHeat) + strikeWaterVolume) / (mashOutWaterTemp - mashOutTargetTemp)).toFixed(2)) : 0;
+    const { mashOut, mashEndTemp, totalMaltQty, grainSpecificHeat, strikeWaterVolume, mashOutWaterTemp, mashOutTargetTemp } = this.values; 
+    this.values.mashOutVolume = mashOut ? parseFloat(((mashOutTargetTemp - mashEndTemp) * ((totalMaltQty * grainSpecificHeat) + strikeWaterVolume) / (mashOutWaterTemp - mashOutTargetTemp)).toFixed(2)) : 0;
     return this.values.mashOutVolume;
   }
   spargeWaterVolume = function() {
     const { totalMashWaterVolume, strikeWaterVolume, mashOutVolume } = this.values;  
     this.values.spargeWaterVolume = parseFloat((totalMashWaterVolume - (strikeWaterVolume + mashOutVolume)).toFixed(2));
     return this.values.spargeWaterVolume;
+  }
+  expectedPreBoilGravity = function() {
+    const { totalGravityPoints, conversionPercent } = this.values;  
+    this.values.expectedPreBoilGravity = parseFloat((totalGravityPoints * (conversionPercent / 100)).toFixed(0));
+    return this.values.expectedPreBoilGravity;
+  }
+  expectedOriginalGravity = function() {
+    const { expectedPreBoilGravity, preBoilVolume, postBoilVolume } = this.values;
+    this.values.expectedOriginalGravity = parseFloat(((expectedPreBoilGravity * preBoilVolume) / (postBoilVolume)).toFixed(0));
+    return this.values.expectedOriginalGravity;
   }
   water = function() {
     this.refreshInputs();
@@ -140,12 +150,20 @@ class Recipe {
     //popover content
     document.querySelector('#water-table-display-boilOff').setAttribute('data-content', `    <span class='text-lite italic d-block'>Brewhouse Boil-Off L/hour x (Recipe Boil Minutes / 60 )</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.boilOffRate}</span> x (<span class='bold'>${this.values.boilMinutes}</span> / 60)</span>    <span class='text-lite italic d-block'>= ${this.values.boilOffVolume} L</span>    `)
     document.querySelector('#water-table-display-preBoilVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Recipe Batch Size + Brewhouse Kettle Loss + Calculated Boil-Off</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.batchSize}</span> + <span class='bold'>${this.values.kettleLoss}</span> + <span class='bold'>${this.values.boilOffVolume}</span>    </span><span class='text-lite italic d-block'>= ${this.values.preBoilVolume} L</span>`)
-    document.querySelector('#water-table-display-grainAbsorptionVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Recipe Grain Absorption Rate L/kg x Recipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.grainAbsorptionRate}</span> x <span class='bold'>${this.values.maltQtyTotal}</span></span>    <span class='text-lite italic d-block'>= ${this.values.grainAbsorptionVolume} L</span>    `);
+    document.querySelector('#water-table-display-grainAbsorptionVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Recipe Grain Absorption Rate L/kg x Recipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.grainAbsorptionRate}</span> x <span class='bold'>${this.values.totalMaltQty}</span></span>    <span class='text-lite italic d-block'>= ${this.values.grainAbsorptionVolume} L</span>    `);
     document.querySelector('#water-table-display-totalMashWaterVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Calculated Pre-Boil Volume L + Calculated Grain Absorption L</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.preBoilVolume}</span> + <span class='bold'>${this.values.grainAbsorptionVolume}</span></span>    <span class='text-lite italic d-block'>= ${this.values.totalMashWaterVolume} L</span>    `);
-    document.querySelector('#water-table-display-strikeWaterVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Brewhouse Grist Ratio L/kg x Receipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.gristRatio}</span> x <span class='bold'>${this.values.maltQtyTotal}</span></span>    <span class='text-lite italic d-block'>= ${this.values.strikeWaterVolume} L</span>    `);
-    document.querySelector('#water-table-display-mashOutVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>(T2-T1) x (G + Wm) / (Tw – T2)</span>    <span class='text-lite italic d-block mb-1'>      ${this.values.mashOut ? '= (<span class="bold">' + this.values.mashOutTargetTemp + '</span> - <span class="bold">' + this.values.mashEndTemp + '</span>) x ((<span class="bold">' + this.values.maltQtyTotal + '</span> x <span class="bold">' + this.values.grainSpecificHeat + '</span>) + <span class="bold">' + this.values.strikeWaterVolume + '</span>) / (<span class="bold">' + this.values.mashOutWaterTemp + '</span> – <span class="bold">' + this.values.mashOutTargetTemp + '</span>)' : ''}    </span>    <span class='text-lite italic d-block mb-1'>      = ${this.values.mashOutVolume} L ${this.values.mashOut ? '' : '(No Mash Out on this Recipe)'}    </span>    <hr>    <span class='text-lite italic d-block'><span class='bold'>T2</span> = Brewhouse Mash Out Target Temp C</span>    <span class='text-lite italic d-block'><span class='bold'>T1</span> = Calculated Mash End Temp C (Recipe Mash Temp C, Recipe Mash Length minutes, and Brewhouse Mash Tun Heat Loss C/hour)</span>    <span class='text-lite italic d-block'><span class='bold'>G</span> = Recipe Total Malt Weight x Brewhouse Grain Specific Heat</span>    <span class='text-lite italic d-block'><span class='bold'>Wm</span> = Calculated Strike Water Volume L</span>    <span class='text-lite italic d-block'><span class='bold'>Tw</span> = Brewhouse Mash Out Water Temp C</span>    `);
+    document.querySelector('#water-table-display-strikeWaterVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Brewhouse Grist Ratio L/kg x Receipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.gristRatio}</span> x <span class='bold'>${this.values.totalMaltQty}</span></span>    <span class='text-lite italic d-block'>= ${this.values.strikeWaterVolume} L</span>    `);
+    document.querySelector('#water-table-display-mashOutVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>(T2-T1) x (G + Wm) / (Tw – T2)</span>    <span class='text-lite italic d-block mb-1'>      ${this.values.mashOut ? '= (<span class="bold">' + this.values.mashOutTargetTemp + '</span> - <span class="bold">' + this.values.mashEndTemp + '</span>) x ((<span class="bold">' + this.values.totalMaltQty + '</span> x <span class="bold">' + this.values.grainSpecificHeat + '</span>) + <span class="bold">' + this.values.strikeWaterVolume + '</span>) / (<span class="bold">' + this.values.mashOutWaterTemp + '</span> – <span class="bold">' + this.values.mashOutTargetTemp + '</span>)' : ''}    </span>    <span class='text-lite italic d-block mb-1'>      = ${this.values.mashOutVolume} L ${this.values.mashOut ? '' : '(No Mash Out on this Recipe)'}    </span>    <hr>    <span class='text-lite italic d-block'><span class='bold'>T2</span> = Brewhouse Mash Out Target Temp C</span>    <span class='text-lite italic d-block'><span class='bold'>T1</span> = Calculated Mash End Temp C (Recipe Mash Temp C, Recipe Mash Length minutes, and Brewhouse Mash Tun Heat Loss C/hour)</span>    <span class='text-lite italic d-block'><span class='bold'>G</span> = Recipe Total Malt Weight x Brewhouse Grain Specific Heat</span>    <span class='text-lite italic d-block'><span class='bold'>Wm</span> = Calculated Strike Water Volume L</span>    <span class='text-lite italic d-block'><span class='bold'>Tw</span> = Brewhouse Mash Out Water Temp C</span>    `);
     document.querySelector('#water-table-display-spargeWaterVolume').setAttribute('data-content', `    <span class='text-lite italic d-block'>Calculated Total Mash Water L - (Calculated Strike Water L + Calculated Mash Out Water L)</span>    <span class='text-lite italic d-block'>= <span class='bold'>${this.values.totalMashWaterVolume}</span> - (<span class='bold'>${this.values.strikeWaterVolume}</span> + <span class='bold'>${this.values.mashOutVolume}</span>)</span>    <span class='text-lite italic d-block'>= ${this.values.spargeWaterVolume} L</span>    `)
-  
+  }
+  gravity = function() {
+    this.refreshInputs();
+    this.expectedPreBoilGravity();
+    this.expectedOriginalGravity();
+    updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity);
+    updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity);
+    updateValue('#expectedOriginalGravityInput', this.values.expectedOriginalGravity);
+    updateValue('#expectedOriginalGravityDisplay', this.values.expectedOriginalGravity);
   }
 }
 
@@ -195,21 +213,10 @@ class Malt {
     this.values.totalMaltSrm = parseFloat((1.4922 * (totalMaltMcu ** 0.6859)).toFixed(2));
     return this.values.totalMaltSrm;
   }
-  expectedPreBoilGravity = function() {
-    const { totalGravityPoints } = this.values;  
-    const { conversionPercent } = this.recipeValues; 
-    this.values.expectedPreBoilGravity = parseFloat((totalGravityPoints * (conversionPercent / 100)).toFixed(0));
-    return this.values.expectedPreBoilGravity;
-  }
-  expectedOriginalGravity = function() {
-    const { expectedPreBoilGravity } = this.values;
-    const { preBoilVolume, postBoilVolume } = this.recipeValues;
-    this.values.expectedOriginalGravity = parseFloat(((expectedPreBoilGravity * preBoilVolume) / (postBoilVolume)).toFixed(0));
-  }
   srmHex = function() {
-    const { totalMaltSrm } = this.values;
+    const totalMaltSrm = Math.floor(this.values.totalMaltSrm);
     const colors = [{ hex: "#FFE699", srm: "1" }, { hex: "#FFD878", srm: "2" }, { hex: "#FFCA5A", srm: "3" }, { hex: "#FFBF42", srm: "4" }, { hex: "#FBB123", srm: "5" }, { hex: "#F8A600", srm: "6" }, { hex: "#F39C00", srm: "7" }, { hex: "#EA8F00", srm: "8" }, { hex: "#E58500", srm: "9" }, { hex: "#DE7C00", srm: "10" }, { hex: "#D77200", srm: "11" }, { hex: "#CF6900", srm: "12" }, { hex: "#CB6200", srm: "13" }, { hex: "#C35900", srm: "14" }, { hex: "#BB5100", srm: "15" }, { hex: "#B54C00", srm: "16" }, { hex: "#B04500", srm: "17" }, { hex: "#A63E00", srm: "18" }, { hex: "#A13700", srm: "19" }, { hex: "#9B3200", srm: "20" }, { hex: "#952D00", srm: "21" }, { hex: "#8E2900", srm: "22" }, { hex: "#882300", srm: "23" }, { hex: "#821E00", srm: "24" }, { hex: "#7B1A00", srm: "25" }, { hex: "#771900", srm: "26" }, { hex: "#701400", srm: "27" }, { hex: "#6A0E00", srm: "28" }, { hex: "#660D00", srm: "29" }, { hex: "#5E0B00", srm: "30" }, { hex: "#5A0A02", srm: "31" }, { hex: "#600903", srm: "32" }, { hex: "#520907", srm: "33" }, { hex: "#4C0505", srm: "34" }, { hex: "#470606", srm: "35" }, { hex: "#440607", srm: "36" }, { hex: "#3F0708", srm: "37" }, { hex: "#3B0607", srm: "38" }, { hex: "#3A070B", srm: "39" }, { hex: "#36080A", srm: "40" }]
-    const { hex } = totalMaltSrm ? colors.filter(color => color.srm == Math.floor(totalMaltSrm))[0] : '#FFFFFF';
+    const { hex } = totalMaltSrm > 0 ? colors.filter(color => color.srm == totalMaltSrm)[0] : { hex: '#FFFFFF' };
     this.values.srmHex = hex;
     return this.values.srmHex;
   }
@@ -229,8 +236,6 @@ class Malt {
     this.totalGravityPoints();
     this.totalMaltMcu();
     this.totalMaltSrm();
-    this.expectedPreBoilGravity();
-    this.expectedOriginalGravity();
     this.srmHex();
     updateValue('#maltTotalsQtyDisplay', this.values.totalMaltQty);
     updateValue('#maltTotalsQtyInput', this.values.totalMaltQty);
@@ -240,8 +245,6 @@ class Malt {
     updateValue('#maltTotalsMCUInput', this.values.totalMaltMcu);
     updateValue('#maltTotalsSRMDisplay', this.values.totalMaltSrm);
     updateValue('#maltTotalsSRMInput', this.values.totalMaltSrm);
-    updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity);
-    updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity);
     document.querySelector('#maltTotalsSRMInput').parentElement.style.backgroundColor = this.values.srmHex;
   }
 }
@@ -315,21 +318,28 @@ const updateValue = function(cssSelector, val, domNode = document) {
 //EVENT LISTENERS
 // hop table
 document.querySelector('#hop-table-container').addEventListener('input', (e) => {
-  const h = new Hop();
   const hopRow = e.target.parentElement.parentElement;
   h.hop(r.values, hopRow);
 })
 
 // malt table
 document.querySelector('#malt-table-container').addEventListener('input', (e) => {
-  const m = new Malt();
   const maltRow = e.target.parentElement.parentElement;
   m.malt(r.values, maltRow);
+  r.gravity();
   r.water();
 })
+
 // targets
 document.querySelector('#target-container').addEventListener('input', (e) => {
   r.water();
+  if(r.values.totalMaltQty > 0){
+    const maltRows = document.querySelectorAll('.malt-row');
+    for (let row of maltRows) {
+      m.malt(r.values, row);
+    }
+  }
+  r.gravity();
 })
 
 // boil minutes
@@ -375,5 +385,7 @@ $("#brewhouseSelect").change(function() {
   }
 });
 
-// initialize recipe class
+// initialize recipe, malt and hop class
 const r = new Recipe();
+const m = new Malt();
+const h = new Hop();

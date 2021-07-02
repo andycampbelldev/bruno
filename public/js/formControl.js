@@ -162,10 +162,10 @@ $("#malt-table").on("click", ".delete-malt", function () {
                 i++;
             });
             // re-run the calculator methods after removing the row
-            const m = new Malt();
             const maltRow = $(".malt-row")[0];
             m.malt(r.values, maltRow);
             r.water();
+            r.gravity();
         });
     });
 });
@@ -248,7 +248,6 @@ $("#hop-table").on("click", ".delete-hop", function () {
                 i++;
             });
             // re-run the calculator methods after removing the row
-            const h = new Hop();
             const hopRow = $(".hop-row")[0];
             h.hop(r.values, hopRow);
         });

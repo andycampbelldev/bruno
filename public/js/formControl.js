@@ -352,6 +352,9 @@ $("#mash-table").on("click", ".delete-mash", function () {
                 // increment i
                 i++;
             });
+            // recalculate water and mash totals, as deleted row may have changed mash end temp
+            r.water();
+            r.mash();
         });
     });
 });
@@ -447,6 +450,8 @@ $("#ferm-table").on("click", ".delete-ferm", function () {
                 // increment i
                 i++;
             });
+            // update ferm table total days
+            r.ferm();
         });
     });
 });
@@ -485,3 +490,10 @@ $("#notes-table").on("click", ".delete-notes", function () {
         });
     });
 });
+
+// make targets card sticky
+document.querySelector('#pinTargets').addEventListener('click', (e) => {
+  document.querySelector('#target-container').classList.toggle('sticky-top');
+  document.querySelector('#target-container').classList.toggle('shadow');
+  document.querySelector('#pinTargets').classList.toggle('active');
+})

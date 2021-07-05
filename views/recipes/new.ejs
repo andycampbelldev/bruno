@@ -3,18 +3,48 @@
       <div class="row mb-2">
         <div class="col-md-12 px-2 px-md-0">
           <h3 class="d-inline-block mb-0"><%= beer.name %></h3><span class="pl-1"><%= beer.style %></span>
+          <div class="float-right">
+            <button class="btn btn-sm btn-outline-success">Save</button>
+          </div>
         </div>
       </div>
       <!-- Recipe Info -->
       <div class="row">
         <div class="col-md-12 px-2 px-md-0">
           <form action="/beers/<%= beer._id %>/recipes" method="POST">
+            <!-- Target Batch Size, Boil Mins, OG, FG-->
+            <div id="target-container" class="card mb-2">
+              <div class="card-body">
+                <a id="pinTargets" class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i class="fas fa-thumbtack"></i></a>
+                <div class="form-row">
+                  <div class="col-6 col-md-3 text-center">
+                    <span id="target-display-batchSize" class="d-block display-4">0</span>
+                    <span class="d-block text-lite">Litres</span>
+                  </div>
+                  <div class="col-6 col-md-3 text-center">
+                    <label for="expectedOriginalGravityInput" class="col-sm-12 sr-only">Original Gravity</label>
+                    <input id="expectedOriginalGravityInput" class="form-control form-control-sm bottom-border d-none" type="number" min="0" step="0.001" name="recipe[expectedOriginalGravity]">
+                    <span id="expectedOriginalGravityDisplay" class="d-block display-4">0</span>
+                    <span class="d-block text-lite">OG</span>
+                  </div>
+                  <div class="col-6 col-md-3 text-center">
+                    <label for="expectedFinalGravityInput" class="col-sm-12 sr-only">Final Gravity</label>
+                    <input id="expectedFinalGravityInput" class="form-control form-control-sm bottom-border d-none" type="number" min="0" step="0.001" name="recipe[expectedFinalGravity]">
+                    <span id="expectedFinalGravityDisplay" class="d-block display-4">0</span>
+                    <span class="d-block text-lite">FG</span>
+                  </div>
+                  <div class="col-6 col-md-3 text-center">
+                    <label for="expectedABVInput" class="col-sm-12 sr-only">% ABV</label>
+                    <input id="expectedABVInput" class="form-control form-control-sm bottom-border d-none" type="number" min="0" step="0.01" name="recipe[expectedABV]"> 
+                    <span id="expectedABVDisplay" class="d-block display-4">0</span>
+                    <span class="d-block text-lite">% ABV</span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- Save and Edit buttons should just show one or the other -->
             <div class="card mb-2">
               <div class="card-body">
-                <div class="float-right">
-                  <button class="btn btn-sm btn-outline-success">Save</button>
-                </div>
                 <h4>General</h4>
                 <!-- General -->
                 <div class="form-row mt-2 mb-2">
@@ -52,55 +82,22 @@
                 </div>
               </div>
             </div>
-
-            <!-- Target Batch Size, Boil Mins, OG, FG-->
-            <div id="target-container" class="card mb-2">
-              <div class="card-body">
-                <h4>Targets</h4>
-                <div class="form-row mb-4">
-                  <div class="col-6 col-sm-3">
-                    <div class="form-group row mb-1">
-                      <label for="batchSize" class="col-sm-12 recipe-label">Batch Size (L)</label>
-                      <div class="col-sm-12">
-                        <input id="batchSize" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="recipe[batchSize]"> 
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-sm-3">
-                    <div class="form-group row mb-1">
-                      <label for="expectedOriginalGravityInput" class="col-sm-12 recipe-label">Original Gravity</label>
-                      <div class="col-sm-12">
-                        <input id="expectedOriginalGravityInput" class="form-control form-control-sm bottom-border d-none" type="number" min="0" step="0.001" name="recipe[expectedOriginalGravity]">
-                        <span id="expectedOriginalGravityDisplay" class="d-block form-control-sm text-center bold">0</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-sm-3">
-                    <div class="form-group row mb-1">
-                      <label for="targetFG" class="col-sm-12 recipe-label">Final Gravity</label>
-                      <div class="col-sm-12">
-                        <input id="targetFG" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.001" name="recipe[targetFG]">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-sm-3">
-                    <div class="form-group row mb-1">
-                      <label for="targetABV" class="col-sm-12 recipe-label">% ABV</label>
-                      <div class="col-sm-12">
-                        <input id="targetABV" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="recipe[targetABV]"> 
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!-- Water -->
-            <div class="card mb-2">
+            <div id="water-container" class="card mb-2">
               <div class="card-body">
                 <h4>Water</h4>
                 <div class="form-row mb-4">
                   <div class="col-md-6">
+                    <div class="form-row mb-4">
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="batchSize" class="col-sm-12 recipe-label">Batch Size (L)</label>
+                          <div class="col-sm-12">
+                            <input id="batchSize" class="form-control form-control-sm bottom-border" type="number" min="0" step="0.01" name="recipe[batchSize]"> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="form-row mb-4">
                       <div class="col-6">
                         <div class="form-group row mb-1">
@@ -595,6 +592,22 @@
                       </div>
                       <div class="col-6">
                         <div class="form-group row mb-1">
+                          <label for="yeastFlocculation" class="col-sm-12 recipe-label">Flocculation</label>
+                          <div class="col-sm-12">
+                            <input id="yeastFlocculation" class="form-control form-control-sm bottom-border" type="text" name="yeast[flocculation]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
+                          <label for="yeastAttenuation" class="col-sm-12 recipe-label">Attenuation %</label>
+                          <div class="col-sm-12">
+                            <input id="yeastAttenuation" class="form-control form-control-sm bottom-border" type="number" min="0" step="1" name="yeast[attenuation]">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group row mb-1">
                           <label for="yeastState" class="col-sm-12 recipe-label">State</label>
                           <div class="col-sm-12">
                             <input id="yeastState" class="form-control form-control-sm bottom-border" type="text" name="yeast[state]">
@@ -708,8 +721,9 @@
                             <td></td>
                             <td></td>
                             <td>
-                              <label class="sr-only" for="mashTotalMinutes">Total Mash Minutes</label>
-                              <input id="mashTotalMinutes" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="mash[totalMinutes]" value="0">  
+                              <label class="sr-only" for="totalMashMinutesInput">Total Mash Minutes</label>
+                              <input id="totalMashMinutesInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="mash[totalMinutes]" value="0">
+                              <span id="totalMashMinutesDisplay" class="d-block form-control-sm text-center bold">0</span>  
                             </td>
                             <td class="border-0"></td>
                           </tr>         
@@ -806,8 +820,9 @@
                             <td></td>
                             <td></td>
                             <td>
-                              <label class="sr-only" for="fermTotalsDays">Total Ferm Days</label>
-                              <input id="fermTotalsDays" class="form-control form-control-sm border-0 text-center bold" type="number" min="0" step="0.01" name="fermTotals[days]" value="0">  
+                              <label class="sr-only" for="totalFermDaysInput">Total Ferm Days</label>
+                              <input id="totalFermDaysInput" class="form-control form-control-sm border-0 text-center bold d-none" type="number" min="0" step="0.01" name="fermTotals[days]" value="0">  
+                              <span id="totalFermDaysDisplay" class="d-block form-control-sm text-center bold">0</span>  
                             </td>
                             <td class="border-0"></td>
                           </tr>         

@@ -230,3 +230,9 @@ label.btn {
 .popover {
     max-width: 95%;
 }
+
+/* General Styling */
+/* This is a copy of the bootrap 5 regular shadow, without having to go to the trouble of enabling shadows with scss */
+.shadow {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}

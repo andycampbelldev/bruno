@@ -1,12 +1,46 @@
 /* 
 ========TO DO==============
 
-+ Review use of input event for firing calculators - ensure this isn't too bad for performance.
-+ refactor event listeners - try to find nicer way to listen on boil minutes so it doesn't have to have its own specific event listener.
+
+Add to README: Some general rules for recipe, malt and hop methods:
+- If water is updated, update each malt row, and gravity. Later we'll need to update hops once we have additional calcs for hop utilization etc.
+- If malt is updated, update water (as malt qty affects water loss to grain and strike water volume), and obviously update gravity!
+- If hops are updated, there's no need to update anything else
+- If the mash table is updated, update water (as mash affects mash out water), and update mash totals.
+- If yeast gets updated, update gravity.
+- If the ferm table gets updated, update ferm total days
+
++ Add to README: ABV formula: This is just a general formula. Many brewers online have pointed out that this formula becomes less accurate for higher gravity beers, however I generally keep mine under 6% ABV, so not too worried.
++ Add to README: FG is a product of OG and Yeast Attenuation - it does not take any other factors into account, therefore the only way that the FG could ever be <1 would be if we entered a yeast attenuation greater than 100%, which we would not do. 
+This is merely an estimate and can be lower or higher because there are many factors that affect the final gravity. These factors include fermentation temperature, amount of yeast pitched, the health of yeast, the amount of O2 present, mash temperature, the amount of adjuncts used, the amount of nutrients available in the wort, and the flocculation rate of the yeast strain.
+
+
+=======IN PROGRESS=========
+
++ refactor event listeners
   - consider adding a class to any inputs that need to fire specific methods on input.
-  - also need to ensure that recalculations occur in the correct order when any relevant field is updated - e.g. at the moment if you work from top to bottom
-    and complete the mash table entries, then go back and change the Batch Size, the Malt Table and Gravity Calcs do not update.
-+ Calculator around ABV, OG and FG - maybe where any two of these fields can be input to complete the other
+  - ensure that changes flow on to related data (see below)
+
+Some general rules for this:
+- water affects each malt, and gravity
+- malt affects water (strike vol, grain loss) and gravity
+- hops are currently standalone
+- mash affects water temp (not water volume though, so no need to re-run malt)
+- yeast affects gravity
+- ferm is standalone
+
+How can we shorten up our event listeners?
+- calc class on all element on which we want to listen for inputs.
+- then a further class that specifies the calculation order - e.g. the water table could have class="calc calc-water"
+  - we could add an event listener to all elements with calc, then have conditional logic within the event handler
+  - if class list contains calc-water, then run water(), malt(), then gravity().
+  - if class list contains calc-malt, then run malt(), then water()
+
+  Only drawback with this approach is that we have to either:
+  - really standardize how all of our inputs are nested relative to the parent to whom the event listener has been delegated
+  - add the calc classes to every single input, which isn't ideal.
+
+  Standardization is better, just a lot of effort and risk that something breaks!
 
 ===========================
 
@@ -40,8 +74,7 @@ class Recipe {
     this.values.grainAbsorptionRate = getFloat('#grainAbsorptionRate');
     this.values.gristRatio = getFloat('#gristRatio');
     this.values.kettleLoss = getFloat('#kettleLoss');
-    this.values.targetABV = getFloat('#targetABV');
-    this.values.targetFG = getFloat('#targetFG');
+    this.values.expectedFinalGravity = getFloat('#expectedFinalGravityInput');
     this.values.expectedOriginalGravity = getFloat('#expectedOriginalGravityInput');
     this.values.totalMaltQty = getFloat('#maltTotalsQtyInput');
     this.values.mashOutTargetTemp = getFloat('#mashOutTargetTemp');
@@ -62,6 +95,7 @@ class Recipe {
     this.values.totalGravityPoints = getFloat('#maltTotalsPointsInput');
     this.values.totalMaltMCU = getFloat('#maltTotalsMCUInput');
     this.values.totalMaltSRM = getFloat('#maltTotalsSRMInput');
+    this.values.yeastAttenuation = getFloat('#yeastAttenuation');
   }
   //water methods
   boilOffVolume = function() {
@@ -98,6 +132,10 @@ class Recipe {
     this.values.mashEndTemp = parseFloat((finalMashStepTemp - ((finalMashStepMinutes / 60) * mashHeatLoss)).toFixed(2));
     return this.values.mashEndTemp;
   }
+  totalMashMinutes = function() {
+    this.values.totalMashMinutes = sumValues('input[id^="mashMins"]');
+    return this.values.totalMashMinutes;
+  }
   mashOutVolume = function() {
     const { mashOut, mashEndTemp, totalMaltQty, grainSpecificHeat, strikeWaterVolume, mashOutWaterTemp, mashOutTargetTemp } = this.values; 
     this.values.mashOutVolume = mashOut ? parseFloat(((mashOutTargetTemp - mashEndTemp) * ((totalMaltQty * grainSpecificHeat) + strikeWaterVolume) / (mashOutWaterTemp - mashOutTargetTemp)).toFixed(2)) : 0;
@@ -108,16 +146,32 @@ class Recipe {
     this.values.spargeWaterVolume = parseFloat((totalMashWaterVolume - (strikeWaterVolume + mashOutVolume)).toFixed(2));
     return this.values.spargeWaterVolume;
   }
+  // gravity methods
   expectedPreBoilGravity = function() {
     const { totalGravityPoints, conversionPercent } = this.values;  
-    this.values.expectedPreBoilGravity = parseFloat((totalGravityPoints * (conversionPercent / 100)).toFixed(0));
+    this.values.expectedPreBoilGravity = parseFloat(((totalGravityPoints * (conversionPercent / 100)).toFixed(0) / 1000) + 1);
     return this.values.expectedPreBoilGravity;
   }
   expectedOriginalGravity = function() {
     const { expectedPreBoilGravity, preBoilVolume, postBoilVolume } = this.values;
-    this.values.expectedOriginalGravity = parseFloat(((expectedPreBoilGravity * preBoilVolume) / (postBoilVolume)).toFixed(0));
+    this.values.expectedOriginalGravity = parseFloat((((((expectedPreBoilGravity - 1) * 1000) * preBoilVolume) / postBoilVolume).toFixed(0) / 1000) + 1);
     return this.values.expectedOriginalGravity;
   }
+  expectedFinalGravity = function() {
+    const { expectedOriginalGravity, yeastAttenuation } = this.values;
+    this.values.expectedFinalGravity = parseFloat(((((expectedOriginalGravity - 1) * 1000) * ((100 - yeastAttenuation) / 100)).toFixed(0) / 1000) + 1);
+    return this.values.expectedFinalGravity;
+  }
+  expectedABV = function() {
+    const { expectedOriginalGravity, expectedFinalGravity } = this.values;
+    this.values.expectedABV = parseFloat(((expectedOriginalGravity - expectedFinalGravity) * 131.25).toFixed(1));
+    return this.values.expectedABV;
+  }
+  totalFermDays = function() {
+    this.values.totalFermDays = sumValues('input[id^="fermDays"');
+    return this.values.totalFermDays;
+  }
+  // calculators
   water = function() {
     this.refreshInputs();
     this.boilOffVolume();
@@ -129,6 +183,7 @@ class Recipe {
     this.mashEndTemp();
     this.mashOutVolume();
     this.spargeWaterVolume();
+    updateValue('#target-display-batchSize', this.values.batchSize);
     updateValue('#water-table-display-batchSize span', this.values.batchSize);
     updateValue('#water-table-display-kettleLoss span', this.values.kettleLoss);
     updateValue('#water-table-input-boilOff', this.values.boilOffVolume);
@@ -160,10 +215,26 @@ class Recipe {
     this.refreshInputs();
     this.expectedPreBoilGravity();
     this.expectedOriginalGravity();
-    updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity);
-    updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity);
+    this.expectedFinalGravity();
+    this.expectedABV();
+    updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity.toFixed(3));
+    updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity.toFixed(3));
     updateValue('#expectedOriginalGravityInput', this.values.expectedOriginalGravity);
-    updateValue('#expectedOriginalGravityDisplay', this.values.expectedOriginalGravity);
+    updateValue('#expectedOriginalGravityDisplay', this.values.expectedOriginalGravity.toFixed(3));
+    updateValue('#expectedFinalGravityInput', this.values.expectedFinalGravity);
+    updateValue('#expectedFinalGravityDisplay', this.values.expectedFinalGravity.toFixed(3));
+    updateValue('#expectedABVInput', this.values.expectedABV);
+    updateValue('#expectedABVDisplay', this.values.expectedABV);
+  }
+  mash = function() {
+    this.totalMashMinutes();
+    updateValue('#totalMashMinutesInput', this.values.totalMashMinutes);
+    updateValue('#totalMashMinutesDisplay', this.values.totalMashMinutes);
+  }
+  ferm = function() {
+    this.totalFermDays();
+    updateValue('#totalFermDaysInput', this.values.totalFermDays);
+    updateValue('#totalFermDaysDisplay', this.values.totalFermDays);
   }
 }
 
@@ -316,6 +387,18 @@ const updateValue = function(cssSelector, val, domNode = document) {
 }
 
 //EVENT LISTENERS
+// water - all inputs
+document.querySelector('#water-container').addEventListener('input', (e) => {
+  r.water();
+  if(r.values.totalMaltQty > 0){
+    const maltRows = document.querySelectorAll('.malt-row');
+    for (let row of maltRows) {
+      m.malt(r.values, row);
+    }
+  }
+  r.gravity();
+})
+
 // hop table
 document.querySelector('#hop-table-container').addEventListener('input', (e) => {
   const hopRow = e.target.parentElement.parentElement;
@@ -327,28 +410,6 @@ document.querySelector('#malt-table-container').addEventListener('input', (e) =>
   const maltRow = e.target.parentElement.parentElement;
   m.malt(r.values, maltRow);
   r.gravity();
-  r.water();
-})
-
-// targets
-document.querySelector('#target-container').addEventListener('input', (e) => {
-  r.water();
-  if(r.values.totalMaltQty > 0){
-    const maltRows = document.querySelectorAll('.malt-row');
-    for (let row of maltRows) {
-      m.malt(r.values, row);
-    }
-  }
-  r.gravity();
-})
-
-// boil minutes
-document.querySelector('#boilMinutes').addEventListener('input', (e) => {
-  r.water();
-})
-
-// Brewhouse values (i.e. when overriding)
-document.querySelector('#brewhouse-container').addEventListener('input', (e) => {
   r.water();
 })
 
@@ -364,6 +425,12 @@ document.querySelector('#mashOutToggle').addEventListener('click', () => {
 // mash table
 document.querySelector('#mash-table-container').addEventListener('input', (e) => {
   r.water();
+  r.mash();
+})
+
+// yeast attenuation
+document.querySelector('#yeastAttenuation').addEventListener('input', (e) => {
+  r.gravity();
 })
 
 // brewhouse profile
@@ -384,6 +451,11 @@ $("#brewhouseSelect").change(function() {
     })
   }
 });
+
+//ferm table
+document.querySelector('#ferm-table-container').addEventListener('input', (e) => {
+  r.ferm();
+})
 
 // initialize recipe, malt and hop class
 const r = new Recipe();

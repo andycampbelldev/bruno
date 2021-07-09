@@ -1,9 +1,30 @@
 // --------------------------
 // TO DO
 // - refactor functions below to use event listener, instead of html onclick
-// - separate out water calculation logic into separate script
 // - standardize with use of either jQuery or vanilla JS
 // --------------------------
+
+// stop enter from submitting form
+window.addEventListener('keydown', function(e) {
+  if(e.keyIdentifier=='U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+    if(e.target.nodeName == 'INPUT'){
+      e.preventDefault();
+      return false;
+    }
+  }}, true);
+
+// show/hide scroll cue on mobile when user scrolls right
+const toggleScrollCue = function() {
+  let y = this.scrollLeft; 
+  let chev = this.querySelector('.scroll-cue');
+  if (y > 5) {
+    chev.classList.remove('d-flex');
+    chev.classList.add('d-none');
+  } else {
+    chev.classList.remove('d-none');
+    chev.classList.add('d-flex');
+  }
+}
 
 //general toggler for showing/hiding elements
 function toggler(i) {
@@ -84,34 +105,31 @@ $("#malt-table").on("click", ".add-malt", function () {
         `<tr class="malt-row">
         <td>
           <label class="sr-only" for="maltName[${i}]">Name</label>
-          <input id="maltName[${i}]" class="form-control form-control-sm border-0" type="text" name="malts[${i}][name]" placeholder="New Malt">
+          <input id="maltName[${i}]" class="form-control form-control-sm border-0" type="text" name="malts[${i}][name]">
         </td>
         <td>
           <label class="sr-only" for="maltQty[${i}]">Qty (kg)</label>
-          <input id="maltQty[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.001" name="malts[${i}][qty]">
+          <input id="maltQty[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.001" name="malts[${i}][qty]">
         </td>
         <td>
           <label class="sr-only" for="maltPPG[${i}]">PPG</label>
-          <input id="maltPPG[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="malts[${i}][ppg]">
+          <input id="maltPPG[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="malts[${i}][ppg]">
         </td>
         <td>
-          <label class="sr-only" for="maltGravityPointsInput[${i}]">Points</label>
-          <input id="maltGravityPointsInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][gravityPoints]">
-          <span id="maltGravityPointsDisplay[${i}]" class="d-block form-control-sm text-center bold">0</span>
+          <input id="maltGravityPointsInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][gravityPoints]" aria-hidden="true">
+          <span id="maltGravityPointsDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Malt Gravity Points">0</span>
         </td>
         <td>
           <label class="sr-only" for="maltLovibond[${i}]">SRM/lb/G</label>
-          <input id="maltLovibond[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="1" name="malts[${i}][lovibond]">
+          <input id="maltLovibond[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[${i}][lovibond]">
         </td>
         <td>
-          <label class="sr-only" for="maltMCUInput[${i}]">MCU</label>
-          <input id="maltMCUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][mcu]">
-          <span id="maltMCUDisplay[${i}]" class="d-block form-control-sm text-center bold">0</span>
+          <input id="maltMCUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][mcu]" aria-hidden="true">
+          <span id="maltMCUDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Malt Color Units">0</span>
         </td>
         <td>
-          <label class="sr-only" for="maltSRMInput[${i}]">SRM</label>
-          <input id="maltSRMInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][srm]">
-          <span id="maltSRMDisplay[${i}]" class="d-block form-control-sm text-center bold">0</span>
+          <input id="maltSRMInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][srm]" aria-hidden="true">
+          <span id="maltSRMDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Malt SRM Color">0</span>
         </td>
         <td class="border-0">
           <a class="btn btn-sm btn-outline-dark my-1 delete-malt" role="button"><i class="far fa-trash-alt"></i></i></a>
@@ -139,8 +157,7 @@ $("#malt-table").on("click", ".delete-malt", function () {
                 $(this).find("label[for^=maltPPG\\[]").attr("for", `maltPPG[${i}]`);
                 $(this).find("input[id^=maltPPG\\[]").attr("id", `maltPPG[${i}]`);
                 $(this).find("input[id^=maltPPG\\[]").attr("name", `malts[${i}][ppg]`);
-                // malt points - label for attribute, input id & name attributes, span id
-                $(this).find("label[for^=maltGravityPointsInput\\[]").attr("for", `maltGravityPointsInput[${i}]`);
+                // malt points - input id & name attributes, span id
                 $(this).find("input[id^=maltGravityPointsInput\\[]").attr("id", `maltGravityPointsInput[${i}]`);
                 $(this).find("input[id^=maltGravityPointsInput\\[]").attr("name", `malts[${i}][gravityPoints]`);
                 $(this).find("span[id^=maltGravityPointsDisplay\\[]").attr("id", `maltGravityPointsDisplay[${i}]`)
@@ -148,13 +165,11 @@ $("#malt-table").on("click", ".delete-malt", function () {
                 $(this).find("label[for^=maltLovibond\\[]").attr("for", `maltLovibond[${i}]`);
                 $(this).find("input[id^=maltLovibond\\[]").attr("id", `maltLovibond[${i}]`);
                 $(this).find("input[id^=maltLovibond\\[]").attr("name", `malts[${i}][lovibond]`);
-                // malt mcu - label for attribute, input id & name attributes, span id
-                $(this).find("label[for^=maltMCUInput\\[]").attr("for", `maltMCUInput[${i}]`);
+                // malt mcu - input id & name attributes, span id
                 $(this).find("input[id^=maltMCUInput\\[]").attr("id", `maltMCUInput[${i}]`);
                 $(this).find("input[id^=maltMCUInput\\[]").attr("name", `malts[${i}][mcu]`);
                 $(this).find("span[id^=maltMCUDisplay\\[]").attr("id", `maltMCUDisplay[${i}]`);
-                // malt srm - label for attribute, input id & name attributes, span id
-                $(this).find("label[for^=maltSRMInput\\[]").attr("for", `maltSRMInput[${i}]`);
+                // malt srm - input id & name attributes, span id
                 $(this).find("input[id^=maltSRMInput\\[]").attr("id", `maltSRMInput[${i}]`);
                 $(this).find("input[id^=maltSRMInput\\[]").attr("name", `malts[${i}][srm]`);
                 $(this).find("span[id^=maltSRMDisplay\\[]").attr("id", `maltSRMDisplay[${i}]`)
@@ -170,6 +185,9 @@ $("#malt-table").on("click", ".delete-malt", function () {
     });
 });
 
+// remove malt table scroll-cue below medium breakpoint when a user starts scrolling
+document.querySelector('#malt-table-container').addEventListener('scroll', toggleScrollCue)
+
 // add more rows to hop table as needed
 $("#hop-table").on("click", ".add-hop", function () {
     // check the number of hop-rows already on the page. Use the result as the index for the row being added.
@@ -178,20 +196,19 @@ $("#hop-table").on("click", ".add-hop", function () {
         `<tr class="hop-row">
         <td>
           <label class="sr-only" for="hopName[${i}]">Name</label>
-          <input id="hopName[${i}]" class="form-control form-control-sm border-0" type="text" name="hops[${i}][name]" placeholder="New Hop">  
+          <input id="hopName[${i}]" class="form-control form-control-sm border-0" type="text" name="hops[${i}][name]">  
         </td>
         <td>
           <label class="sr-only" for="hopAA[${i}]">AA%</label>
-          <input id="hopAA[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" max="100" step="0.01" name="hops[${i}][aa]">  
+          <input id="hopAA[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" max="100" step="0.01" name="hops[${i}][aa]">  
         </td>
         <td>
           <label class="sr-only" for="hopQty[${i}]">Qty (g)</label>
-          <input id="hopQty[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="hops[${i}][qty]">  
+          <input id="hopQty[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="hops[${i}][qty]">  
         </td>
         <td>
-          <label class="sr-only" for="hopAAUInput[${i}]">AAU</label>
-          <input id="hopAAUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="hops[${i}][aau]">
-          <span id="hopAAUDisplay[${i}]" class="d-block form-control-sm text-center bold">0</span>
+          <input id="hopAAUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="hops[${i}][aau]" aria-hidden="true">
+          <span id="hopAAUDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Hop Alpha Acid Units">0</span>
         </td>
         <td class="text-center">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -234,7 +251,6 @@ $("#hop-table").on("click", ".delete-hop", function () {
                 $(this).find("input[id^=hopQty\\[]").attr("id", `hopQty[${i}]`);
                 $(this).find("input[id^=hopQty\\[]").attr("name", `hops[${i}][qty]`);
                 // hop aau - label for attribute, input id & name attributes
-                $(this).find("label[for^=hopAAUInput\\[]").attr("for", `hopAAUInput[${i}]`);
                 $(this).find("input[id^=hopAAUInput\\[]").attr("id", `hopAAUInput[${i}]`);
                 $(this).find("input[id^=hopAAUInput\\[]").attr("name", `hops[${i}][aau]`);
                 $(this).find("span[id^=hopAAUDisplay\\[]").attr("id", `hopAAUDisplay[${i}]`)
@@ -254,6 +270,9 @@ $("#hop-table").on("click", ".delete-hop", function () {
     });
 });
 
+// remove hop table scroll-cue below medium breakpoint when a user starts scrolling
+document.querySelector('#hop-table-container').addEventListener('scroll', toggleScrollCue)
+
 // add more rows to finings table as needed
 $("#finings-table").on("click", ".add-finings", function () {
     // check the number of finings-rows already on the page. Use the result as the index for the row being added.
@@ -262,7 +281,7 @@ $("#finings-table").on("click", ".add-finings", function () {
         `<tr class="finings-row">
         <td>
           <label class="sr-only" for="finingsName[${i}]">Type</label>
-          <input id="finingsName[${i}]" class="form-control form-control-sm border-0" type="text" name="finings[${i}][name]" placeholder="New Fining">  
+          <input id="finingsName[${i}]" class="form-control form-control-sm border-0" type="text" name="finings[${i}][name]">  
         </td>
         <td>
           <label class="sr-only" for="finingsQty[${i}]">Qty</label>
@@ -305,6 +324,9 @@ $("#finings-table").on("click", ".delete-finings", function () {
     });
 });
 
+// remove ferm table scroll-cue below medium breakpoint when a user starts scrolling
+document.querySelector('#finings-table-container').addEventListener('scroll', toggleScrollCue)
+
 // add more rows to mash schedule table as needed
 $("#mash-table").on("click", ".add-mash", function () {
     // check the number of mash-rows already on the page. Use the result as the index for the row being added.
@@ -313,15 +335,15 @@ $("#mash-table").on("click", ".add-mash", function () {
         `<tr class="mash-row">
     <td>
       <label class="sr-only" for="mashRestType[${i}]">Rest Type</label>
-      <input id="mashRestType[${i}]" class="form-control form-control-sm border-0" type="text" name="mashSched[${i}][restType]" placeholder="New Rest">  
+      <input id="mashRestType[${i}]" class="form-control form-control-sm border-0" type="text" name="mashSched[${i}][restType]">  
     </td>
     <td>
       <label class="sr-only" for="mashTemp[${i}]">Temp (C)</label>
-      <input id="mashTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="mashSched[${i}][temp]">  
+      <input id="mashTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="mashSched[${i}][temp]">  
     </td>
     <td>
       <label class="sr-only" for="mashMins[${i}]">Minutes</label>
-      <input id="mashMins[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="1" name="mashSched[${i}][minutes]">  
+      <input id="mashMins[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="mashSched[${i}][minutes]">  
     </td>
     <td class="border-0">
       <a class="btn btn-sm btn-outline-dark my-1 delete-mash" role="button"><i class="far fa-trash-alt"></i></i></a>
@@ -372,18 +394,6 @@ $("input[name=yeast\\[starter\\]]").change(function () {
     }
 });
 
-// // show/hide-reset mash out temp and mash out water row
-// $("input[name=mash\\[mashOut\\]]").change(function() {
-//   let val = $(this).val() === "true" ? true : false;
-//   let hidden = $("#mashOut-row").hasClass("d-none");
-//   if ((val === true) && (hidden === true)) {
-//     $("#mashOut-row").toggleClass("d-none")
-//   } 
-//   else if ((val === false) && (hidden === false)) {
-//     $("#mashOut-row").toggleClass("d-none");
-//   }
-// });
-
 // show/hide-reset water adjustment details
 $("input[name=water\\[adjustments\\]]").change(function () {
     let val = $(this).val() === "true" ? true : false;
@@ -396,6 +406,19 @@ $("input[name=water\\[adjustments\\]]").change(function () {
         $("#waterAdjustmentNotes").val("");
     }
 });
+
+// show/hide brewhouse water volumes & temps
+document.querySelector('#toggle-brewhouse-volumes').addEventListener('click', e => {
+  document.querySelector('#brewhouse-volumes').classList.toggle('d-none');
+  document.querySelector('#toggle-brewhouse-volumes-expanded').classList.toggle('d-none');
+  document.querySelector('#toggle-brewhouse-volumes-collapsed').classList.toggle('d-none');
+})
+
+document.querySelector('#toggle-brewhouse-temps').addEventListener('click', e => {
+  document.querySelector('#brewhouse-temps').classList.toggle('d-none');
+  document.querySelector('#toggle-brewhouse-temps-expanded').classList.toggle('d-none');
+  document.querySelector('#toggle-brewhouse-temps-collapsed').classList.toggle('d-none');
+})
 
 // initialize all popovers and contain within the water table
 const popoverContainer = document.querySelector('#water-table');
@@ -411,15 +434,15 @@ $("#ferm-table").on("click", ".add-ferm", function () {
         `<tr class="ferm-row">
       <td>
         <label class="sr-only" for="fermStage[${i}]">Stage</label>
-        <input id="fermStage[${i}]" class="form-control form-control-sm border-0" type="text" name="ferm[${i}][stage]" placeholder="New Stage">  
+        <input id="fermStage[${i}]" class="form-control form-control-sm border-0" type="text" name="ferm[${i}][stage]">  
       </td>
       <td>
         <label class="sr-only" for="fermTemp[${i}]">Temp (C)</label>
-        <input id="fermTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="0.01" name="ferm[${i}][temp]">  
+        <input id="fermTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="ferm[${i}][temp]">  
       </td>
       <td>
         <label class="sr-only" for="fermDays[${i}]">Days</label>
-        <input id="fermDays[${i}]" class="form-control form-control-sm border-0 text-center" type="number" min="0" step="1" name="ferm[${i}][days]">  
+        <input id="fermDays[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="ferm[${i}][days]">  
       </td>
       <td class="border-0">
         <a class="btn btn-sm btn-outline-dark my-1 delete-ferm" role="button"><i class="far fa-trash-alt"></i></i></a>
@@ -464,7 +487,7 @@ $("#notes-table").on("click", ".add-notes", function () {
         `<tr class="notes-row">
     <td>
       <label class="sr-only" for="noteDetails[${i}]">Details</label>
-      <textarea id="noteDetails[${i}]" class="form-control form-control-sm border-0" name="recipeNotes[${i}]" rows="2" placeholder="New Recipe Note"></textarea>
+      <textarea id="noteDetails[${i}]" class="form-control form-control-sm border-0" name="recipeNotes[${i}]" rows="2"></textarea>
     </td>
     <td class="border-0">
       <a class="btn btn-sm btn-outline-dark my-1 delete-notes" role="button"><i class="far fa-trash-alt"></i></i></a>
@@ -491,9 +514,9 @@ $("#notes-table").on("click", ".delete-notes", function () {
     });
 });
 
-// make targets card sticky
-document.querySelector('#pinTargets').addEventListener('click', (e) => {
+// make targets card sticky on click/tap
+document.querySelector('#target-container').addEventListener('click', (e) => {
   document.querySelector('#target-container').classList.toggle('sticky-top');
   document.querySelector('#target-container').classList.toggle('shadow');
-  document.querySelector('#pinTargets').classList.toggle('active');
+  document.querySelector('#pin-targets').classList.toggle('d-none');
 })

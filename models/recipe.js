@@ -5,54 +5,21 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Beer"
     },
-    version: Number,
     parent: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Recipe"
     },
+    version: Number,
+    batchSize: Number,
+    brews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Brew"
+    }],
     description: String,
     recipeNotes: [String],
-    batchSize: Number,
-    targetABV: Number,
-    targetOG: Number,
-    targetFG: Number,
-    boilMinutes: Number,
-    malts: [{
-        name: String,
-        qty: Number,
-        ppg: Number,
-        gravityPoints: Number,
-        lovibond: Number, //consider whether we can record this in metric terms to be consistent
-        mcu: Number,
-        srm: Number
-    }],
-    maltTotals: {
-        qty: Number,
-        points: Number,
-        mcu: Number,
-        srm: Number,
-    },
-    hops: [{
-        name: String,
-        aa: Number,
-        qty: Number,
-        aau: Number,
-        usage: String,
-        timing: String
-    }],
-    hopTotals: {
-        qty: Number,
-        aau: Number
-    },
-    yeast: {
-        lab: String,
-        strain: String,
-        state: String,
-        qty: String,
-        pitchTemp: Number,
-        starter: Boolean,
-        starterNotes: String
-    },
+    expectedABV: Number,
+    expectedFinalGravity: Number,
+    expectedOriginalGravity: Number,
     ferm: [{
         stage: String,
         temp: Number,
@@ -61,40 +28,85 @@ const recipeSchema = new mongoose.Schema({
     fermTotals: {
         days: Number
     },
-    water: {
-        source: String,
-        adjustments: Boolean,
-        adjustmentNotes: String,
-        brewhouse: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Brewhouse"
-        },
-        boilOffRate: Number,
-        grainAbsorptionRate: Number,
-        kettleLoss: Number
-    },
-    mash: {
-        method: String,
-        gristRatio: Number,
-        absorptionRatio: Number,
-        schedule: [{
-            restType: String,
-            temp: Number,
-            minutes: Number
-        }],
-        totalMinutes: Number,
-        mashOut: Boolean,
-        spargeMethod: String
-    },
     finings: [{
         name: String,
         qty: String,
         usage: String
     }],
-    brews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Brew"
-    }]
+    hops: [{
+        name: String,
+        aa: Number,
+        aau: Number,
+        qty: Number,
+        timing: String,
+        usage: String
+    }],
+    hopTotals: {
+        aau: Number,
+        qty: Number
+    },
+    malts: [{
+        name: String,
+        gravityPoints: Number,
+        lovibond: Number,
+        mcu: Number,
+        ppg: Number,
+        qty: Number,
+        srm: Number
+    }],
+    maltTotals: {
+        mcu: Number,
+        points: Number,
+        qty: Number,
+        srm: Number
+    },
+    mash: {
+        method: String,
+        spargeMethod: String,
+        totalMinutes: Number
+    },
+    mashSched: [{
+        minutes: Number,
+        restType: String,
+        temp: Number
+    }],
+    water: {
+        adjustments: Boolean,
+        adjustmentNotes: String,
+        boilMinutes: Number,
+        boilOffRate: Number,
+        boilOffVolume: Number,
+        brewhouse: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Brewhouse"
+        },
+        grainAbsorptionRate: Number,
+        grainAbsorptionVolume: Number,
+        grainSpecificHeat: Number,
+        gristRatio: Number,
+        kettleLoss: Number,
+        mashHeatLoss: Number,
+        mashOut: Boolean,
+        mashOutTargetTemp: Number,
+        mashOutWaterTemp: Number,
+        mashOutVolume: Number,
+        preBoilVolume: Number,
+        source: String,
+        spargeWaterVolume: Number,
+        strikeVolume: Number,
+        totalMashWaterVolume: Number
+    },
+    yeast: {
+        lab: String,
+        strain: String,
+        attenuation: Number,
+        flocculation: String,
+        pitchTemp: Number,
+        qty: String,
+        starter: Boolean,
+        starterNotes: String,
+        state: String
+    }
 })
 
 module.exports = mongoose.model('Recipe', recipeSchema);

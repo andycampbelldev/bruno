@@ -112,7 +112,8 @@ app.get('/beers/:beer/recipes/new', async (req, res) => {
 // create new recipe
 app.post('/beers/:beer/recipes', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
-    const recipe = req.body;
+    const recipe = new Recipe(req.body);
+    await recipe.save();
     res.send(recipe);
 })
 

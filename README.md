@@ -29,3 +29,18 @@ Schema:
 Unresolved legacy issues to watch out for:
 Dates appeared to be captured and stored based on the eastern timezone. Could be related to AWS instance, but need to investigate this further and ensure dates are localized correctly.
 Line breaks not observed in saved notes, making them hard to read. Need to determine if these were being lost on save and ensure this is resolved.
+
+Notes to tidy up later:
+
+From Recipe.js:
+Add to README: Some general rules for calculations:
+- water affects each malt, and gravity
+- malt affects water (strike vol, grain loss) and gravity
+- hops are currently standalone - just update totals
+- mash affects water temp (not water volume though, so no need to re-run malt)
+- yeast affects gravity
+- ferm is standalone - just update totals
+
++ Add to README: ABV formula: This is just a general formula. Many brewers online have pointed out that this formula becomes less accurate for higher gravity beers, however I generally keep mine under 6% ABV, so not too worried.
++ Add to README: FG is a product of OG and Yeast Attenuation - it does not take any other factors into account, therefore the only way that the FG could ever be <1 would be if we entered a yeast attenuation greater than 100%, which we would not do. 
+This is merely an estimate and can be lower or higher because there are many factors that affect the final gravity. These factors include fermentation temperature, amount of yeast pitched, the health of yeast, the amount of O2 present, mash temperature, the amount of adjuncts used, the amount of nutrients available in the wort, and the flocculation rate of the yeast strain.

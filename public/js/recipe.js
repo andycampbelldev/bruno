@@ -1,52 +1,8 @@
 /* 
-========TO DO==============
-
-
-Add to README: Some general rules for recipe, malt and hop methods:
-- If water is updated, update each malt row, and gravity. Later we'll need to update hops once we have additional calcs for hop utilization etc.
-- If malt is updated, update water (as malt qty affects water loss to grain and strike water volume), and obviously update gravity!
-- If hops are updated, there's no need to update anything else
-- If the mash table is updated, update water (as mash affects mash out water), and update mash totals.
-- If yeast gets updated, update gravity.
-- If the ferm table gets updated, update ferm total days
-
-+ Add to README: ABV formula: This is just a general formula. Many brewers online have pointed out that this formula becomes less accurate for higher gravity beers, however I generally keep mine under 6% ABV, so not too worried.
-+ Add to README: FG is a product of OG and Yeast Attenuation - it does not take any other factors into account, therefore the only way that the FG could ever be <1 would be if we entered a yeast attenuation greater than 100%, which we would not do. 
-This is merely an estimate and can be lower or higher because there are many factors that affect the final gravity. These factors include fermentation temperature, amount of yeast pitched, the health of yeast, the amount of O2 present, mash temperature, the amount of adjuncts used, the amount of nutrients available in the wort, and the flocculation rate of the yeast strain.
-
-
-=======IN PROGRESS=========
-
-+ refactor event listeners
-  - consider adding a class to any inputs that need to fire specific methods on input.
-  - ensure that changes flow on to related data (see below)
-
-Some general rules for this:
-- water affects each malt, and gravity
-- malt affects water (strike vol, grain loss) and gravity
-- hops are currently standalone
-- mash affects water temp (not water volume though, so no need to re-run malt)
-- yeast affects gravity
-- ferm is standalone
-
-How can we shorten up our event listeners?
-- calc class on all element on which we want to listen for inputs.
-- then a further class that specifies the calculation order - e.g. the water table could have class="calc calc-water"
-  - we could add an event listener to all elements with calc, then have conditional logic within the event handler
-  - if class list contains calc-water, then run water(), malt(), then gravity().
-  - if class list contains calc-malt, then run malt(), then water()
-
-  Only drawback with this approach is that we have to either:
-  - really standardize how all of our inputs are nested relative to the parent to whom the event listener has been delegated
-  - add the calc classes to every single input, which isn't ideal.
-
-  Standardization is better, just a lot of effort and risk that something breaks!
-
-===========================
 
 Design Notes:
 
-+ Create a recipe class with all the methods needed to update values on the recipe.
++ Create a recipe class with all the methods needed to calculate recipe-level values - recipe totals, gravity etc.
 + instantiate a new recipe object when the page loads
 + On each input event, 
   - pull in all the required values from the DOM
@@ -54,13 +10,21 @@ Design Notes:
   - output values to the DOM
 
 + Have classes for each multi-instance recipe entity, like malts and hops.
++ instantiate a new object from these classes on page load
 + Whenever there is input on one of these rows
-  - instantiate a new object from the class
   - pull in all values from the row, and also from the recipe object
   - Run calculations
-  - Output values to the DOM for the row level
+  - Output row level values to the DOM
   - Run total calculations - each time there's a change at the row level, the totals for the relevant entity should be updated.
-  - Output all values again.
+  - Output total values.
+
++ Event delegation
+  - related inputs are put into divs with a "container" id attribute - e.g. water-container.
+  - that container element will have the "calc" class and an additional class to indicate which methods should be run when there is input to the container
+    - e.g. "calc calc-water/calc-malt/calc-hop/calc-mash/calc-ferm/calc-yeast"
+  - this somewhat simplifies our logic for creating event listeners. If the element has the calc class, we'll assign an appropriate event handler based on the other calc class
+    - e.g. calc-water, then run water(), malt() for each malt row, then gravity().
+
 */
 
 class Recipe {
@@ -100,36 +64,36 @@ class Recipe {
   //water methods
   boilOffVolume = function() {
     const { boilOffRate, boilMinutes } = this.values;
-    this.values.boilOffVolume = parseFloat((boilOffRate * (boilMinutes / 60)).toFixed(2));
+    this.values.boilOffVolume = parseFloat((boilOffRate * (boilMinutes / 60)).toFixed(2)) || 0;
     return this.values.boilOffVolume;
   }
   preBoilVolume = function() {
     const { batchSize, kettleLoss, boilOffVolume } = this.values;
-    this.values.preBoilVolume = parseFloat((batchSize + kettleLoss + boilOffVolume).toFixed(2));
+    this.values.preBoilVolume = parseFloat((batchSize + kettleLoss + boilOffVolume).toFixed(2)) || 0;
     return this.values.preBoilVolume;
   }
   postBoilVolume = function() {
     const { boilOffVolume, preBoilVolume } = this.values;
-    this.values.postBoilVolume = parseFloat((preBoilVolume - boilOffVolume).toFixed(2));
+    this.values.postBoilVolume = parseFloat((preBoilVolume - boilOffVolume).toFixed(2)) || 0;
   }
   grainAbsorptionVolume = function() {
     const { totalMaltQty, grainAbsorptionRate } = this.values;
-    this.values.grainAbsorptionVolume = parseFloat((totalMaltQty * grainAbsorptionRate).toFixed(2));
+    this.values.grainAbsorptionVolume = parseFloat((totalMaltQty * grainAbsorptionRate).toFixed(2)) || 0;
     return this.values.grainAbsorptionVolume;
   }
   totalMashWaterVolume = function() {
     const { preBoilVolume, grainAbsorptionVolume } = this.values;
-    this.values.totalMashWaterVolume = parseFloat((preBoilVolume + grainAbsorptionVolume).toFixed(2));
+    this.values.totalMashWaterVolume = parseFloat((preBoilVolume + grainAbsorptionVolume).toFixed(2)) || 0;
     return this.values.totalMashWaterVolume;
   }
   strikeWaterVolume = function() {
     const { gristRatio, totalMaltQty } = this.values;  
-    this.values.strikeWaterVolume = parseFloat((gristRatio * totalMaltQty).toFixed(2));
+    this.values.strikeWaterVolume = parseFloat((gristRatio * totalMaltQty).toFixed(2)) || 0;
     return this.values.strikeWaterVolume;
   }
   mashEndTemp = function() {
     const { finalMashStepTemp, finalMashStepMinutes, mashHeatLoss } = this.values; 
-    this.values.mashEndTemp = parseFloat((finalMashStepTemp - ((finalMashStepMinutes / 60) * mashHeatLoss)).toFixed(2));
+    this.values.mashEndTemp = parseFloat((finalMashStepTemp - ((finalMashStepMinutes / 60) * mashHeatLoss)).toFixed(2)) || 0;
     return this.values.mashEndTemp;
   }
   totalMashMinutes = function() {
@@ -138,33 +102,33 @@ class Recipe {
   }
   mashOutVolume = function() {
     const { mashOut, mashEndTemp, totalMaltQty, grainSpecificHeat, strikeWaterVolume, mashOutWaterTemp, mashOutTargetTemp } = this.values; 
-    this.values.mashOutVolume = mashOut ? parseFloat(((mashOutTargetTemp - mashEndTemp) * ((totalMaltQty * grainSpecificHeat) + strikeWaterVolume) / (mashOutWaterTemp - mashOutTargetTemp)).toFixed(2)) : 0;
+    this.values.mashOutVolume = mashOut ? parseFloat(((mashOutTargetTemp - mashEndTemp) * ((totalMaltQty * grainSpecificHeat) + strikeWaterVolume) / (mashOutWaterTemp - mashOutTargetTemp)).toFixed(2)) || 0 : 0;
     return this.values.mashOutVolume;
   }
   spargeWaterVolume = function() {
     const { totalMashWaterVolume, strikeWaterVolume, mashOutVolume } = this.values;  
-    this.values.spargeWaterVolume = parseFloat((totalMashWaterVolume - (strikeWaterVolume + mashOutVolume)).toFixed(2));
+    this.values.spargeWaterVolume = parseFloat((totalMashWaterVolume - (strikeWaterVolume + mashOutVolume)).toFixed(2)) || 0;
     return this.values.spargeWaterVolume;
   }
   // gravity methods
   expectedPreBoilGravity = function() {
     const { totalGravityPoints, conversionPercent } = this.values;  
-    this.values.expectedPreBoilGravity = parseFloat(((totalGravityPoints * (conversionPercent / 100)).toFixed(0) / 1000) + 1);
+    this.values.expectedPreBoilGravity = parseFloat(((totalGravityPoints * (conversionPercent / 100)).toFixed(0) / 1000) + 1) || 1;
     return this.values.expectedPreBoilGravity;
   }
   expectedOriginalGravity = function() {
     const { expectedPreBoilGravity, preBoilVolume, postBoilVolume } = this.values;
-    this.values.expectedOriginalGravity = parseFloat((((((expectedPreBoilGravity - 1) * 1000) * preBoilVolume) / postBoilVolume).toFixed(0) / 1000) + 1);
+    this.values.expectedOriginalGravity = parseFloat((((((expectedPreBoilGravity - 1) * 1000) * preBoilVolume) / postBoilVolume).toFixed(0) / 1000) + 1) || 1;
     return this.values.expectedOriginalGravity;
   }
   expectedFinalGravity = function() {
     const { expectedOriginalGravity, yeastAttenuation } = this.values;
-    this.values.expectedFinalGravity = parseFloat(((((expectedOriginalGravity - 1) * 1000) * ((100 - yeastAttenuation) / 100)).toFixed(0) / 1000) + 1);
+    this.values.expectedFinalGravity = parseFloat(((((expectedOriginalGravity - 1) * 1000) * ((100 - yeastAttenuation) / 100)).toFixed(0) / 1000) + 1) || 1;
     return this.values.expectedFinalGravity;
   }
   expectedABV = function() {
     const { expectedOriginalGravity, expectedFinalGravity } = this.values;
-    this.values.expectedABV = parseFloat(((expectedOriginalGravity - expectedFinalGravity) * 131.25).toFixed(1));
+    this.values.expectedABV = parseFloat(((expectedOriginalGravity - expectedFinalGravity) * 131.25).toFixed(1)) || 0;
     return this.values.expectedABV;
   }
   totalFermDays = function() {
@@ -252,18 +216,18 @@ class Malt {
   points = function() {
     const { qty, ppg } = this.values;
     const { preBoilVolume } = this.recipeValues;
-    this.values.points = parseFloat(((ppg * 8.3454) * qty / preBoilVolume).toFixed(0)); // convert ppg value to a metric value by multiplying by 8.3454
+    this.values.points = preBoilVolume ? parseFloat(((ppg * 8.3454) * qty / preBoilVolume).toFixed(0)) : 0; // convert ppg value to a metric value by multiplying by 8.3454
     return this.values.points;
   }
   mcu = function() {
     const { lovibond, qty, recipeValues } = this.values;
     const { batchSize } = this.recipeValues;
-    this.values.mcu = parseFloat(((lovibond * 8.3454) * qty / batchSize).toFixed(2)); // convert lovibond value to a metric value by multiplying by 8.3454
+    this.values.mcu = parseFloat(((lovibond * 8.3454) * qty / batchSize).toFixed(2)) || 0; // convert lovibond value to a metric value by multiplying by 8.3454
     return this.values.mcu;
   }
   srm = function() {
     const { mcu } = this.values;
-    this.values.srm = parseFloat((1.4922 * (mcu ** 0.6859)).toFixed(2)); // Morey SRM
+    this.values.srm = parseFloat((1.4922 * (mcu ** 0.6859)).toFixed(2)) || 0; // Morey SRM
     return this.values.srm;
   }
   // malt totals
@@ -281,7 +245,7 @@ class Malt {
   }
   totalMaltSrm = function() {
     const { totalMaltMcu } = this.values;
-    this.values.totalMaltSrm = parseFloat((1.4922 * (totalMaltMcu ** 0.6859)).toFixed(2));
+    this.values.totalMaltSrm = parseFloat((1.4922 * (totalMaltMcu ** 0.6859)).toFixed(2)) || 0;
     return this.values.totalMaltSrm;
   }
   srmHex = function() {
@@ -332,7 +296,7 @@ class Hop {
   }
   aau = function() {
     const { qty, aa } = this.values;
-    this.values.aau = parseFloat((qty * (aa / 100)).toFixed(2));
+    this.values.aau = parseFloat((qty * (aa / 100)).toFixed(2)) || 0;
     return this.aau;
   }
   // add methods for hop total qty and total aau
@@ -386,32 +350,59 @@ const updateValue = function(cssSelector, val, domNode = document) {
   node && node.nodeName === 'INPUT' ? node.value = val : node.textContent = val;
 }
 
-//EVENT LISTENERS
-// water - all inputs
-document.querySelector('#water-container').addEventListener('input', (e) => {
-  r.water();
-  if(r.values.totalMaltQty > 0){
-    const maltRows = document.querySelectorAll('.malt-row');
-    for (let row of maltRows) {
-      m.malt(r.values, row);
-    }
+// EVENT LISTENERS
+
+let sections = document.querySelectorAll('.calc');
+for (let section of sections) {
+  // water
+  if (section.classList.contains('calc-water')) {
+    section.addEventListener('input', e => {
+      r.water();
+      if (r.values.totalMaltQty > 0) {
+        const maltRows = document.querySelectorAll('.malt-row');
+        for (let row of maltRows) {
+          m.malt(r.values, row);
+        }
+      }
+      r.gravity();
+    })
   }
-  r.gravity();
-})
-
-// hop table
-document.querySelector('#hop-table-container').addEventListener('input', (e) => {
-  const hopRow = e.target.parentElement.parentElement;
-  h.hop(r.values, hopRow);
-})
-
-// malt table
-document.querySelector('#malt-table-container').addEventListener('input', (e) => {
-  const maltRow = e.target.parentElement.parentElement;
-  m.malt(r.values, maltRow);
-  r.gravity();
-  r.water();
-})
+  // malt
+  if (section.classList.contains('calc-malt')) {
+    section.addEventListener('input', e => {
+      const maltRow = e.target.closest('.malt-row');
+      m.malt(r.values, maltRow);
+      r.gravity();
+      r.water();
+    })
+  }
+  // hop
+  if (section.classList.contains('calc-hop')) {
+    section.addEventListener('input', e => {
+      const hopRow = e.target.closest('.hop-row');
+      h.hop(r.values, hopRow);
+    })
+  }
+  // mash
+  if (section.classList.contains('calc-mash')) {
+    section.addEventListener('input', e => {
+      r.water();
+      r.mash();
+    })
+  }  
+  // ferm
+  if (section.classList.contains('calc-ferm')) {
+    section.addEventListener('input', e => {
+      r.ferm();
+    })
+  }
+  // yeast
+  if (section.classList.contains('calc-yeast')) {
+    section.addEventListener('input', e => {
+      r.gravity();
+    })
+  }
+}
 
 // Mash Out Toggler
 // use of setTimeout() is a little janky. Bug in BS4 where radio buttons seem to be eating events on the underlying inputs.
@@ -422,21 +413,10 @@ document.querySelector('#mashOutToggle').addEventListener('click', () => {
   }, 100);
 })
 
-// mash table
-document.querySelector('#mash-table-container').addEventListener('input', (e) => {
-  r.water();
-  r.mash();
-})
-
-// yeast attenuation
-document.querySelector('#yeastAttenuation').addEventListener('input', (e) => {
-  r.gravity();
-})
-
 // brewhouse profile
 $("#brewhouseSelect").change(function() {
   if($(this).val()) {
-    $.get(`http://localhost:3000/brewhouses/${$(this).val()}`, function(data) {
+    $.get(`/brewhouses/${$(this).val()}`, function(data) {
       $("#boilOffRate").val(data.boilOffRate);
       $("#kettleLoss").val(data.kettleLoss);
       $("#grainAbsorptionRate").val(data.grainAbsorptionRate);
@@ -447,15 +427,16 @@ $("#brewhouseSelect").change(function() {
       $("#grainSpecificHeat").val(data.grainSpecificHeat);
       $("#malts-conversionPercent").text(data.conversionPercent);
       r.water();
-
+      if(r.values.totalMaltQty > 0) {
+        const maltRows = document.querySelectorAll('.malt-row');
+        for (let row of maltRows) {
+          m.malt(r.values, row);
+        }
+      }
+      r.gravity();
     })
   }
 });
-
-//ferm table
-document.querySelector('#ferm-table-container').addEventListener('input', (e) => {
-  r.ferm();
-})
 
 // initialize recipe, malt and hop class
 const r = new Recipe();

@@ -1,3 +1,10 @@
+/* pin icon for pinning target container on recipe page */
+#pin-targets {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
 /* Photo thumbnails - always square */
 .photo-card {
     max-width: 100%;
@@ -60,6 +67,34 @@
     padding-bottom: 0;
     font-size: 0.75rem;
     font-weight: 500;
+}
+
+/* Reduce the font-size on Bootstrap's display-4 class when below 768px */
+@media (max-width: 767px) {
+    .display-4 {
+        font-size: 1.5rem;
+    }
+     /* Increase font size to prevent auto zoom on input focus on mobile browsers */
+     input[type="color"],
+     input[type="date"],
+     input[type="datetime"],
+     input[type="datetime-local"],
+     input[type="email"],
+     input[type="month"],
+     input[type="number"],
+     input[type="password"],
+     input[type="search"],
+     input[type="tel"],
+     input[type="text"],
+     input[type="time"],
+     input[type="url"],
+     input[type="week"],
+     select:focus,
+     textarea,
+     textarea:focus,
+     .form-control-sm {
+     font-size: 16px;
+     }
 }
 
 /* --------------- */
@@ -131,9 +166,9 @@ table {
 #hop-table th:nth-child(1), 
 #mash-table th:nth-child(1),
 #water-table th:nth-child(1),
-#finings-table th:nth-child(1),
+/* #finings-table th:nth-child(1), */
 #next-steps-table th:nth-child(1) {
-        width: 140px;
+    width: 140px;
 }
 
 /* TABLE: Add/Delete Button column width */
@@ -161,18 +196,31 @@ table {
 @media (max-width: 775px) {
     #malt-table, #hop-table {
         width: 678px;
+        max-width: none;
     }
 
     #malt-table-container, #hop-table-container {
     overflow-x: scroll;
     display: block;
     padding-bottom: 0.5rem;
+    position: relative;
+    }
+
+    #malt-table-container .scroll-cue, #hop-table-container .scroll-cue {
+        height: 100%;
+        width: 60px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 30%);
+        z-index: 99;
     }
 }
 
 @media (max-width: 520px) {
-    #finings-table {
+    /* #finings-table {
         width: 462px;
+        max-width: none;
     }
 
     #finings-table-container {
@@ -181,11 +229,21 @@ table {
         padding-bottom: 0.5rem;
     }
 
+    #finings-table-container .scroll-cue {
+        height: 100%;
+        width: 60px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 30%);
+        z-index: 99;
+    } */
+
 }
 
 @media (max-width: 420px) {
     #mash-table, #ferm-table {
-        width: 360px;
+        width: 355px;
     }
 
     #mash-table-container, #ferm-table-container {
@@ -194,6 +252,33 @@ table {
         padding-bottom: 0.5rem;
     }
 
+    #finings-table {
+        width: 462px;
+        max-width: none;
+    }
+
+    #finings-table-container {
+        overflow-x: scroll;
+        display: block;
+        padding-bottom: 0.5rem;
+    }
+
+    #finings-table-container .scroll-cue {
+        display: flex;
+        height: 100%;
+        width: 60px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 30%);
+        z-index: 99;
+    }
+}
+
+@media (min-width: 420px) {
+    #finings-table-container .scroll-cue {
+        display: none;
+    }
 }
 
 /* TABLE: Fixed first column when scrolling */

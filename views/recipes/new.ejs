@@ -15,7 +15,6 @@
             <!-- Target Batch Size, Boil Mins, OG, FG-->
             <div id="target-container" class="card mb-2">
               <div class="card-body">
-                <!-- <a id="pinTargets" class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i class="fas fa-thumbtack"></i></a> -->
                 <i id="pin-targets" class="fas fa-thumbtack d-none"></i>
                 <div class="form-row">
                   <div class="col-3 text-center">
@@ -23,17 +22,17 @@
                     <span class="d-block text-lite">Litres</span>
                   </div>
                   <div class="col-3 text-center">
-                    <input id="expectedOriginalGravityInput" class="d-none" type="number" step="0.001" name="recipe[expectedOriginalGravity]" aria-hidden="true">
+                    <input id="expectedOriginalGravityInput" class="d-none" type="number" step="0.001" name="expectedOriginalGravity" aria-hidden="true">
                     <span id="expectedOriginalGravityDisplay" class="d-block display-4" aria-label="Expected Original Gravity">0</span>
                     <span class="d-block text-lite">OG</span>
                   </div>
                   <div class="col-3 text-center">
-                    <input id="expectedFinalGravityInput" class="d-none" type="number" step="0.001" name="recipe[expectedFinalGravity]" aria-hidden="true">
+                    <input id="expectedFinalGravityInput" class="d-none" type="number" step="0.001" name="expectedFinalGravity" aria-hidden="true">
                     <span id="expectedFinalGravityDisplay" class="d-block display-4" aria-label="Expected Final Gravity">0</span>
                     <span class="d-block text-lite">FG</span>
                   </div>
                   <div class="col-3 text-center">
-                    <input id="expectedABVInput" class="d-none" type="number" step="0.1" name="recipe[expectedABV]" aria-hidden="true"> 
+                    <input id="expectedABVInput" class="d-none" type="number" step="0.1" name="expectedABV" aria-hidden="true"> 
                     <span id="expectedABVDisplay" class="d-block display-4" aria-label="Expected ABV">0</span>
                     <span class="d-block text-lite">% ABV</span>
                   </div>
@@ -50,7 +49,7 @@
                     <div class="form-group row mb-1">
                       <label for="brewDesc" class="col-sm-12 recipe-label">Description</label>
                       <div class="col-sm-12">
-                        <textarea id="brewDesc" class="form-control form-control-sm bottom-border" name="recipe[description]" rows="3"></textarea>
+                        <textarea id="brewDesc" class="form-control form-control-sm bottom-border" name="description" rows="3"></textarea>
                       </div>
                     </div>
                   </div>
@@ -91,7 +90,7 @@
                         <div class="form-group row mb-1">
                           <label for="batchSize" class="col-sm-12 recipe-label">Batch Size (L)</label>
                           <div class="col-sm-12">
-                            <input id="batchSize" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="recipe[batchSize]"> 
+                            <input id="batchSize" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="batchSize"> 
                           </div>
                         </div>
                       </div>

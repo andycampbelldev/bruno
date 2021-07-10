@@ -408,16 +408,10 @@ $("input[name=water\\[adjustments\\]]").change(function () {
 });
 
 // show/hide brewhouse water volumes & temps
-document.querySelector('#toggle-brewhouse-volumes').addEventListener('click', e => {
-  document.querySelector('#brewhouse-volumes').classList.toggle('d-none');
-  document.querySelector('#toggle-brewhouse-volumes-expanded').classList.toggle('d-none');
-  document.querySelector('#toggle-brewhouse-volumes-collapsed').classList.toggle('d-none');
-})
-
-document.querySelector('#toggle-brewhouse-temps').addEventListener('click', e => {
-  document.querySelector('#brewhouse-temps').classList.toggle('d-none');
-  document.querySelector('#toggle-brewhouse-temps-expanded').classList.toggle('d-none');
-  document.querySelector('#toggle-brewhouse-temps-collapsed').classList.toggle('d-none');
+document.querySelector('#toggle-brewhouse-values').addEventListener('click', e => {
+  document.querySelector('#brewhouse-values').classList.toggle('d-none');
+  document.querySelector('#toggle-brewhouse-values-expanded').classList.toggle('d-none');
+  document.querySelector('#toggle-brewhouse-values-collapsed').classList.toggle('d-none');
 })
 
 // initialize all popovers and contain within the water table

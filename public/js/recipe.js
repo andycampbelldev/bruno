@@ -135,6 +135,37 @@ class Recipe {
     this.values.totalFermDays = sumValues('input[id^="fermDays"');
     return this.values.totalFermDays;
   }
+  getBrewhouse = async function(id) {
+    let data
+    if(id) {
+      const request = new Request(
+        `/brewhouses/${id}`,
+        {
+          method: 'GET',
+          headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        }
+        )
+      try {
+        const res = await fetch(request);
+        if (res.status >= 400) {
+          throw new Error(res)
+        } else {
+          data = await res.json();
+        }
+      } catch (err) {
+        throw new Error(`Error getting Brewhouse: ${err}`);
+      }
+    }
+      updateValue('#boilOffRate', data ? data.boilOffRate : 0);
+      updateValue('#kettleLoss', data ? data.kettleLoss : 0);
+      updateValue('#grainAbsorptionRate', data ? data.grainAbsorptionRate : 0);
+      updateValue('#gristRatio', data ? data.gristRatio : 0);
+      updateValue('#mashOutTargetTemp', data ? data.mashOutTargetTemp : 0);
+      updateValue('#mashOutWaterTemp', data ? data.mashOutWaterTemp : 0);
+      updateValue('#mashHeatLoss', data ? data.mashHeatLoss : 0);
+      updateValue('#grainSpecificHeat', data ? data.grainSpecificHeat : 0);
+      updateValue('#malts-conversionPercent', data ? data.conversionPercent : 0);
+  }
   // calculators
   water = function() {
     this.refreshInputs();
@@ -414,29 +445,24 @@ document.querySelector('#mashOutToggle').addEventListener('click', () => {
 })
 
 // brewhouse profile
-$("#brewhouseSelect").change(function() {
-  if($(this).val()) {
-    $.get(`/brewhouses/${$(this).val()}`, function(data) {
-      $("#boilOffRate").val(data.boilOffRate);
-      $("#kettleLoss").val(data.kettleLoss);
-      $("#grainAbsorptionRate").val(data.grainAbsorptionRate);
-      $("#gristRatio").val(data.gristRatio);
-      $("#mashOutTargetTemp").val(data.mashOutTargetTemp);
-      $("#mashOutWaterTemp").val(data.mashOutWaterTemp);
-      $("#mashHeatLoss").val(data.mashHeatLoss);
-      $("#grainSpecificHeat").val(data.grainSpecificHeat);
-      $("#malts-conversionPercent").text(data.conversionPercent);
-      r.water();
-      if(r.values.totalMaltQty > 0) {
-        const maltRows = document.querySelectorAll('.malt-row');
-        for (let row of maltRows) {
-          m.malt(r.values, row);
-        }
-      }
-      r.gravity();
-    })
+document.querySelector('#brewhouse-select').addEventListener('change', async function() {
+  const placeholder = document.querySelector('#brewhouse-placeholder');
+  if(this.value) {
+    await r.getBrewhouse(this.value);
+    placeholder.removeAttribute('disabled');
+  } else {
+    await r.getBrewhouse();
+    placeholder.setAttribute('disabled', '');
   }
-});
+  r.water();
+  if(r.values.totalMaltQty > 0) {
+    const maltRows = document.querySelectorAll('.malt-row');
+    for (let row of maltRows) {
+      m.malt(r.values, row);
+    }
+  }
+  r.gravity();
+})
 
 // initialize recipe, malt and hop class
 const r = new Recipe();

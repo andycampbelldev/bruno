@@ -131,8 +131,8 @@
                         <h6 id="toggle-brewhouse-values">Brewhouse & Defaults <span id="toggle-brewhouse-values-collapsed" class="float-right px-1"><i class="fas fa-chevron-right"></i></span><span id="toggle-brewhouse-values-expanded" class="float-right px-1 d-none"><i class="fas fa-chevron-down"></i></span></h6>
                         <% if(brewhouses.length > 0) { %> 
                         <div class="form-group mt-3">
-                          <select name="water[brewhouse]" id="brewhouseSelect" class="custom-select custom-select-sm">
-                            <option value="" selected>Select a brewhouse</option>
+                          <select name="water[brewhouse]" id="brewhouse-select" class="custom-select custom-select-sm">
+                            <option id="brewhouse-placeholder"value="" selected disabled>Select a brewhouse</option>
                             <% for(let brewhouse of brewhouses) { %> 
                             <option value="<%= brewhouse._id %>"><%= brewhouse.name %></option>
                             <% } %>

@@ -40,23 +40,26 @@ app.get('/beers', async (req, res) => {
     res.render('beers/index', { beers });
 })
 
+// create beer
 app.post('/beers', async (req, res) => {
     const beer = new Beer(req.body.beer);
     await beer.save();
     res.redirect('/beers');
 })
 
+// edit beer
 app.put('/beers/:id', async (req, res) => {
     await Beer.findByIdAndUpdate(req.params.id, req.body.beer);
     res.redirect('/beers');
 })
 
+// edit beer form
 app.get('/beers/:id/edit', async (req, res) => {
     const beer = await Beer.findById(req.params.id);
     res.render('beers/edit', { beer });
 })
 
-// new beer
+// new beer form
 app.get('/beers/new', async (req, res) => {
     res.render('beers/new');
 })
@@ -113,6 +116,7 @@ app.get('/beers/:beer/recipes/new', async (req, res) => {
 app.post('/beers/:beer/recipes', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
     const recipe = new Recipe(req.body);
+    recipe.beer = beer._id;
     await recipe.save();
     res.send(recipe);
 })

@@ -30,43 +30,46 @@
           <div id="recipes<%= beer._id %>" class="collapse">
             <div class="card-body pt-0">
               <% if (beer.recipes.length> 0) { %>
-                <table class="text-lite table table-sm">
-                  <thead>
-                    <tr>
-                      <th class="recipe-label text-center" scope="col">Version</th>
-                      <th class="recipe-label text-center" scope="col">Date Added</th>
-                      <th class="recipe-label text-center" scope="col">Last Brewed</th>
-                      <th class="recipe-label text-center" scope="col">Note</th>
-                      <th class="recipe-label text-center" scope="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for (let recipe of beer.recipes) { %>
-                      <tr class="text-center">
-                        <td>
-                          <%= recipe.version %>
-                        </td>
-                        <td>
-                          <%= recipe.dateAdded %>
-                        </td>
-                        <td>
-                          <%= recipe.lastBrewed %>
-                        </td>
-                        <td>
-                          <%= recipe.note %>
-                        </td>
-                        <td><a href="beers/<%= beer._id %>/recipes/<%= recipe._id %>"
-                            class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i
-                              class="far fa-eye"></i></a></td>
+                <div class="beer-index-recipes-table-container">
+                  <table class="text-lite table table-sm beer-index-recipes-table">
+                    <thead>
+                      <tr>
+                        <th class="recipe-label text-center" scope="col">Version</th>
+                        <th class="recipe-label text-center" scope="col">Added</th>
+                        <th class="recipe-label text-center" scope="col">Last Brewed</th>
+                        <th class="recipe-label text-left" scope="col">Note</th>
+                        <!-- <th class="recipe-label text-center" scope="col"></th> -->
                       </tr>
-                      <% } %>
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      <% for (let recipe of beer.recipes) { %>
+                        <tr class="text-center">
+                          <td>
+                            <%= recipe.version %>
+                          </td>
+                          <td>
+                            <%= recipe.created.toLocaleDateString() %>
+                          </td>
+                          <td>
+                            <%= recipe.lastBrewed || '-' %>
+                          </td>
+                          <td class="text-left">
+                            <%= `${recipe.description.substring(0, 100)}...` %>
+                          </td>
+                          <!-- <td><a href="beers/<%= beer._id %>/recipes/<%= recipe._id %>"
+                              class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i
+                                class="far fa-eye"></i></a></td> -->
+                        </tr>
+                        <% } %>
+                    </tbody>
+                  </table>
+                  <div class="scroll-cue d-flex d-md-none justify-content-center align-items-center"><i class="fas fa-chevron-right"></i></div>
+                </div>
                 <% } else { %>
                   <p class="text-lite">This beer doesn't have any recipes yet.</p>
                   <% } %>
                     <div class="d-flex flex-row-reverse">
-                      <a href="beers/<%= beer._id %>/recipes/new" class="btn btn-outline-success btn-sm mb-1"
+                      <a href="/beers/<%= beer._id %>/recipes/new" class="btn btn-outline-success btn-sm mb-1"
                         role="button">New Recipe</a>
                     </div>
             </div>

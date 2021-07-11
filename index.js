@@ -36,8 +36,9 @@ app.use(methodOverride('_method'));
 
 // index for beers
 app.get('/beers', async (req, res) => {
-    const beers = await Beer.find({});
-    res.render('beers/index', { beers, scripts: [] });
+    const beers = await Beer.find({}).populate('recipes');
+    console.log(beers);
+    res.render('beers/index', { beers, scripts: ['general.js', 'beer-index.js'] });
 })
 
 // create beer
@@ -109,7 +110,7 @@ app.get('/brewhouses/:id', async (req, res) => {
 app.get('/beers/:beer/recipes/new', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
     const brewhouses = await Brewhouse.find({});
-    res.render('recipes/new', { beer, brewhouses, scripts: ['formControl.js', 'recipe.js'] });
+    res.render('recipes/new', { beer, brewhouses, scripts: ['general.js','recipe-form-control.js', 'recipe-calc.js'] });
 })
 
 // create new recipe
@@ -118,16 +119,18 @@ app.post('/beers/:beer/recipes', async (req, res) => {
     const recipe = new Recipe(req.body);
     recipe.beer = beer._id;
     await recipe.save();
+    beer.recipes.push(recipe._id);
+    await beer.save();
     res.send(recipe);
 })
 
-// read particular recipe
-app.get('/beers/:beer/recipes/:recipe', (req, res) => {
-    const i = beers.map(beer => beer.id).indexOf(req.params.beer);
-    const beer = beers[i];
-    const j = recipes.map(recipe => recipe.id).indexOf(req.params.recipe);
-    const recipe = recipes[j];
-    res.render('recipes/show', { recipe, beer });
+// show recipe
+app.get('/beers/:beer/recipes/:recipe', async (req, res) => {
+    const beer = await Beer.findById(req.params.beer);
+    const recipe = await Recipe.findById(req.params.recipe);
+    console.log(beer);
+    console.log(recipe);
+    res.render('recipes/show', { beer, recipe, scripts: [] });
 })
 
 // read list of brews for a recipe

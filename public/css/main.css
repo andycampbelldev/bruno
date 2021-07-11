@@ -159,6 +159,12 @@ table {
     table-layout: fixed;
 }
 
+/* TABLE: Beer Index Page Recipes Table */
+/* Force the width of the 4th column (notes) */
+.beer-index-recipes-table th:nth-child(4) {
+    width: 60%;
+}
+
 /* TABLE: Force width of water table - specified column widths below don't seem to work when there are only 2 columns */
 
 /* TABLE: First column width */
@@ -194,19 +200,19 @@ table {
 /* TABLE: Lock table width and enable horizontal scroll */
 
 @media (max-width: 775px) {
-    #malt-table, #hop-table {
+    #malt-table, #hop-table, .beer-index-recipes-table {
         width: 678px;
         max-width: none;
     }
 
-    #malt-table-container, #hop-table-container {
+    #malt-table-container, #hop-table-container, .beer-index-recipes-table-container {
     overflow-x: scroll;
     display: block;
     padding-bottom: 0.5rem;
     position: relative;
     }
 
-    #malt-table-container .scroll-cue, #hop-table-container .scroll-cue {
+    #malt-table-container .scroll-cue, #hop-table-container .scroll-cue, .beer-index-recipes-table-container .scroll-cue {
         height: 100%;
         width: 60px;
         position: absolute;

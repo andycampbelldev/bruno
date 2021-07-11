@@ -37,7 +37,7 @@ app.use(methodOverride('_method'));
 // index for beers
 app.get('/beers', async (req, res) => {
     const beers = await Beer.find({});
-    res.render('beers/index', { beers });
+    res.render('beers/index', { beers, scripts: [] });
 })
 
 // create beer
@@ -56,7 +56,7 @@ app.put('/beers/:id', async (req, res) => {
 // edit beer form
 app.get('/beers/:id/edit', async (req, res) => {
     const beer = await Beer.findById(req.params.id);
-    res.render('beers/edit', { beer });
+    res.render('beers/edit', { beer, scripts: [] });
 })
 
 // new beer form
@@ -67,7 +67,7 @@ app.get('/beers/new', async (req, res) => {
 // index for brewhouse
 app.get('/brewhouses', async (req, res) => {
     const brewhouses = await Brewhouse.find({});
-    res.render('brewhouses/index', { brewhouses });
+    res.render('brewhouses/index', { brewhouses, scripts: [] });
 })
 
 // create brewhouse
@@ -79,13 +79,13 @@ app.post('/brewhouses', async (req, res) => {
 
 // new brewhouse
 app.get('/brewhouses/new', (req, res) => {
-    res.render('brewhouses/new');
+    res.render('brewhouses/new', { scripts: [] });
 })
 
 // edit brewhouse
 app.get('/brewhouses/:id/edit', async (req, res) => {
     const brewhouse = await Brewhouse.findById(req.params.id);
-    res.render('brewhouses/edit', { brewhouse });
+    res.render('brewhouses/edit', { brewhouse, scripts: [] });
 })
 
 // update brewhouse
@@ -109,7 +109,7 @@ app.get('/brewhouses/:id', async (req, res) => {
 app.get('/beers/:beer/recipes/new', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
     const brewhouses = await Brewhouse.find({});
-    res.render('recipes/new', { beer, brewhouses });
+    res.render('recipes/new', { beer, brewhouses, scripts: ['formControl.js', 'recipe.js'] });
 })
 
 // create new recipe

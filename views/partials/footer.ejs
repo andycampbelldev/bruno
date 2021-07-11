@@ -12,8 +12,12 @@
 <!-- local Bootstrap and Popper bundle -->
 <script src="/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 
-<!-- Custom JS & jQuery for recipe form-->
-<script src="/js/formControl.js" type="text/javascript"></script>
-<script src="/js/recipe.js" type="text/javascript"></script>
+<!-- Custom JS & jQuery -->
+<% if(scripts.length) { %>
+<% for (let script of scripts) { %> 
+    <script src="/js/<%= script %> " type="text/javascript"></script>
+<% } %> 
+<% } %> 
+
 </body>
 </html>

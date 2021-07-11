@@ -18,7 +18,7 @@
             <p class="text-lite">
               <%= beer.description %>
             </p>
-            <a type="button" class="btn btn-outline-secondary" href="/beers/<%= beer._id %>/edit">Edit</a>
+            <a role="button" class="btn btn-outline-secondary" href="/beers/<%= beer._id %>/edit">Edit</a>
             <button type="button" class="btn btn-outline-secondary" data-toggle="collapse"
               data-target="#recipes<%= beer.id %>" aria-expanded="false"
               aria-controls="recipes<%= beer.id %>">Recipes</button>
@@ -38,7 +38,7 @@
                         <th class="recipe-label text-center" scope="col">Added</th>
                         <th class="recipe-label text-center" scope="col">Last Brewed</th>
                         <th class="recipe-label text-left" scope="col">Note</th>
-                        <!-- <th class="recipe-label text-center" scope="col"></th> -->
+                        <th class="recipe-label text-center" scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -56,9 +56,9 @@
                           <td class="text-left">
                             <%= `${recipe.description.substring(0, 100)}...` %>
                           </td>
-                          <!-- <td><a href="beers/<%= beer._id %>/recipes/<%= recipe._id %>"
+                          <td><a href="beers/<%= beer._id %>/recipes/<%= recipe._id %>"
                               class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i
-                                class="far fa-eye"></i></a></td> -->
+                                class="far fa-eye"></i></a></td>
                         </tr>
                         <% } %>
                     </tbody>

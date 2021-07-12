@@ -5,7 +5,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 
-// connect to dev db. For now will only work on Macbook
+// connect to dev db on Macbook
 mongoose.connect('mongodb://localhost:27017/bruno-dev', {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -37,7 +37,6 @@ app.use(methodOverride('_method'));
 // index for beers
 app.get('/beers', async (req, res) => {
     const beers = await Beer.find({}).populate('recipes');
-    console.log(beers);
     res.render('beers/index', { beers, scripts: ['general.js', 'beer-index.js'] });
 })
 
@@ -116,8 +115,11 @@ app.get('/beers/:beer/recipes/new', async (req, res) => {
 // create new recipe
 app.post('/beers/:beer/recipes', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
+    //determine the version number of the recipe. For now, this is basically a sequence number. This logic will need to change when the ability to copy a recipe is introduced.
+    const version = beer.recipes.length + 1;
     const recipe = new Recipe(req.body);
     recipe.beer = beer._id;
+    recipe.version = version;
     await recipe.save();
     beer.recipes.push(recipe._id);
     await beer.save();

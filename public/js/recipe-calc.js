@@ -193,6 +193,7 @@ class Recipe {
     updateValue('#water-table-display-totalMashWaterVolume span', this.values.totalMashWaterVolume);
     updateValue('#water-table-input-strikeWaterVolume', this.values.strikeWaterVolume);
     updateValue('#water-table-display-strikeWaterVolume span', this.values.strikeWaterVolume);
+    updateValue('#water-table-input-mashEndTemp', this.values.mashEndTemp);
     updateValue('#water-table-input-mashOutVolume', this.values.mashOutVolume);
     updateValue('#water-table-display-mashOutVolume span', this.values.mashOutVolume);
     updateValue('#water-table-input-spargeWaterVolume', this.values.spargeWaterVolume);

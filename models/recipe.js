@@ -91,6 +91,7 @@ const recipeSchema = new mongoose.Schema({
         grainSpecificHeat: Number,
         gristRatio: Number,
         kettleLoss: Number,
+        mashEndTemp: Number,
         mashHeatLoss: Number,
         mashOut: Boolean,
         mashOutTargetTemp: Number,

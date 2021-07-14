@@ -390,7 +390,6 @@ document.querySelector('#toggle-brewhouse-values').addEventListener('click', e =
 })
 
 // initialize all popovers and contain within the water table
-const popoverContainer = document.querySelector('#water-table');
 $('[data-toggle="popover"]').popover({
     boundary: "viewport"
 });

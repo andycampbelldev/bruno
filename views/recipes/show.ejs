@@ -17,22 +17,19 @@
                 <i id="pin-targets" class="fas fa-thumbtack d-none"></i>
                 <div class="form-row">
                   <div class="col-3 text-center">
-                    <span id="target-display-batchSize" class="d-block display-4">0</span>
+                    <span id="target-display-batchSize" class="d-block display-4"><%= recipe.batchSize %></span>
                     <span class="d-block text-lite">Litres</span>
                   </div>
                   <div class="col-3 text-center">
-                    <input id="expectedOriginalGravityInput" class="d-none" type="number" step="0.001" name="expectedOriginalGravity" aria-hidden="true">
-                    <span id="expectedOriginalGravityDisplay" class="d-block display-4" aria-label="Expected Original Gravity">0</span>
+                    <span id="expectedOriginalGravityDisplay" class="d-block display-4" aria-label="Expected Original Gravity"><%= recipe.expectedOriginalGravity %></span>
                     <span class="d-block text-lite">OG</span>
                   </div>
                   <div class="col-3 text-center">
-                    <input id="expectedFinalGravityInput" class="d-none" type="number" step="0.001" name="expectedFinalGravity" aria-hidden="true">
-                    <span id="expectedFinalGravityDisplay" class="d-block display-4" aria-label="Expected Final Gravity">0</span>
+                    <span id="expectedFinalGravityDisplay" class="d-block display-4" aria-label="Expected Final Gravity"><%= recipe.expectedFinalGravity %></span>
                     <span class="d-block text-lite">FG</span>
                   </div>
                   <div class="col-3 text-center">
-                    <input id="expectedABVInput" class="d-none" type="number" step="0.1" name="expectedABV" aria-hidden="true"> 
-                    <span id="expectedABVDisplay" class="d-block display-4" aria-label="Expected ABV">0</span>
+                    <span id="expectedABVDisplay" class="d-block display-4" aria-label="Expected ABV"><%= recipe.expectedABV %></span>
                     <span class="d-block text-lite">% ABV</span>
                   </div>
                 </div>
@@ -45,30 +42,17 @@
                 <h4>General</h4>
                 <div class="form-row my-2">
                   <div class="col">
-                    <label for="brewDesc" class="recipe-label">Description</label>
-                    <textarea id="brewDesc" class="form-control form-control-sm bottom-border" name="description" rows="3"></textarea>
+                    <p class="text-lite">
+                      <%= recipe.description %>
+                      <ul class="text-lite">
+                        <% if(recipe.recipeNotes.length > 0) { %>
+                        <% for(let note of recipe.recipeNotes) { %>
+                        <li><%= note %></li>
+                        <% } %>  
+                        <% } %>
+                      </ul>
+                    </p>
                   </div>
-                </div>
-                <div id="notes-table-container">
-                  <table id="notes-table" class="table table-sm mb-1">
-                    <thead>
-                      <tr>
-                        <th class="recipe-label" scope="col">Important Notes</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody id="notes-list">
-                      <tr class="notes-row">
-                        <td>
-                          <label class="sr-only" for="noteDetails[0]">Note Content</label>
-                          <textarea id="noteDetails[0]" class="form-control form-control-sm border-0" name="recipeNotes[0]" rows="2"></textarea>
-                        </td>
-                        <td class="border-0">
-                          <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                        </td>
-                      </tr>
-                    </tbody>                     
-                  </table>
                 </div>
               </div>
             </div>
@@ -80,111 +64,32 @@
                 <div class="form-row mb-4">
                   <!-- left col at md + -->
                   <div class="col-md-6">
-                    <div class="form-row mb-4">
-                      <div class="col-6">
-                        <label for="batchSize" class="recipe-label">Batch Size (L)</label>
-                        <input id="batchSize" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="batchSize"> 
-                      </div>
-                      <div class="col-6">
-                        <label for="waterSource" class="recipe-label">Source</label>
-                        <input id="waterSource" class="form-control form-control-sm bottom-border" type="text" name="water[source]">
-                      </div>
-                      <div class="col-6">
-                        <label for="boilMinutes" class="recipe-label">Boil Minutes</label>
-                        <input id="boilMinutes" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="1" name="water[boilMinutes]"> 
-                      </div>
-                    </div>
-                    <div class="form-row mb-4">
-                      <div class="col-6">
-                        <label for="waterAdjust-toggle" class="recipe-label">Adjustments</label>
-                        <div id="waterAdjust-toggle" class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
-                          <label class="btn btn-light">
-                            <input type="radio" name="water[adjustments]" autocomplete="off" value="true">Yes
-                          </label>
-                          <label class="btn btn-light active">
-                            <input type="radio" name="water[adjustments]" autocomplete="off" value="false" checked>No
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <label for="mashOutToggle" class="recipe-label">Mash Out</label>
-                        <div id="mashOutToggle" class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
-                          <label class="btn btn-light">
-                            <input type="radio" name="water[mashOut]" autocomplete="off" value="true">Yes
-                          </label>
-                          <label class="btn btn-light active">
-                            <input type="radio" name="water[mashOut]" autocomplete="off" value="false" checked>No
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-  
-                    <div id="waterAdjustmentNotes-row" class="form-row mb-4 d-none">
-                      <div class="col">
-                        <label for="waterAdjustmentNotes" class="recipe-label">Adjustment Details</label>
-                        <textarea id="waterAdjustmentNotes" class="form-control form-control-sm bottom-border" name="water[adjustmentNotes]" rows="3"></textarea>
-                      </div>
-                    </div>
-
-                    <div id="brewhouse-container" class="card mb-4 mb-md-2">
-                      <div class="card-body">
-                        <h6 id="toggle-brewhouse-values">Brewhouse & Defaults <span id="toggle-brewhouse-values-collapsed" class="float-right px-1"><i class="fas fa-chevron-right"></i></span><span id="toggle-brewhouse-values-expanded" class="float-right px-1 d-none"><i class="fas fa-chevron-down"></i></span></h6>
-                        <% if(brewhouses.length > 0) { %> 
-                        <div class="form-group mt-3">
-                          <select name="water[brewhouse]" id="brewhouse-select" class="custom-select custom-select-sm">
-                            <option id="brewhouse-placeholder"value="" selected disabled>Select a brewhouse</option>
-                            <% for(let brewhouse of brewhouses) { %> 
-                            <option value="<%= brewhouse._id %>"><%= brewhouse.name %></option>
-                            <% } %>
-                          </select>
-                        </div>
-                        <% } else { %>
-                        <p class="text-lite">
-                          No Brewhouses found. Set up a Brewhouse to re-use common water and temperature settings.
-                        </p>
-                        <% } %>
-                        <div id="brewhouse-values" class="d-none">
-                          <h6>Volume</h6>
-                          <div class="form-row mb-4">
-                            <div class="col-6">
-                              <label for="boilOffRate" class="recipe-label">Boil-Off (L/Hour)</label>
-                              <input id="boilOffRate" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="water[boilOffRate]">
-                            </div>
-                            <div class="col-6">
-                              <label for="kettleLoss" class="recipe-label">Kettle Loss (L)</label>
-                              <input id="kettleLoss" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="water[kettleLoss]">
-                            </div>
-                            <div class="col-6">
-                              <label for="grainAbsorptionRate" class="recipe-label">Grain Absorption (L/kg)</label>
-                              <input id="grainAbsorptionRate" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="water[grainAbsorptionRate]">
-                            </div>
-                            <div class="col-6">
-                              <label for="gristRatio" class="recipe-label">Grist Ratio (L/kg)</label>
-                              <input id="gristRatio" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.001" name="water[gristRatio]">
-                            </div>
-                          </div>
-                          <h6>Temperature</h6>
-                          <div class="form-row mb-4">
-                            <div class="col-6">
-                              <label for="mashOutTargetTemp" class="recipe-label">Mash Out Target (C)</label>
-                              <input id="mashOutTargetTemp" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.1" name="water[mashOutTargetTemp]">
-                            </div>
-                            <div class="col-6">
-                              <label for="mashOutWaterTemp" class="recipe-label">Mash Out Water (C)</label>
-                              <input id="mashOutWaterTemp" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.1" name="water[mashOutWaterTemp]">
-                            </div>
-                            <div class="col-6">
-                              <label for="mashHeatLoss" class="recipe-label">Mash Tun Heat Loss (C/Hour)</label>
-                              <input id="mashHeatLoss" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.1" name="water[mashHeatLoss]">
-                            </div>
-                            <div class="col-6">
-                              <label for="grainSpecificHeat" class="recipe-label">Grain Specific Heat (Metric)</label>
-                              <input id="grainSpecificHeat" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="0.01" name="water[grainSpecificHeat]">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <p class="text-lite">
+                      <ul class="text-lite">
+                        <li>Sourced from <span class="bold"><%= recipe.water.source %></span></li>
+                        <% if(recipe.water.adjustments) { %> 
+                        <li>Adjustments required: <span class="bold"><%= recipe.water.adjustmentNotes %> </span></li>
+                        <% } %> 
+                        <li>Boil for <span class="bold"><%= recipe.water.boilMinutes %> minutes</span></li>
+                        <% if(recipe.water.mashOut) { %> 
+                        <li>Mash out with <span class="bold"><%= recipe.water.mashOutVolume %> litres</span> at <span class="bold"><%= recipe.water.mashOutWaterTemp %> C</span></li> 
+                        <% } %> 
+                      </ul>
+                      <h6>Brewhouse & Defaults</h6>
+                      <ul class="text-lite">
+                        <li><span class="bold"><%= recipe.water.brewhouse.name ? recipe.water.brewhouse.name : 'No' %></span> brewhouse</li>
+                          <ul>
+                            <li>Boil-Off of <span class="bold"><%= recipe.water.brewhouse.boilOffRate %> L/hour</span></li>
+                            <li>Kettle Loss of <span class="bold"><%= recipe.water.brewhouse.kettleLoss %> L</span></li>
+                            <li>Grain Absorption of <span class="bold"><%= recipe.water.brewhouse.grainAbsorptionRate %> L/kg</span></li>
+                            <li>Grist Ratio of <span class="bold"><span><%= recipe.water.brewhouse.gristRatio %> L/kg</span></li>
+                            <li>Mash Out Target Temperature <span class="bold"><%= recipe.water.brewhouse.mashOutTargetTemp %> C</span></li>
+                            <li>Mash Out Water Temperature <span class="bold"><%= recipe.water.mashOutWaterTemp %> C</span></li>
+                            <li>Mash Tun Heat Loss <span class="bold"><%= recipe.water.mashHeatLoss %> C/hour</span></li>
+                            <li>Grain Specific Heat <span class="bold"><%= recipe.water.brewhouse.grainSpecificHeat %></span></li>
+                          </ul>
+                      </ul>
+                    </p>  
                   </div>
                   <!-- right col at md + -->
                   <div class="col-md-6">
@@ -202,7 +107,7 @@
                               <span class="recipe-label">Batch Size</span>
                             </td>
                             <td class="border-0">
-                              <a id="water-table-display-batchSize" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<span class='text-lite italic d-block'>Recipe Batch Size</span>"><span>0</span></a>
+                              <a id="water-table-display-batchSize" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<span class='text-lite italic d-block'>Recipe Batch Size</span>"><span><%= recipe.batchSize %></span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -210,7 +115,7 @@
                               <span class="recipe-label">+ Kettle Loss</span>
                             </td>
                             <td class="border-0">
-                              <a id="water-table-display-kettleLoss" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<span class='text-lite italic d-block'>Brewhouse Kettle Loss</span>"><span>0</span></a>
+                              <a id="water-table-display-kettleLoss" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<span class='text-lite italic d-block'>Brewhouse Kettle Loss</span>"><span><%= recipe.water.kettleLoss %></span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -219,8 +124,7 @@
                             </td>
                             <td class="border-0">
                               <input id="water-table-input-boilOff" class="d-none" type="number" step="0.001" name="water[boilOffVolume]" aria-hidden="true">  
-                              <a id="water-table-display-boilOff" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>Brewhouse Boil-Off L/hour x (Recipe Boil Minutes / 60 )</span>"><span aria-label="Expected Boil Off Volume">0</span></a>
+                              <a id="water-table-display-boilOff" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>Brewhouse Boil-Off L/hour x (Recipe Boil Minutes / 60 )</span>    <span class='text-lite italic d-block'>= <span class='bold'><%= recipe.water.brewhouse.boilOffRate %></span> x (<span class='bold'><%= recipe.water.boilMinutes %></span> / 60)</span>    <span class='text-lite italic d-block'>= <%= recipe.water.boilOffVolume %>  L</span>    "><span aria-label="Expected Boil Off Volume"><%= recipe.water.boilOffVolume %> </span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -229,9 +133,7 @@
                             </td>
                             <td>
                               <input id="water-table-input-preBoilVolume" class="d-none" type="number" step="0.001" name="water[preBoilVolume]" aria-hidden="true">  
-                              <a id="water-table-display-preBoilVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>Recipe Batch Size + Brewhouse Kettle Loss + Calculated Boil-Off</span>
-                              "><span aria-label="Expected Pre-Boil Volume">0</span></a>
+                              <a id="water-table-display-preBoilVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>Recipe Batch Size + Brewhouse Kettle Loss + Calculated Boil-Off</span>    <span class='text-lite italic d-block'>= <span class='bold'><%= recipe.batchSize %></span> + <span class='bold'><%= recipe.water.kettleLoss %> </span> + <span class='bold'><%= recipe.water.boilOffVolume %></span>    </span><span class='text-lite italic d-block'>= <%= recipe.water.preBoilVolume %> L</span>"><span aria-label="Expected Pre-Boil Volume"><%= recipe.water.preBoilVolume %></span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -240,8 +142,7 @@
                             </td>
                             <td class="border-0">
                               <input id="water-table-input-grainAbsorptionVolume" class="d-none" type="number" step="0.001" name="water[grainAbsorptionVolume]" aria-hidden="true">  
-                              <a id="water-table-display-grainAbsorptionVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>Recipe Grain Absorption Rate L/kg x Recipe Total Malt Weight kg</span>"><span aria-label="Expected Grain Absorption Volume">0</span></a>
+                              <a id="water-table-display-grainAbsorptionVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>Recipe Grain Absorption Rate L/kg x Recipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'><%= recipe.water.grainAbsorptionRate %></span> x <span class='bold'><%= recipe.maltTotals.qty %></span></span>    <span class='text-lite italic d-block'>= <%= recipe.water.grainAbsorptionVolume %> L</span>    "><span aria-label="Expected Grain Absorption Volume"><%= recipe.water.grainAbsorptionVolume %></span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -250,8 +151,7 @@
                             </td>
                             <td>
                               <input id="water-table-input-totalMashWaterVolume" class="d-none" type="number" step="0.001" name="water[totalMashWaterVolume]" aria-hidden="true">  
-                              <a id="water-table-display-totalMashWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>Calculated Pre-Boil Volume L + Calculated Grain Loss L</span>"><span aria-label="Total Mash Water Volume">0</span></a>
+                              <a id="water-table-display-totalMashWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>Calculated Pre-Boil Volume L + Calculated Grain Absorption L</span>    <span class='text-lite italic d-block'>= <span class='bold'><%= recipe.water.preBoilVolume %></span> + <span class='bold'><%= recipe.water.grainAbsorptionVolume %></span></span>    <span class='text-lite italic d-block'>= <%= recipe.water.totalMashWaterVolume %> L</span>    "><span aria-label="Total Mash Water Volume"><%= recipe.water.totalMashWaterVolume %></span></a>
                             </td>
                           </tr>
                           <tr>
@@ -266,8 +166,7 @@
                             </td>
                             <td>
                               <input id="water-table-input-strikeWaterVolume" class="d-none" type="number" step="0.001" name="water[strikeVolume]" aria-hidden="true">  
-                              <a id="water-table-display-strikeWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>Brewhouse Grist Ratio L/kg x Receipe Total Malt Weight kg</span>"><span aria-label="Strike Water Volume">0</span></a>
+                              <a id="water-table-display-strikeWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>Brewhouse Grist Ratio L/kg x Receipe Total Malt Weight kg</span>    <span class='text-lite italic d-block'>= <span class='bold'><%= recipe.maltTotals.qty %></span> x <span class='bold'><%= recipe.water.gristRatio %></span></span>    <span class='text-lite italic d-block'>= <%= recipe.water.strikeVolume %> L</span>    "><span aria-label="Strike Water Volume"><%= recipe.water.strikeVolume %></span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -276,13 +175,7 @@
                             </td>
                             <td>
                               <input id="water-table-input-mashOutVolume" class="d-none" type="number" step="0.001" name="water[mashOutVolume]" aria-hidden="true">  
-                              <a id="water-table-display-mashOutVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>(T2-T1) x (G + Wm) / (Tw – T2)</span>
-                              <span class='text-lite italic d-block'><span class='bold'>T2</span> = Brewhouse Mash Out Temp C</span>
-                              <span class='text-lite italic d-block'><span class='bold'>T1</span> = Calculated Mash End Temp C (Recipe Mash Temp C, Recipe Mash Length minutes, and Brewhouse Mash Tun Heat Loss C/hour)</span>
-                              <span class='text-lite italic d-block'><span class='bold'>G</span> = Recipe Total Malt Weight x Brewhouse Grain Specific Heat</span>
-                              <span class='text-lite italic d-block'><span class='bold'>Wm</span> = Calculated Strike Water Volume L</span>
-                              <span class='text-lite italic d-block'><span class='bold'>Tw</span> = Brewhouse Mash Out Water Temp C</span>"><span aria-label="Mash Out Water Volume">0</span></a>
+                              <a id="water-table-display-mashOutVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>(T2-T1) x (G + Wm) / (Tw – T2)</span>    <span class='text-lite italic d-block mb-1'>      <%= recipe.water.mashOut ? '= (<span class="bold">' + recipe.water.mashOutTargetTemp + '</span> - <span class="bold">' + recipe.water.mashEndTemp + '</span>) x ((<span class="bold">' + recipe.maltTotals.qty + '</span> x <span class="bold">' + recipe.water.grainSpecificHeat + '</span>) + <span class="bold">' + recipe.water.strikeVolume + '</span>) / (<span class="bold">' + recipe.water.mashOutWaterTemp + '</span> – <span class="bold">' + recipe.water.mashOutTargetTemp + '</span>)' : ''%>    </span>    <span class='text-lite italic d-block mb-1'>      = <%= recipe.water.mashOutVolume %> L <%= recipe.water.mashOut ? '' : '(No Mash Out on this Recipe)' %>    </span>    <hr>    <span class='text-lite italic d-block'><span class='bold'>T2</span> = Brewhouse Mash Out Target Temp C</span>    <span class='text-lite italic d-block'><span class='bold'>T1</span> = Calculated Mash End Temp C (Recipe Mash Temp C, Recipe Mash Length minutes, and Brewhouse Mash Tun Heat Loss C/hour)</span>    <span class='text-lite italic d-block'><span class='bold'>G</span> = Recipe Total Malt Weight x Brewhouse Grain Specific Heat</span>    <span class='text-lite italic d-block'><span class='bold'>Wm</span> = Calculated Strike Water Volume L</span>    <span class='text-lite italic d-block'><span class='bold'>Tw</span> = Brewhouse Mash Out Water Temp C</span>    "><span aria-label="Mash Out Water Volume"><%= recipe.water.mashOutVolume %></span></a>
                             </td>
                           </tr>
                           <tr class="water-row">
@@ -291,9 +184,7 @@
                             </td>
                             <td>
                               <input id="water-table-input-spargeWaterVolume" class="d-none" type="number" step="0.001" name="water[spargeWaterVolume]" aria-hidden="true">  
-                              <a id="water-table-display-spargeWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="
-                              <span class='text-lite italic d-block'>Calculated Total Mash Water L - (Calculated Strike Water L + Calculated Mash Out Water L)</span>
-                              "><span aria-label="Sparge Water Volume">0</span></a>
+                              <a id="water-table-display-spargeWaterVolume" class="btn btn-sm btn-outline-secondary" tabindex="0" data-trigger="focus" data-html="true" data-container="body" data-toggle="popover" data-placement="bottom" data-content="    <span class='text-lite italic d-block'>Calculated Total Mash Water L - (Calculated Strike Water L + Calculated Mash Out Water L)</span>    <span class='text-lite italic d-block'>= <span class='bold'><%= recipe.water.totalMashWaterVolume %> </span> - (<span class='bold'><%= recipe.water.strikeVolume %></span> + <span class='bold'><%= recipe.water.mashOutVolume %></span>)</span>    <span class='text-lite italic d-block'>= <%= recipe.water.spargeWaterVolume %> L</span>    "><span aria-label="Sparge Water Volume"><%= recipe.water.spargeWaterVolume %></span></a>
                             </td>
                           </tr>       
                         </tfoot>                      
@@ -695,5 +586,5 @@
           </div>
         </div>
     </form>
-        
+
 <%- include('../partials/footer') -%>

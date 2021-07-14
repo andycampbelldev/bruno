@@ -24,3 +24,8 @@ const toggleScrollCue = function() {
       chev.classList.add('d-flex');
     }
   }
+
+// initialize all popovers and contain within the water table
+$('[data-toggle="popover"]').popover({
+  boundary: "viewport"
+});

@@ -4,18 +4,7 @@ for (let r of recipeLists) {
   r.addEventListener('scroll', toggleScrollCue)  
 }
 
-
-
-// event listener on Recipes and Brews buttons - when one is clicked, remove the 'show' class from the other to cause it to collapse
-// let buttons = document.querySelectorAll('.beer-index-buttons button')
-// for (let button of buttons) {
-//     button.addEventListener('click', function() {
-//         let target = this.getAttribute('data-target');
-//         target = target.indexOf('recipes') > 0 ? target.replace('recipes', 'brews') : target.replace('brews', 'recipes');
-//         document.querySelector(target).classList.remove('show');
-//     })
-// }
-
+// event listener on Recipes and Brews buttons - when one is clicked, remove the 'd-none' class from the appropriate section and add it to the other.
 let buttons = document.querySelectorAll('.beer-index-buttons button')
 for (let button of buttons) {
     button.addEventListener('click', function() {

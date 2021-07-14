@@ -19,15 +19,13 @@
               <%= beer.description %>
             </p>
             <a role="button" class="btn btn-outline-secondary" href="/beers/<%= beer._id %>/edit">Edit</a>
-            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse"
-              data-target="#recipes<%= beer.id %>" aria-expanded="false"
-              aria-controls="recipes<%= beer.id %>">Recipes</button>
-            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse"
-              data-target="#brews<%= beer._id %>" aria-expanded="false"
-              aria-controls="brews<%= beer._id %>">Brews</button>
+            <div class="d-inline-block beer-index-buttons">
+              <button type="button" class="btn btn-outline-secondary" data-target="#recipes<%= beer.id %>">Recipes</button>
+              <button type="button" class="btn btn-outline-secondary" data-target="#brews<%= beer._id %>">Brews</button>
+            </div>
           </div>
           <!-- Collapsing list of recipes -->
-          <div id="recipes<%= beer._id %>" class="collapse">
+          <div id="recipes<%= beer._id %>" class="d-none">
             <div class="card-body pt-0">
               <% if (beer.recipes.length> 0) { %>
                 <div class="beer-index-recipes-table-container">
@@ -75,7 +73,7 @@
             </div>
           </div>
           <!-- Collapsing List of Brews -->
-          <div id="brews<%= beer.id %>" class="collapse">
+          <div id="brews<%= beer.id %>" class="d-none">
             <div class="card-body pt-0">
               <% if (beer.brews.length> 0) { %>
                 <table class="text-lite table table-sm">

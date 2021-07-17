@@ -214,6 +214,7 @@ class Recipe {
     this.expectedFinalGravity();
     this.expectedABV();
     updateValue('#malts-expectedPreBoilGravity', this.values.expectedPreBoilGravity.toFixed(3));
+    updateValue('#expectedpreBoilGravityInput', this.values.expectedPreBoilGravity.toFixed(3));
     updateValue('#malts-expectedOriginalGravity', this.values.expectedOriginalGravity.toFixed(3));
     updateValue('#expectedOriginalGravityInput', this.values.expectedOriginalGravity);
     updateValue('#expectedOriginalGravityDisplay', this.values.expectedOriginalGravity.toFixed(3));
@@ -312,6 +313,7 @@ class Malt {
     updateValue('#maltTotalsMCUInput', this.values.totalMaltMcu);
     updateValue('#maltTotalsSRMDisplay', this.values.totalMaltSrm);
     updateValue('#maltTotalsSRMInput', this.values.totalMaltSrm);
+    updateValue('#maltTotalsSRMHexInput', this.values.srmHex);
     document.querySelector('#maltTotalsSRMInput').parentElement.style.backgroundColor = this.values.srmHex;
   }
 }

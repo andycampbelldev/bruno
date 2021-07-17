@@ -26,6 +26,7 @@ const recipeSchema = new mongoose.Schema({
     expectedABV: Number,
     expectedFinalGravity: Number,
     expectedOriginalGravity: Number,
+    expectedPreBoilGravity: Number,
     ferm: [{
         stage: String,
         temp: Number,
@@ -64,7 +65,8 @@ const recipeSchema = new mongoose.Schema({
         mcu: Number,
         points: Number,
         qty: Number,
-        srm: Number
+        srm: Number,
+        srmHex: String
     },
     mash: {
         method: String,

@@ -61,7 +61,7 @@ app.get('/beers/:id/edit', async (req, res) => {
 
 // new beer form
 app.get('/beers/new', async (req, res) => {
-    res.render('beers/new');
+    res.render('beers/new', {scripts: []});
 })
 
 // index for brewhouse

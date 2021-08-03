@@ -186,7 +186,8 @@ class Recipe {
     updateValue('#water-table-input-preBoilVolume', this.values.preBoilVolume);
     updateValue('#water-table-display-preBoilVolume span', this.values.preBoilVolume);
     updateValue('#malts-preBoilVolume', this.values.preBoilVolume);
-    updateValue('#malts-postBoilVolume', this.values.postBoilVolume);
+    updateValue('#malts-display-postBoilVolume', this.values.postBoilVolume);
+    updateValue('#malts-input-postBoilVolume', this.values.postBoilVolume);
     updateValue('#water-table-input-grainAbsorptionVolume', this.values.grainAbsorptionVolume);
     updateValue('#water-table-display-grainAbsorptionVolume span', this.values.grainAbsorptionVolume);
     updateValue('#water-table-input-totalMashWaterVolume', this.values.totalMashWaterVolume);

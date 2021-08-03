@@ -270,7 +270,7 @@
                 <ul class="text-lite">
                   <li>Total Gravity Points based on Pre-Boil Volume of <span id="malts-preBoilVolume" class="bold"><%= recipe.water.preBoilVolume %></span> L.</li>
                   <li>Current Brewhouse typically achieves conversion of approximately <span id="malts-conversionPercent" class="bold"><%= recipe.water.brewhouse.conversionPercent %></span>%. Pre-Boil Gravity of <span id="malts-expectedPreBoilGravity" class='bold'><%= recipe.expectedPreBoilGravity %></span> expected.</li>
-                  <li>Based on expected Post-Boil Volume of <span id="malts-postBoilVolume" class="bold">0</span> L, Original Gravity of <span id="malts-expectedOriginalGravity" class="bold">0</span> is expected.</li>
+                  <li>Based on expected Post-Boil Volume of <span id="malts-postBoilVolume" class="bold"><%= recipe.water.postBoilVolume %></span> L, Original Gravity of <span id="malts-expectedOriginalGravity" class="bold"><%= recipe.expectedOriginalGravity %></span> is expected.</li>
                 </ul>
               </div>
             </div>
@@ -293,53 +293,39 @@
                       </tr>
                     </thead>
                     <tbody id="hop-list">
-                      <tr class="hop-row">
-                        <td>
-                          <label class="sr-only" for="hopName[0]">Name</label>
-                          <input id="hopName[0]" class="form-control form-control-sm border-0" type="text" name="hops[0][name]">  
-                        </td>
-                        <td>
-                          <label class="sr-only" for="hopAA[0]">AA%</label>
-                          <input id="hopAA[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" max="100" step="0.01" name="hops[0][aa]">  
-                        </td>
-                        <td>
-                          <label class="sr-only" for="hopQty[0]">Qty (g)</label>
-                          <input id="hopQty[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="hops[0][qty]">  
-                        </td>
-                        <td>
-                          <input id="hopAAUInput[0]" class="d-none" type="number" step="0.001" name="hops[0][aau]" aria-hidden="true">
-                          <span id="hopAAUDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Hop Alpha Acid Units">0</span>
-                        </td>
-                        <td class="text-center">
-                          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-light active">
-                              <input type="radio" name="hops[0][usage]" autocomplete="off" value="Boil" checked>Boil
-                            </label>
-                            <label class="btn btn-light">
-                              <input type="radio" name="hops[0][usage]" autocomplete="off" value="Dry">Dry
-                            </label>
-                          </div>
-                        </td>
-                        <td>
-                          <label class="sr-only" for="hopTime[0]">Timing</label>
-                          <input id="hopTime[0]" class="form-control form-control-sm border-0 text-center" type="text" name="hops[0][timing]">
-                        </td>
-                        <td class="border-0">
-                          <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
-                        </td>
-                      </tr>
+                      <% for (let h of recipe.hops) { %>
+                        <tr class="hop-row">
+                          <td>
+                            <span class="d-block form-control-sm text-left" aria-label="Hop Name"><%= h.name %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center" aria-label="Hop AA%"><%= h.aa %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center" aria-label="Hop Quantity"><%= h.qty %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center bold" aria-label="Hop Alpha Acid Units"><%= h.aau %></span>
+                          </td>
+                          <td class="text-center">
+                            <span class="d-block form-control-sm text-center" aria-label="Hop Usage"><%= h.usage %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center" aria-label="Hop Timing"><%= h.timing %></span>
+                          </td>
+                          <td class="border-0"></td>
+                        </tr>
+                      <% } %>  
                     </tbody>
                     <tfoot>
                       <tr class="text-center">
                         <td></td>
                         <td></td>
                         <td>
-                          <input id="hopTotalsQtyInput" class="d-none" type="number" step="0.001" name="hopTotals[qty]" value="0" aria-hidden="true">
-                          <span id="hopTotalsQtyDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Hop Quantity">0</span>  
+                          <span class="d-block form-control-sm text-center bold" aria-label="Total Hop Quantity"><%= recipe.hopTotals.qty %></span>  
                         </td>
                         <td>
-                          <input id="hopTotalsAAUInput" class="d-none" type="number" step="0.001" name="hopTotals[aau]" value="0" aria-hidden="true"> 
-                          <span id="hopTotalsAAUDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Hop Alpha Acid Units">0</span>  
+                          <span class="d-block form-control-sm text-center bold" aria-label="Total Hop Alpha Acid Units"><%= recipe.hopTotals.aau %></span>  
                         </td>
                         <td></td>
                         <td></td>

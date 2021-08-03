@@ -100,6 +100,7 @@ const recipeSchema = new mongoose.Schema({
         mashOutWaterTemp: Number,
         mashOutVolume: Number,
         preBoilVolume: Number,
+        postBoilVolume: Number,
         source: String,
         spargeWaterVolume: Number,
         strikeVolume: Number,

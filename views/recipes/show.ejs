@@ -215,60 +215,51 @@
                       </tr>
                     </thead>
                     <tbody id="malt-list">
-                      <tr class="malt-row">
-                        <td>
-                          <label class="sr-only" for="maltName[0]">Name</label>
-                          <input id="maltName[0]" class="form-control form-control-sm border-0" type="text" name="malts[0][name]">
-                        </td>
-                        <td>
-                          <label class="sr-only" for="maltQty[0]">Qty (kg)</label>
-                          <input id="maltQty[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.001" name="malts[0][qty]">
-                        </td>
-                        <td>
-                          <label class="sr-only" for="maltPPG[0]">PPG</label>
-                          <input id="maltPPG[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[0][ppg]">
-                        </td>
-                        <td>
-                          <input id="maltGravityPointsInput[0]" class="d-none" type="number" step="1" name="malts[0][gravityPoints]" aria-hidden="true">
-                          <span id="maltGravityPointsDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt Gravity Points">0</span>
-                        </td>
-                        <td>
-                          <label class="sr-only" for="maltLovibond[0]">Lovibond</label>
-                          <input id="maltLovibond[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[0][lovibond]">
-                        </td>
-                        <td>
-                          <input id="maltMCUInput[0]" class="d-none" type="number" step="0.001" name="malts[0][mcu]" aria-hidden="true">
-                          <span id="maltMCUDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt Color Units">0</span>
-                        </td>
-                        <td>
-                          <input id="maltSRMInput[0]" class="d-none" type="number" step="0.001" name="malts[0][srm]" aria-hidden="true">
-                          <span id="maltSRMDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt SRM Color">0</span>
-                        </td>
-                        <td class="border-0">
-                          <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
-                        </td>
-                      </tr>
+                      <% for (let m of recipe.malts) { %> 
+                        <tr class="malt-row">
+                          <td>
+                            <span class="d-block form-control-sm text-left" aria-label="Malt Name"><%= m.name %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center" aria-label="Malt Quantity"><%= m.qty %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center" aria-label="Malt PPG"><%= m.ppg %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center bold" aria-label="Malt Gravity Points"><%= m.gravityPoints %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center" aria-label="Malt Lovibond"><%= m.lovibond %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center bold" aria-label="Malt Color Units"><%= m.mcu %></span>
+                          </td>
+                          <td>
+                            <span class="d-block form-control-sm text-center bold" aria-label="Malt SRM Color"><%= m.srm %></span>
+                          </td>
+                          <td class="border-0">
+                            <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                          </td>
+                        </tr>
+                      <% } %> 
                     </tbody>
                     <tfoot>
                       <tr>
                         <td></td>
                         <td>
-                          <input id="maltTotalsQtyInput" class="d-none" type="number" step="0.001" name="maltTotals[qty]" value="0" aria-hidden="true">
-                          <span id="maltTotalsQtyDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Malt Quantity">0</span>                      
+                          <span class="d-block form-control-sm text-center bold" aria-label="Total Malt Quantity"><%= recipe.maltTotals.qty %></span>                      
                         </td>
                         <td></td>
                         <td>
-                          <input id="maltTotalsPointsInput" class="d-none" type="number" step="1" name="maltTotals[points]" value="0" aria-hidden="true">                  
-                          <span id="maltTotalsPointsDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Gravity Points">0</span>
+                          <span class="d-block form-control-sm text-center bold" aria-label="Total Gravity Points"><%= recipe.maltTotals.points %></span>
                         </td>
                         <td></td>
                         <td>
-                          <input id="maltTotalsMCUInput" class="d-none" type="number" step="0.001" name="maltTotals[mcu]" value="0" aria-hidden="true">
-                          <span id="maltTotalsMCUDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Malt Color Units">0</span>
+                          <span id="maltTotalsMCUDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Malt Color Units"><%= recipe.maltTotals.mcu %></span>
                         </td>
-                        <td>
-                          <input id="maltTotalsSRMInput" class="d-none" type="number" step="0.001" name="maltTotals[srm]" value="0" aria-hidden="true">
-                          <span id="maltTotalsSRMDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Malt SRM">0</span>
+                        <td id="srmHex">
+                          <span id="maltTotalsSRMDisplay" class="d-block form-control-sm text-center bold" aria-label="Total Malt SRM"><%= recipe.maltTotals.srm %></span>
                         </td>
                         <td class="border-0"></td>
                       </tr>         
@@ -277,8 +268,8 @@
                   <div class="scroll-cue d-flex d-md-none justify-content-center align-items-center"><i class="fas fa-chevron-right"></i></div>
                 </div>
                 <ul class="text-lite">
-                  <li>Total Gravity Points based on Pre-Boil Volume of <span id="malts-preBoilVolume" class="bold">0</span> L.</li>
-                  <li>Current Brewhouse typically achieves conversion of approximately <span id="malts-conversionPercent" class="bold">0</span>%. Pre-Boil Gravity of <span id="malts-expectedPreBoilGravity" class='bold'>0</span> expected.</li>
+                  <li>Total Gravity Points based on Pre-Boil Volume of <span id="malts-preBoilVolume" class="bold"><%= recipe.water.preBoilVolume %></span> L.</li>
+                  <li>Current Brewhouse typically achieves conversion of approximately <span id="malts-conversionPercent" class="bold"><%= recipe.water.brewhouse.conversionPercent %></span>%. Pre-Boil Gravity of <span id="malts-expectedPreBoilGravity" class='bold'><%= recipe.expectedPreBoilGravity %></span> expected.</li>
                   <li>Based on expected Post-Boil Volume of <span id="malts-postBoilVolume" class="bold">0</span> L, Original Gravity of <span id="malts-expectedOriginalGravity" class="bold">0</span> is expected.</li>
                 </ul>
               </div>
@@ -586,5 +577,8 @@
           </div>
         </div>
     </form>
+
+    <!-- script to set background-color on malt SRM <td>. VS Code does not like this being done with inline styling! -->
+    <%- `<script>document.querySelector('#srmHex').style.backgroundColor = "${recipe.maltTotals.srmHex}"</script>` %>  
 
 <%- include('../partials/footer') -%>

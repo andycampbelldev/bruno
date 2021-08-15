@@ -94,7 +94,7 @@ app.put('/brewhouses/:id', async (req, res) => {
     res.redirect('/brewhouses');
 })
 
-// get brewhouse (for recipe new/edit)
+// get brewhouse (for recipe new/edit form AJAX)
 app.get('/brewhouses/:id', async (req, res) => {
     const brewhouse = await Brewhouse.findById(req.params.id);
     res.send(brewhouse);
@@ -130,7 +130,6 @@ app.post('/beers/:beer/recipes', async (req, res) => {
 app.get('/beers/:beer/recipes/:recipe', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
     const recipe = await Recipe.findById(req.params.recipe).populate('water.brewhouse');
-    console.log(recipe);
     res.render('recipes/show', { beer, recipe, scripts: ['general.js'] });
 })
 

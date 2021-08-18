@@ -60,8 +60,8 @@
                     <tbody id="notes-list">
                       <tr class="notes-row">
                         <td>
-                          <label class="sr-only" for="noteDetails[0]">Note Content</label>
-                          <textarea id="noteDetails[0]" class="form-control form-control-sm border-0" name="recipeNotes[0]" rows="2"></textarea>
+                          <label class="sr-only" for="recipeNotes[0]">Note Content</label>
+                          <textarea id="recipeNotes[0]" class="form-control form-control-sm border-0" name="recipeNotes[0]" rows="2"></textarea>
                         </td>
                         <td class="border-0">
                           <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></a>
@@ -145,6 +145,13 @@
                         </p>
                         <% } %>
                         <div id="brewhouse-values" class="<%= brewhouses.length > 0 ? 'd-none' : '' %>">
+                          <h6>Efficiency</h6>
+                          <div class="form-row mb-4">
+                            <div class="col-6">
+                              <label for="conversionPercent" class="recipe-label">Conversion %</label>
+                              <input id="conversionPercent" class="form-control form-control-sm bottom-border" type="number" inputmode="decimal" min="0" step="1" name="water[conversionPercent]">
+                            </div>
+                          </div>
                           <h6>Volume</h6>
                           <div class="form-row mb-4">
                             <div class="col-6">
@@ -356,7 +363,7 @@
                           <span id="maltSRMDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt SRM Color">0</span>
                         </td>
                         <td class="border-0">
-                          <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                          <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></a>
                         </td>
                       </tr>
                     </tbody>
@@ -448,7 +455,7 @@
                           <input id="hopTime[0]" class="form-control form-control-sm border-0 text-center" type="text" name="hops[0][timing]">
                         </td>
                         <td class="border-0">
-                          <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                          <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></a>
                         </td>
                       </tr>
                     </tbody>
@@ -525,7 +532,7 @@
                         <div id="yeastPrepDesc-row" class="form-row mb-4 d-none">
                           <div class="col">
                             <label for="yeastStarterNotes" class="recipe-label">Starter/Rehydration Steps</label>
-                            <textarea id="yeastStarterNotes" class="form-control form-control-sm bottom-border" name="yeast[starterNotes]" rows="3"></textarea>
+                            <textarea id="yeastStarterNotes" class="form-control form-control-sm bottom-border" name="yeast[starterNotes]" rows="5"></textarea>
                           </div>
                         </div>
                       </div>
@@ -575,7 +582,7 @@
                               <input id="mashMins[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="mashSched[0][minutes]">  
                             </td>
                             <td class="border-0">
-                              <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                              <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></a>
                             </td>
                           </tr>
                         </tbody>
@@ -628,7 +635,7 @@
                                   <input id="finingsUsage[0]" class="form-control form-control-sm border-0 text-left" type="text" name="finings[0][usage]">  
                                 </td>
                                 <td class="border-0">
-                                  <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                                  <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></a>
                                 </td>
                               </tr>
                             </tbody>
@@ -676,7 +683,7 @@
                               <input id="fermDays[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="ferm[0][days]">  
                             </td>
                             <td class="border-0">
-                              <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></i></a>
+                              <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></a>
                             </td>
                           </tr>
                         </tbody>

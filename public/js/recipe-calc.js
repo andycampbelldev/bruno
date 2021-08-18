@@ -55,7 +55,7 @@ class Recipe {
     const mashStepMins = document.querySelectorAll('input[id^="mashMins"]');
     this.values.finalMashStepTemp = parseFloat(mashStepTemps[mashStepTemps.length - 1].value || 0);
     this.values.finalMashStepMinutes = parseFloat(mashStepMins[mashStepMins.length - 1].value || 0);
-    this.values.conversionPercent = getFloat('#malts-conversionPercent');
+    this.values.conversionPercent = getFloat('#conversionPercent');
     this.values.totalGravityPoints = getFloat('#maltTotalsPointsInput');
     this.values.totalMaltMCU = getFloat('#maltTotalsMCUInput');
     this.values.totalMaltSRM = getFloat('#maltTotalsSRMInput');
@@ -156,6 +156,7 @@ class Recipe {
         throw new Error(`Error getting Brewhouse: ${err}`);
       }
     }
+      updateValue('#conversionPercent', data ? data.conversionPercent : 0)
       updateValue('#boilOffRate', data ? data.boilOffRate : 0);
       updateValue('#kettleLoss', data ? data.kettleLoss : 0);
       updateValue('#grainAbsorptionRate', data ? data.grainAbsorptionRate : 0);
@@ -187,6 +188,7 @@ class Recipe {
     updateValue('#water-table-display-preBoilVolume span', this.values.preBoilVolume);
     updateValue('#malts-preBoilVolume', this.values.preBoilVolume);
     updateValue('#malts-display-postBoilVolume', this.values.postBoilVolume);
+    updateValue('#malts-conversionPercent', this.values.conversionPercent);
     updateValue('#malts-input-postBoilVolume', this.values.postBoilVolume);
     updateValue('#water-table-input-grainAbsorptionVolume', this.values.grainAbsorptionVolume);
     updateValue('#water-table-display-grainAbsorptionVolume span', this.values.grainAbsorptionVolume);
@@ -472,3 +474,12 @@ document.querySelector('#brewhouse-select').addEventListener('change', async fun
 const r = new Recipe();
 const m = new Malt();
 const h = new Hop();
+
+// on load, run each calculator once to initalize the values property on each class
+// this is needed for the recipe edit form to ensure all required inputs are available for a potential update on any field.
+r.water();
+m.malt(r.values, document.querySelector('.malt-row')); //first malt row only
+h.hop(r.values, document.querySelector('.hop-row') )
+r.gravity();
+r.mash();
+r.ferm();

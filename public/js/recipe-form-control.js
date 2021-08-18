@@ -454,8 +454,8 @@ $("#notes-table").on("click", ".add-notes", function () {
     $("#notes-list").append(
         `<tr class="notes-row">
     <td>
-      <label class="sr-only" for="noteDetails[${i}]">Details</label>
-      <textarea id="noteDetails[${i}]" class="form-control form-control-sm border-0" name="recipeNotes[${i}]" rows="2"></textarea>
+      <label class="sr-only" for="recipeNotes[${i}]">Note Content</label>
+      <textarea id="recipeNotes[${i}]" class="form-control form-control-sm border-0" name="recipeNotes[${i}]" rows="2"></textarea>
     </td>
     <td class="border-0">
       <a class="btn btn-sm btn-outline-dark my-1 delete-notes" role="button"><i class="far fa-trash-alt"></i></i></a>
@@ -472,9 +472,9 @@ $("#notes-table").on("click", ".delete-notes", function () {
             let i = 0;
             $(".notes-row").each(function () {
                 // details - label for attribute, input id & name attributes
-                $(this).find("label[for^=noteDetails\\[]").attr("for", `noteDetails[${i}]`);
-                $(this).find("textarea[id^=noteDetails\\[]").attr("id", `noteDetails[${i}]`);
-                $(this).find("textarea[id^=noteDetails\\[]").attr("name", `notes[${i}][details]`);
+                $(this).find("label[for^=recipeNotes\\[]").attr("for", `recipeNotes[${i}]`);
+                $(this).find("textarea[id^=recipeNotes\\[]").attr("id", `recipeNotes[${i}]`);
+                $(this).find("textarea[id^=recipeNotes\\[]").attr("name", `recipeNotes[${i}]`);
                 // increment i
                 i++;
             });

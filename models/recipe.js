@@ -88,6 +88,7 @@ const recipeSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Brewhouse"
         },
+        conversionPercent: Number,
         grainAbsorptionRate: Number,
         grainAbsorptionVolume: Number,
         grainSpecificHeat: Number,

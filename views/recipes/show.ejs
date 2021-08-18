@@ -1,8 +1,9 @@
 <%- include('../partials/header') -%>
       
-    <form action="/beers/<%= beer._id %>/recipes" method="POST">
+    <!-- <form action="/beers/<%= beer._id %>/recipes" method="POST"> -->
       <div class="row mb-2">
         <div class="col-md-12 px-2 px-md-0">
+          <a role="button" class="btn btn-sm btn-outline-warning d-block float-right" href="/beers/<%= beer._id %>/recipes/<%= recipe._id %>/edit">Edit</a>
           <h3 class="d-inline-block mb-0"><i id="srmDisplay" class="fas fa-circle mr-2"></i><%= beer.name %></h3><span class="pl-1 d-block d-md-inline"><%= beer.style %></span>
           <span class="pl-1 d-block text-lite italic">Version <%= recipe.version %>, created <%= recipe.created.toLocaleDateString() %></span>
         </div>
@@ -45,9 +46,9 @@
                       <%= recipe.description %>
                       <ul class="text-lite">
                         <% if(recipe.recipeNotes.length > 0) { %>
-                        <% for(let note of recipe.recipeNotes) { %>
-                        <li><%= note %></li>
-                        <% } %>  
+                          <% for(let note of recipe.recipeNotes) { %>
+                          <li><%= note %></li>
+                          <% } %>  
                         <% } %>
                       </ul>
                     </p>
@@ -105,7 +106,7 @@
                       <div class="col-md-6">
                         <h6>Water</h6>
                         <p class="text-lite">
-                          <%= recipe.water.brewhouse.name ? `Values below based on ${recipe.water.brewhouse.name} brewhouse and defaults.` : 'No brewhouse settings used. Edit Recipe to view all water-related inputs.' %>
+                          <%= recipe.water.brewhouse ? `Values below based on ${recipe.water.brewhouse.name} brewhouse and defaults.` : 'No brewhouse settings used. Edit Recipe to view all water-related inputs.' %>
                         </p>
                         <p class="text-lite">
                           <%= recipe.water.source ? `Water sourced from ${recipe.water.source}. ` : '' %><%= recipe.water.adjustments && recipe.water.adjustmentNotes ? `Adjustments required: ${recipe.water.adjustmentNotes}.` : '' %>  
@@ -135,7 +136,7 @@
                             <% } %>
                             <li><%= recipe.mash.spargeMethod %> Sparge: <%= recipe.water.spargeWaterVolume %> L @ <%= recipe.water.brewhouse.spargeWaterTemp %> C</li>
                             <li>Pre-Boil Volume: <%= recipe.water.preBoilVolume %> L</li>
-                            <li>Pre-Boil Gravity: ~<%= recipe.expectedPreBoilGravity %>, assuming conversion of ~<%= recipe.water.brewhouse.conversionPercent %>%</li>
+                            <li>Pre-Boil Gravity: ~<%= recipe.expectedPreBoilGravity %>, assuming conversion of ~<%= recipe.water.conversionPercent %>%</li>
                           </ul>
                         <% } %>
                       </div>

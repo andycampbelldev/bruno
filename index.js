@@ -133,6 +133,20 @@ app.get('/beers/:beer/recipes/:recipe', async (req, res) => {
     res.render('recipes/show', { beer, recipe, scripts: ['general.js'] });
 })
 
+// edit recipe form
+app.get('/beers/:beer/recipes/:recipe/edit', async (req, res) => {
+    const beer = await Beer.findById(req.params.beer);
+    const recipe = await Recipe.findById(req.params.recipe).populate('water.brewhouse');
+    const brewhouses = await Brewhouse.find({});
+    res.render('recipes/edit', { beer, brewhouses, recipe, scripts: ['general.js','recipe-form-control.js', 'recipe-calc.js'] });
+})
+
+// update recipe
+app.put('/beers/:beer/recipes/:recipe', async (req, res) => {
+    await Recipe.findByIdAndUpdate(req.params.recipe, req.body);
+    res.redirect(`/beers/${req.params.beer}/recipes/${req.params.recipe}`);
+})
+
 // read list of brews for a recipe
 app.get('/beers/:beer/recipes/:recipe/brews', (req, res) => {
     const i = recipes.map(recipe => recipe.id).indexOf(req.params.recipe);

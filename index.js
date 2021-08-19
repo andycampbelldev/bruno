@@ -130,7 +130,6 @@ app.post('/beers/:beer/recipes', async (req, res) => {
 app.get('/beers/:beer/recipes/:recipe', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
     const recipe = await Recipe.findById(req.params.recipe).populate('water.brewhouse');
-    console.log(recipe);
     res.render('recipes/show', { beer, recipe, scripts: ['general.js'] });
 })
 
@@ -144,7 +143,7 @@ app.get('/beers/:beer/recipes/:recipe/edit', async (req, res) => {
 
 // update recipe
 app.put('/beers/:beer/recipes/:recipe', async (req, res) => {
-    await Recipe.findByIdAndUpdate(req.params.recipe, req.body);
+    await Recipe.findByIdAndUpdate(req.params.recipe, req.body, {overwrite: true});
     res.redirect(`/beers/${req.params.beer}/recipes/${req.params.recipe}`);
 })
 

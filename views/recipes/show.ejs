@@ -22,11 +22,11 @@
                     <span class="d-block text-lite">Litres</span>
                   </div>
                   <div class="col-3 text-center">
-                    <span id="expectedOriginalGravityDisplay" class="d-block display-4" aria-label="Expected Original Gravity"><%= recipe.expectedOriginalGravity %></span>
+                    <span id="expectedOriginalGravityDisplay" class="d-block display-4" aria-label="Expected Original Gravity"><%= recipe.expectedOriginalGravity.toFixed(3) %></span>
                     <span class="d-block text-lite">OG</span>
                   </div>
                   <div class="col-3 text-center">
-                    <span id="expectedFinalGravityDisplay" class="d-block display-4" aria-label="Expected Final Gravity"><%= recipe.expectedFinalGravity %></span>
+                    <span id="expectedFinalGravityDisplay" class="d-block display-4" aria-label="Expected Final Gravity"><%= recipe.expectedFinalGravity.toFixed(3) %></span>
                     <span class="d-block text-lite">FG</span>
                   </div>
                   <div class="col-3 text-center">
@@ -136,7 +136,7 @@
                             <% } %>
                             <li><%= recipe.mash.spargeMethod %> Sparge: <%= recipe.water.spargeWaterVolume %> L @ <%= recipe.water.brewhouse.spargeWaterTemp %> C</li>
                             <li>Pre-Boil Volume: <%= recipe.water.preBoilVolume %> L</li>
-                            <li>Pre-Boil Gravity: ~<%= recipe.expectedPreBoilGravity %>, assuming conversion of ~<%= recipe.water.conversionPercent %>%</li>
+                            <li>Pre-Boil Gravity: ~<%= recipe.expectedPreBoilGravity.toFixed(3) %>, assuming conversion of ~<%= recipe.water.conversionPercent %>%</li>
                           </ul>
                         <% } %>
                       </div>
@@ -145,7 +145,7 @@
                         <ul class="text-lite">
                           <li>Boil for <%= recipe.water.boilMinutes %> minutes</li>
                           <li>Post-Boil Volume: <%= recipe.water.postBoilVolume %> L</li>
-                          <li>Post-Boil Gravity: <%= recipe.expectedOriginalGravity %> </li>
+                          <li>Post-Boil Gravity: <%= recipe.expectedOriginalGravity.toFixed(3) %> </li>
                         </ul>
                       </div>
                     </div>

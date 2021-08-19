@@ -167,6 +167,10 @@ table {
 
 /* TABLE: Force width of water table - specified column widths below don't seem to work when there are only 2 columns */
 
+.table thead th {
+    vertical-align: middle;
+}
+
 /* TABLE: First column width */
 #malt-table th:nth-child(1),
 #hop-table th:nth-child(1), 
@@ -302,7 +306,7 @@ table {
 }
 
 /* TABLE: Buttons inside tables min width  */
-td a.btn {
+td a.btn, th a.btn {
     min-width: 2rem;
 }
 

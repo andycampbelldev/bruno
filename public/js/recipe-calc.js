@@ -53,8 +53,8 @@ class Recipe {
     }
     const mashStepTemps = document.querySelectorAll('input[id^="mashTemp"]');
     const mashStepMins = document.querySelectorAll('input[id^="mashMins"]');
-    this.values.finalMashStepTemp = parseFloat(mashStepTemps[mashStepTemps.length - 1].value || 0);
-    this.values.finalMashStepMinutes = parseFloat(mashStepMins[mashStepMins.length - 1].value || 0);
+    this.values.finalMashStepTemp = mashStepTemps.length > 0 ? parseFloat(mashStepTemps[mashStepTemps.length - 1].value || 0) : 0;
+    this.values.finalMashStepMinutes = mashStepMins.length > 0 ? parseFloat(mashStepMins[mashStepMins.length - 1].value || 0) : 0;
     this.values.conversionPercent = getFloat('#conversionPercent');
     this.values.totalGravityPoints = getFloat('#maltTotalsPointsInput');
     this.values.totalMaltMCU = getFloat('#maltTotalsMCUInput');
@@ -244,9 +244,9 @@ class Malt {
     this.recipeValues = {};
   }
   refreshInputs = function(recipe, row) {
-    this.values.qty = getFloat('input[id^="maltQty"]', row);
-    this.values.ppg = getFloat('input[id^="maltPPG"]', row);
-    this.values.lovibond = getFloat('input[id^="maltLovibond"]', row);
+    this.values.qty = row ? getFloat('input[id^="maltQty"]', row) : 0;
+    this.values.ppg = row ? getFloat('input[id^="maltPPG"]', row) : 0;
+    this.values.lovibond = row ? getFloat('input[id^="maltLovibond"]', row) : 0;
     this.recipeValues = recipe;
   }
   points = function() {
@@ -293,16 +293,16 @@ class Malt {
   }
   malt = function(recipe, row) {
     this.refreshInputs(recipe, row);
-    this.points();
-    this.mcu();
-    this.srm();
+    row && this.points();
+    row && this.mcu();
+    row && this.srm();
     // output row-level results to DOM so that totals below update immediately
-    updateValue('input[id^="maltGravityPointsInput"]', this.values.points, row);
-    updateValue('span[id^="maltGravityPointsDisplay"]', this.values.points, row);
-    updateValue('input[id^="maltMCUInput"]', this.values.mcu, row);
-    updateValue('span[id^="maltMCUDisplay"]', this.values.mcu, row);
-    updateValue('input[id^="maltSRMInput\\["]', this.values.srm, row);
-    updateValue('span[id^="maltSRMDisplay"]', this.values.srm, row);
+    row && updateValue('input[id^="maltGravityPointsInput"]', this.values.points, row);
+    row && updateValue('span[id^="maltGravityPointsDisplay"]', this.values.points, row);
+    row && updateValue('input[id^="maltMCUInput"]', this.values.mcu, row);
+    row && updateValue('span[id^="maltMCUDisplay"]', this.values.mcu, row);
+    row && updateValue('input[id^="maltSRMInput\\["]', this.values.srm, row);
+    row && updateValue('span[id^="maltSRMDisplay"]', this.values.srm, row);
     this.totalMaltQty();
     this.totalGravityPoints();
     this.totalMaltMcu();
@@ -327,8 +327,8 @@ class Hop {
     this.recipeValues = {};
   }
   refreshInputs = function(recipe, row) {
-    this.values.qty = getFloat('input[id^="hopQty"]', row);
-    this.values.aa = getFloat('input[id^="hopAA"]', row);
+    this.values.qty = row ? getFloat('input[id^="hopQty"]', row) : 0;
+    this.values.aa = row ? getFloat('input[id^="hopAA"]', row) : 0;
     this.recipeValues = recipe;
   }
   aau = function() {
@@ -345,12 +345,13 @@ class Hop {
     this.values.totalHopAAU = parseFloat((sumValues('input[id^="hopAAUInput\\["]').toFixed(2)));
     return this.values.totalHopAAU
   }
+  // if no row passed in, will skip row-level methods and just update hop totals (i.e. if all rows are deleted from hop table)
   hop = function(recipe, row) {
     this.refreshInputs(recipe,row);
-    this.aau();
+    row && this.aau();
     // output row-level results to DOM so that totals below update immediately
-    updateValue('input[id^="hopAAUInput"]', this.values.aau, row);
-    updateValue('span[id^="hopAAUDisplay"]', this.values.aau, row);
+    row && updateValue('input[id^="hopAAUInput"]', this.values.aau, row);
+    row && updateValue('span[id^="hopAAUDisplay"]', this.values.aau, row);
     this.totalHopQty();
     this.totalHopAAU();
     updateValue('#hopTotalsQtyInput', this.values.totalHopQty);
@@ -478,8 +479,12 @@ const h = new Hop();
 // on load, run each calculator once to initalize the values property on each class
 // this is needed for the recipe edit form to ensure all required inputs are available for a potential update on any field.
 r.water();
-m.malt(r.values, document.querySelector('.malt-row')); //first malt row only
-h.hop(r.values, document.querySelector('.hop-row') )
+if(document.querySelector('.malt-row')) {
+  m.malt(r.values, document.querySelector('.malt-row')); //first malt row only
+}
+if(document.querySelector('.hop-row')) {
+  h.hop(r.values, document.querySelector('.hop-row') )
+}
 r.gravity();
 r.mash();
 r.ferm();

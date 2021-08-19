@@ -55,7 +55,9 @@
                     <thead>
                       <tr>
                         <th class="recipe-label" scope="col">Important Notes</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                        <th class="border-0 col-add-del-btn" scope="col">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                        </th>
                       </tr>                  
                     </thead>
                     <tbody id="notes-list">
@@ -67,20 +69,10 @@
                               <textarea id="recipeNotes[<%= i %>]" class="form-control form-control-sm border-0" name="recipeNotes[<%= i %>]" rows="2"><%= recipe.recipeNotes[i] %></textarea>
                             </td>
                             <td class="border-0">
-                              <a class="btn btn-sm btn-outline-dark my-1 <%= i === 0 ? 'add-notes' : 'delete-notes' %>" role="button"><i class="<%= i === 0 ? 'fas fa-plus fa-sm' : 'far fa-trash-alt' %>"></i></a>
+                              <a class="btn btn-sm btn-outline-dark my-1 delete-notes" role="button"><i class="far fa-trash-alt"></i></a>
                             </td>
                           </tr>
                         <% } %> 
-                      <% } else { %> 
-                        <tr class="notes-row">
-                          <td>
-                            <label class="sr-only" for="noteDetails[0]">Note Content</label>
-                            <textarea id="noteDetails[0]" class="form-control form-control-sm border-0" name="recipeNotes[0]" rows="2"></textarea>
-                          </td>
-                          <td class="border-0">
-                            <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                          </td>
-                        </tr>
                       <% } %> 
                     </tbody>                     
                   </table>
@@ -339,7 +331,9 @@
                         <th class="recipe-label text-center" scope="col">Lovibond</th>
                         <th class="recipe-label text-center" scope="col">MCU </th>
                         <th class="recipe-label text-center" scope="col">SRM</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                        <th class="border-0 col-add-del-btn" scope="col">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                        </th>
                       </tr>
                     </thead>
                     <tbody id="malt-list">
@@ -375,45 +369,11 @@
                               <span id="maltSRMDisplay[<%= i %>]" class="d-block form-control-sm text-center bold" aria-label="Malt SRM Color"><%= recipe.malts[i].srm %></span>
                             </td>
                             <td class="border-0">
-                              <a class="btn btn-sm btn-outline-dark my-1 <%= i === 0 ? 'add-malt' : 'delete-malt' %>" role="button"><i class="<%= i === 0 ? 'fas fa-plus fa-sm' : 'far fa-trash-alt' %>"></i></a>
+                              <a class="btn btn-sm btn-outline-dark my-1 delete-malt" role="button"><i class="far fa-trash-alt"></i></a>
                             </td>
                           </tr>
                         <% } %> 
-                      <% } else { %> 
-                        <tr class="malt-row">
-                          <td>
-                            <label class="sr-only" for="maltName[0]">Name</label>
-                            <input id="maltName[0]" class="form-control form-control-sm border-0" type="text" name="malts[0][name]">
-                          </td>
-                          <td>
-                            <label class="sr-only" for="maltQty[0]">Qty (kg)</label>
-                            <input id="maltQty[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.001" name="malts[0][qty]">
-                          </td>
-                          <td>
-                            <label class="sr-only" for="maltPPG[0]">PPG</label>
-                            <input id="maltPPG[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[0][ppg]">
-                          </td>
-                          <td>
-                            <input id="maltGravityPointsInput[0]" class="d-none" type="number" step="1" name="malts[0][gravityPoints]" aria-hidden="true">
-                            <span id="maltGravityPointsDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt Gravity Points">0</span>
-                          </td>
-                          <td>
-                            <label class="sr-only" for="maltLovibond[0]">Lovibond</label>
-                            <input id="maltLovibond[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[0][lovibond]">
-                          </td>
-                          <td>
-                            <input id="maltMCUInput[0]" class="d-none" type="number" step="0.001" name="malts[0][mcu]" aria-hidden="true">
-                            <span id="maltMCUDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt Color Units">0</span>
-                          </td>
-                          <td>
-                            <input id="maltSRMInput[0]" class="d-none" type="number" step="0.001" name="malts[0][srm]" aria-hidden="true">
-                            <span id="maltSRMDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Malt SRM Color">0</span>
-                          </td>
-                          <td class="border-0">
-                            <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                          </td>
-                        </tr>
-                      <% } %> 
+                      <% } %>
                     </tbody>
                     <tfoot>
                       <tr>
@@ -467,7 +427,9 @@
                         <th class="recipe-label text-center" scope="col">AAU</th>
                         <th class="recipe-label text-center col-btn-group" scope="col">Usage</th>
                         <th class="recipe-label text-center" scope="col">Timing</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                        <th class="border-0 col-add-del-btn" scope="col">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                        </th>
                       </tr>
                     </thead>
                     <tbody id="hop-list">
@@ -505,46 +467,10 @@
                               <input id="hopTime[<%= i %>]" class="form-control form-control-sm border-0 text-center" type="text" name="hops[<%= i %>][timing]" value="<%= recipe.hops[i].timing %>">
                             </td>
                             <td class="border-0">
-                              <a class="btn btn-sm btn-outline-dark my-1 <%= i === 0 ? 'add-hop' : 'delete-hop' %>" role="button"><i class="<%= i === 0 ? 'fas fa-plus fa-sm' : 'far fa-trash-alt' %>"></i></a>
+                              <a class="btn btn-sm btn-outline-dark my-1 delete-hop" role="button"><i class="far fa-trash-alt"></i></a>
                             </td>
                           </tr>
                         <% } %>  
-                      <% } else { %> 
-                        <tr class="hop-row">
-                          <td>
-                            <label class="sr-only" for="hopName[0]">Name</label>
-                            <input id="hopName[0]" class="form-control form-control-sm border-0" type="text" name="hops[0][name]">  
-                          </td>
-                          <td>
-                            <label class="sr-only" for="hopAA[0]">AA%</label>
-                            <input id="hopAA[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" max="100" step="0.01" name="hops[0][aa]">  
-                          </td>
-                          <td>
-                            <label class="sr-only" for="hopQty[0]">Qty (g)</label>
-                            <input id="hopQty[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="hops[0][qty]">  
-                          </td>
-                          <td>
-                            <input id="hopAAUInput[0]" class="d-none" type="number" step="0.001" name="hops[0][aau]" aria-hidden="true">
-                            <span id="hopAAUDisplay[0]" class="d-block form-control-sm text-center bold" aria-label="Hop Alpha Acid Units">0</span>
-                          </td>
-                          <td class="text-center">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                              <label class="btn btn-light active">
-                                <input type="radio" name="hops[0][usage]" autocomplete="off" value="Boil" checked>Boil
-                              </label>
-                              <label class="btn btn-light">
-                                <input type="radio" name="hops[0][usage]" autocomplete="off" value="Dry">Dry
-                              </label>
-                            </div>
-                          </td>
-                          <td>
-                            <label class="sr-only" for="hopTime[0]">Timing</label>
-                            <input id="hopTime[0]" class="form-control form-control-sm border-0 text-center" type="text" name="hops[0][timing]">
-                          </td>
-                          <td class="border-0">
-                            <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                          </td>
-                        </tr>                  
                       <% } %> 
                     </tbody>
                     <tfoot>
@@ -652,7 +578,9 @@
                             <th class="recipe-label" scope="col">Rest Type</th>
                             <th class="recipe-label text-center" scope="col">Temp (C)</th>
                             <th class="recipe-label text-center" scope="col">Minutes</th>
-                            <th class="border-0 col-add-del-btn" scope="col"></th>
+                            <th class="border-0 col-add-del-btn" scope="col">
+                              <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                            </th>
                           </tr>
                         </thead>
                         <tbody id="mash-list">
@@ -672,28 +600,10 @@
                                   <input id="mashMins[<%= i %>]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="mashSched[<%= i %>][minutes]" value="<%= recipe.mashSched[i].minutes %>">  
                                 </td>
                                 <td class="border-0">
-                                  <a class="btn btn-sm btn-outline-dark my-1 <%= i === 0 ? 'add-mash' : 'delete-mash' %>" role="button"><i class="<%= i === 0 ? 'fas fa-plus fa-sm' : 'far fa-trash-alt' %>"></i></a>
+                                  <a class="btn btn-sm btn-outline-dark my-1 delete-mash" role="button"><i class="far fa-trash-alt"></i></a>
                                 </td>
                               </tr>
                             <% } %> 
-                          <% } else { %> 
-                            <tr class="mash-row">
-                              <td>
-                                <label class="sr-only" for="mashRestType[0]">Rest Type</label>
-                                <input id="mashRestType[0]" class="form-control form-control-sm border-0" type="text" name="mashSched[0][restType]">  
-                              </td>
-                              <td>
-                                <label class="sr-only" for="mashTemp[0]">Temp (C)</label>
-                                <input id="mashTemp[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.1" name="mashSched[0][temp]">  
-                              </td>
-                              <td>
-                                <label class="sr-only" for="mashMins[0]">Minutes</label>
-                                <input id="mashMins[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="mashSched[0][minutes]">  
-                              </td>
-                              <td class="border-0">
-                                <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                              </td>
-                            </tr>
                           <% } %>
                         </tbody>
                         <tfoot>
@@ -727,7 +637,9 @@
                                 <th class="recipe-label" scope="col">Type</th>
                                 <th class="recipe-label text-center" scope="col">Qty</th>
                                 <th class="recipe-label text-left" scope="col">Usage</th>
-                                <th class="border-0 col-add-del-btn" scope="col"></th>
+                                <th class="border-0 col-add-del-btn" scope="col">
+                                  <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                                </th>
                               </tr>
                             </thead>
                             <tbody id="finings-list">
@@ -747,28 +659,10 @@
                                       <input id="finingsUsage[<%= i %>]" class="form-control form-control-sm border-0 text-left" type="text" name="finings[<%= i %>][usage]" value="<%= recipe.finings[i].usage %>">  
                                     </td>
                                     <td class="border-0">
-                                      <a class="btn btn-sm btn-outline-dark my-1 <%= i === 0 ? 'add-finings' : 'delete-finings' %>" role="button"><i class="<%= i === 0 ? 'fas fa-plus fa-sm' : 'far fa-trash-alt' %>"></i></a>
+                                      <a class="btn btn-sm btn-outline-dark my-1 delete-finings" role="button"><i class="far fa-trash-alt"></i></a>
                                     </td>
                                   </tr>
                                 <% } %> 
-                              <% } else { %> 
-                                <tr class="finings-row">
-                                  <td>
-                                    <label class="sr-only" for="finingsName[0]">Type</label>
-                                    <input id="finingsName[0]" class="form-control form-control-sm border-0" type="text" name="finings[0][name]">  
-                                  </td>
-                                  <td>
-                                    <label class="sr-only" for="finingsQty[0]">Qty</label>
-                                    <input id="finingsQty[0]" class="form-control form-control-sm border-0 text-center" type="text" name="finings[0][qty]">  
-                                  </td>
-                                  <td>
-                                    <label class="sr-only" for="finingsUsage[0]">Usage</label>
-                                    <input id="finingsUsage[0]" class="form-control form-control-sm border-0 text-left" type="text" name="finings[0][usage]">  
-                                  </td>
-                                  <td class="border-0">
-                                    <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                                  </td>
-                                </tr>
                               <% } %> 
                             </tbody>
                             <tfoot>
@@ -797,7 +691,9 @@
                             <th class="recipe-label" scope="col">Stage</th>
                             <th class="recipe-label text-center" scope="col">Temp (C)</th>
                             <th class="recipe-label text-center" scope="col">Days</th>
-                            <th class="border-0 col-add-del-btn" scope="col"></th>
+                            <th class="border-0 col-add-del-btn" scope="col">
+                              <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                            </th>
                           </tr>
                         </thead>
                         <tbody id="ferm-list">
@@ -817,28 +713,10 @@
                                   <input id="fermDays[<%= i %>]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="ferm[<%= i %>][days]" value="<%= recipe.ferm[i].days %>">  
                                 </td>
                                 <td class="border-0">
-                                  <a class="btn btn-sm btn-outline-dark my-1 <%= i === 0 ? 'add-ferm' : 'delete-ferm' %>" role="button"><i class="<%= i === 0 ? 'fas fa-plus fa-sm' : 'far fa-trash-alt' %>"></i></a>
+                                  <a class="btn btn-sm btn-outline-dark my-1 delete-ferm" role="button"><i class="far fa-trash-alt"></i></a>
                                 </td>
                               </tr>
                             <% } %> 
-                          <% } else { %> 
-                            <tr class="ferm-row">
-                              <td>
-                                <label class="sr-only" for="fermStage[0]">Stage</label>
-                                <input id="fermStage[0]" class="form-control form-control-sm border-0" type="text" name="ferm[0][stage]">  
-                              </td>
-                              <td>
-                                <label class="sr-only" for="fermTemp[0]">Temp (C)</label>
-                                <input id="fermTemp[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" step="0.1" min="0" name="ferm[0][temp]">  
-                              </td>
-                              <td>
-                                <label class="sr-only" for="fermDays[0]">Days</label>
-                                <input id="fermDays[0]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="ferm[0][days]">  
-                              </td>
-                              <td class="border-0">
-                                <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></a>
-                              </td>
-                            </tr>
                           <% } %> 
                         </tbody>
                         <tfoot>

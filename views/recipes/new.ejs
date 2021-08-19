@@ -54,11 +54,13 @@
                     <thead>
                       <tr>
                         <th class="recipe-label" scope="col">Important Notes</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                        <th class="border-0 col-add-del-btn" scope="col">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                        </th>
                       </tr>
                     </thead>
                     <tbody id="notes-list">
-                      <tr class="notes-row">
+                      <!-- <tr class="notes-row">
                         <td>
                           <label class="sr-only" for="recipeNotes[0]">Note Content</label>
                           <textarea id="recipeNotes[0]" class="form-control form-control-sm border-0" name="recipeNotes[0]" rows="2"></textarea>
@@ -66,7 +68,7 @@
                         <td class="border-0">
                           <a class="btn btn-sm btn-outline-dark my-1 add-notes" role="button"><i class="fas fa-plus fa-sm"></i></a>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>                     
                   </table>
                 </div>
@@ -329,11 +331,13 @@
                         <th class="recipe-label text-center" scope="col">Lovibond</th>
                         <th class="recipe-label text-center" scope="col">MCU </th>
                         <th class="recipe-label text-center" scope="col">SRM</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                        <th class="border-0 col-add-del-btn" scope="col">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                        </th>
                       </tr>
                     </thead>
                     <tbody id="malt-list">
-                      <tr class="malt-row">
+                      <!-- <tr class="malt-row">
                         <td>
                           <label class="sr-only" for="maltName[0]">Name</label>
                           <input id="maltName[0]" class="form-control form-control-sm border-0" type="text" name="malts[0][name]">
@@ -365,7 +369,7 @@
                         <td class="border-0">
                           <a class="btn btn-sm btn-outline-dark my-1 add-malt" role="button"><i class="fas fa-plus fa-sm"></i></a>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                     <tfoot>
                       <tr>
@@ -419,11 +423,13 @@
                         <th class="recipe-label text-center" scope="col">AAU</th>
                         <th class="recipe-label text-center col-btn-group" scope="col">Usage</th>
                         <th class="recipe-label text-center" scope="col">Timing</th>
-                        <th class="border-0 col-add-del-btn" scope="col"></th>
+                        <th class="border-0 col-add-del-btn" scope="col">
+                          <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                        </th>
                       </tr>
                     </thead>
                     <tbody id="hop-list">
-                      <tr class="hop-row">
+                      <!-- <tr class="hop-row">
                         <td>
                           <label class="sr-only" for="hopName[0]">Name</label>
                           <input id="hopName[0]" class="form-control form-control-sm border-0" type="text" name="hops[0][name]">  
@@ -457,7 +463,7 @@
                         <td class="border-0">
                           <a class="btn btn-sm btn-outline-dark my-1 add-hop" role="button"><i class="fas fa-plus fa-sm"></i></a>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                     <tfoot>
                       <tr class="text-center">
@@ -564,11 +570,13 @@
                             <th class="recipe-label" scope="col">Rest Type</th>
                             <th class="recipe-label text-center" scope="col">Temp (C)</th>
                             <th class="recipe-label text-center" scope="col">Minutes</th>
-                            <th class="border-0 col-add-del-btn" scope="col"></th>
+                            <th class="border-0 col-add-del-btn" scope="col">
+                              <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                            </th>
                           </tr>
                         </thead>
                         <tbody id="mash-list">
-                          <tr class="mash-row">
+                          <!-- <tr class="mash-row">
                             <td>
                               <label class="sr-only" for="mashRestType[0]">Rest Type</label>
                               <input id="mashRestType[0]" class="form-control form-control-sm border-0" type="text" name="mashSched[0][restType]">  
@@ -584,7 +592,7 @@
                             <td class="border-0">
                               <a class="btn btn-sm btn-outline-dark my-1 add-mash" role="button"><i class="fas fa-plus fa-sm"></i></a>
                             </td>
-                          </tr>
+                          </tr> -->
                         </tbody>
                         <tfoot>
                           <tr class="text-center">
@@ -617,11 +625,13 @@
                                 <th class="recipe-label" scope="col">Type</th>
                                 <th class="recipe-label text-center" scope="col">Qty</th>
                                 <th class="recipe-label text-left" scope="col">Usage</th>
-                                <th class="border-0 col-add-del-btn" scope="col"></th>
+                                <th class="border-0 col-add-del-btn" scope="col">
+                                  <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                                </th>
                               </tr>
                             </thead>
                             <tbody id="finings-list">
-                              <tr class="finings-row">
+                              <!-- <tr class="finings-row">
                                 <td>
                                   <label class="sr-only" for="finingsName[0]">Type</label>
                                   <input id="finingsName[0]" class="form-control form-control-sm border-0" type="text" name="finings[0][name]">  
@@ -637,7 +647,7 @@
                                 <td class="border-0">
                                   <a class="btn btn-sm btn-outline-dark my-1 add-finings" role="button"><i class="fas fa-plus fa-sm"></i></a>
                                 </td>
-                              </tr>
+                              </tr> -->
                             </tbody>
                             <tfoot>
                               <tr>
@@ -665,11 +675,13 @@
                             <th class="recipe-label" scope="col">Stage</th>
                             <th class="recipe-label text-center" scope="col">Temp (C)</th>
                             <th class="recipe-label text-center" scope="col">Days</th>
-                            <th class="border-0 col-add-del-btn" scope="col"></th>
+                            <th class="border-0 col-add-del-btn" scope="col">
+                              <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></a>
+                            </th>
                           </tr>
                         </thead>
                         <tbody id="ferm-list">
-                          <tr class="ferm-row">
+                          <!-- <tr class="ferm-row">
                             <td>
                               <label class="sr-only" for="fermStage[0]">Stage</label>
                               <input id="fermStage[0]" class="form-control form-control-sm border-0" type="text" name="ferm[0][stage]">  
@@ -685,7 +697,7 @@
                             <td class="border-0">
                               <a class="btn btn-sm btn-outline-dark my-1 add-ferm" role="button"><i class="fas fa-plus fa-sm"></i></a>
                             </td>
-                          </tr>
+                          </tr> -->
                         </tbody>
                         <tfoot>
                           <tr class="text-center">

@@ -88,18 +88,18 @@ $("#malt-table").on("click", ".add-malt", function () {
         </td>
         <td>
           <label class="sr-only" for="maltPPG[${i}]">PPG</label>
-          <input id="maltPPG[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="malts[${i}][ppg]">
+          <input id="maltPPG[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[${i}][ppg]">
         </td>
         <td>
-          <input id="maltGravityPointsInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][gravityPoints]" aria-hidden="true">
+          <input id="maltGravityPointsInput[${i}]" class="d-none" type="number" step="1" name="malts[${i}][gravityPoints]" aria-hidden="true">
           <span id="maltGravityPointsDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Malt Gravity Points">0</span>
         </td>
         <td>
-          <label class="sr-only" for="maltLovibond[${i}]">SRM/lb/G</label>
+          <label class="sr-only" for="maltLovibond[${i}]">Lovibond</label>
           <input id="maltLovibond[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="1" name="malts[${i}][lovibond]">
         </td>
         <td>
-          <input id="maltMCUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="malts[${i}][mcu]" aria-hidden="true">
+          <input id="maltMCUInput[${i}]" class="d-none" type="number" step="0.001" name="malts[${i}][mcu]" aria-hidden="true">
           <span id="maltMCUDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Malt Color Units">0</span>
         </td>
         <td>
@@ -182,16 +182,16 @@ $("#hop-table").on("click", ".add-hop", function () {
           <input id="hopQty[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="hops[${i}][qty]">  
         </td>
         <td>
-          <input id="hopAAUInput[${i}]" class="form-control form-control-sm border-0 text-center d-none" type="number" min="0" step="0.01" name="hops[${i}][aau]" aria-hidden="true">
+          <input id="hopAAUInput[${i}]" class="d-none" type="number" step="0.001" name="hops[${i}][aau]" aria-hidden="true">
           <span id="hopAAUDisplay[${i}]" class="d-block form-control-sm text-center bold" aria-label="Hop Alpha Acid Units">0</span>
         </td>
         <td class="text-center">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-light active">
-              <input type="radio" name="hops[${i}][usage]" id="boil" autocomplete="off" value="Boil" checked>Boil
+              <input type="radio" name="hops[${i}][usage]" autocomplete="off" value="Boil" checked>Boil
             </label>
             <label class="btn btn-light">
-              <input type="radio" name="hops[${i}][usage]" id="dry" autocomplete="off" value="Dry">Dry
+              <input type="radio" name="hops[${i}][usage]" autocomplete="off" value="Dry">Dry
             </label>
           </div>
         </td>
@@ -314,7 +314,7 @@ $("#mash-table").on("click", ".add-mash", function () {
     </td>
     <td>
       <label class="sr-only" for="mashTemp[${i}]">Temp (C)</label>
-      <input id="mashTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="mashSched[${i}][temp]">  
+      <input id="mashTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.1" name="mashSched[${i}][temp]">  
     </td>
     <td>
       <label class="sr-only" for="mashMins[${i}]">Minutes</label>
@@ -406,7 +406,7 @@ $("#ferm-table").on("click", ".add-ferm", function () {
       </td>
       <td>
         <label class="sr-only" for="fermTemp[${i}]">Temp (C)</label>
-        <input id="fermTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.01" name="ferm[${i}][temp]">  
+        <input id="fermTemp[${i}]" class="form-control form-control-sm border-0 text-center" type="number" inputmode="decimal" min="0" step="0.1" name="ferm[${i}][temp]">  
       </td>
       <td>
         <label class="sr-only" for="fermDays[${i}]">Days</label>

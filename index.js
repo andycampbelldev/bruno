@@ -123,13 +123,14 @@ app.post('/beers/:beer/recipes', async (req, res) => {
     await recipe.save();
     beer.recipes.push(recipe._id);
     await beer.save();
-    res.send(recipe);
+    res.redirect(`/beers/${beer._id}/recipes/${recipe._id}`);
 })
 
 // show recipe
 app.get('/beers/:beer/recipes/:recipe', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
     const recipe = await Recipe.findById(req.params.recipe).populate('water.brewhouse');
+    console.log(recipe);
     res.render('recipes/show', { beer, recipe, scripts: ['general.js'] });
 })
 

@@ -143,7 +143,14 @@ app.get('/beers/:beer/recipes/:recipe/edit', async (req, res) => {
 
 // update recipe
 app.put('/beers/:beer/recipes/:recipe', async (req, res) => {
-    await Recipe.findByIdAndUpdate(req.params.recipe, req.body, {overwrite: true});
+    // ensure any arrays not included in the form are saved as empty arrays
+    req.body.recipeNotes = req.body.recipeNotes || [];
+    req.body.malts = req.body.malts || [];
+    req.body.hops = req.body.hops || [];
+    req.body.mashSched = req.body.mashSched || [];
+    req.body.finings = req.body.finings || [];
+    req.body.ferm = req.body.ferm || [];
+    await Recipe.findByIdAndUpdate(req.params.recipe, req.body);
     res.redirect(`/beers/${req.params.beer}/recipes/${req.params.recipe}`);
 })
 

@@ -59,6 +59,13 @@ app.get('/beers/:id/edit', async (req, res) => {
     res.render('beers/edit', { beer, scripts: [] });
 })
 
+// delete beer
+app.delete('/beers/:id', async (req, res) => {
+    const { id } = req.params;
+    await Beer.findByIdAndDelete(id);
+    res.redirect(`/beers`);
+})
+
 // new beer form
 app.get('/beers/new', async (req, res) => {
     res.render('beers/new', {scripts: []});

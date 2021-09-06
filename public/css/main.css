@@ -123,6 +123,12 @@
     width: auto;
 }
 
+/* Buttons next to card titles - make sure these always have height fit-content so they don't grow when the title wraps*/
+.flex-title-row .btn {
+    height: fit-content;
+    margin-left: 1rem;
+}
+
 /* --------------- */
 /* Forms, Inputs and Tables */
 /* --------------- */

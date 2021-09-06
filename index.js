@@ -36,8 +36,8 @@ app.use(methodOverride('_method'));
 
 // index for beers
 app.get('/beers', async (req, res) => {
-    const beers = await Beer.find({}).populate('recipes');
-    res.render('beers/index', { beers, scripts: ['general.js', 'beer-index.js'] });
+    const beers = await Beer.find({});
+    res.render('beers/index', { beers, scripts: [] });
 })
 
 // create beer
@@ -45,6 +45,12 @@ app.post('/beers', async (req, res) => {
     const beer = new Beer(req.body.beer);
     await beer.save();
     res.redirect('/beers');
+})
+
+// show beer
+app.get('/beers/:id', async (req, res) => {
+    const beer = await Beer.findById(req.params.id).populate('recipes');
+    res.render('beers/show', {beer, scripts: ['general.js', 'beer-show.js']});
 })
 
 // edit beer

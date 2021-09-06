@@ -9,105 +9,18 @@
       <div class="col-12 mb-2 px-2">
         <div class="card">
           <div class="card-body">
-            <h3 class="d-inline-block mb-0">
-              <%= beer.name %>
-            </h3>
-            <span class="pl-1">
-              <%= beer.style %>
-            </span>
+            <div class="d-flex justify-content-between flex-title-row mb-1">
+              <div>
+                <h3 class="d-inline-block mb-0">
+                  <%= beer.name %>
+                </h3>
+                <span class="d-block d-md-inline"><%= beer.style %></span>
+              </div>
+              <a role="button" class="btn btn-sm btn-outline-primary" href="/beers/<%= beer._id %>">More</a>
+            </div>
             <p class="text-lite">
-              <%= beer.description %>
+              <%= beer.description.substring(0, 200) %><%= beer.description.length > 200 ? "..." : "" %>
             </p>
-            <a role="button" class="btn btn-outline-secondary" href="/beers/<%= beer._id %>/edit">Edit</a>
-            <div class="d-inline-block beer-index-buttons">
-              <button type="button" class="btn btn-outline-secondary" data-target="#recipes<%= beer.id %>">Recipes</button>
-              <button type="button" class="btn btn-outline-secondary" data-target="#brews<%= beer._id %>">Brews</button>
-            </div>
-          </div>
-          <!-- Collapsing list of recipes -->
-          <div id="recipes<%= beer._id %>" class="d-none">
-            <div class="card-body pt-0">
-              <% if (beer.recipes.length> 0) { %>
-                <div class="beer-index-recipes-table-container">
-                  <table class="text-lite table table-sm beer-index-recipes-table">
-                    <thead>
-                      <tr>
-                        <th class="recipe-label text-center" scope="col">Version</th>
-                        <th class="recipe-label text-center" scope="col">Added</th>
-                        <th class="recipe-label text-center" scope="col">Last Brewed</th>
-                        <th class="recipe-label text-left" scope="col">Note</th>
-                        <th class="recipe-label text-center" scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% for (let recipe of beer.recipes) { %>
-                        <tr class="text-center">
-                          <td>
-                            <%= recipe.version %>
-                          </td>
-                          <td>
-                            <%= recipe.created.toLocaleDateString() %>
-                          </td>
-                          <td>
-                            <%= recipe.lastBrewed || '-' %>
-                          </td>
-                          <td class="text-left">
-                            <%= `${recipe.description.substring(0, 100)}...` %>
-                          </td>
-                          <td><a href="/beers/<%= beer._id %>/recipes/<%= recipe._id %>"
-                              class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i
-                                class="far fa-eye"></i></a></td>
-                        </tr>
-                        <% } %>
-                    </tbody>
-                  </table>
-                  <div class="scroll-cue d-flex d-md-none justify-content-center align-items-center"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                <% } else { %>
-                  <p class="text-lite">This beer doesn't have any recipes yet.</p>
-                  <% } %>
-                    <div class="d-flex flex-row-reverse mt-4">
-                      <a href="/beers/<%= beer._id %>/recipes/new" class="btn btn-outline-success btn-sm mb-1"
-                        role="button">New Recipe</a>
-                    </div>
-            </div>
-          </div>
-          <!-- Collapsing List of Brews -->
-          <div id="brews<%= beer.id %>" class="d-none">
-            <div class="card-body pt-0">
-              <% if (beer.brews.length> 0) { %>
-                <table class="text-lite table table-sm">
-                  <thead>
-                    <tr>
-                      <th class="recipe-label text-center" scope="col">Brew Date</th>
-                      <th class="recipe-label text-center" scope="col">Recipe Version</th>
-                      <th class="recipe-label text-center" scope="col"></th>
-                      <th class="recipe-label text-center" scope="col"></th>
-                      <th class="recipe-label text-center" scope="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for (let brew of beer.brews) { %>
-                      <tr class="text-center">
-                        <td>
-                          <%= brew.brewDate %>
-                        </td>
-                        <td>
-                          <%= brew.recipeId %>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td><a href="/beers/<%= beer.id %>/recipes/<%= brew.recipeId %>/brews/<%= brew.id %>"
-                            class="btn btn-sm btn-outline-dark mb-2 float-right" role="button"><i
-                              class="far fa-eye"></i></a></td>
-                      </tr>
-                      <% } %>
-                  </tbody>
-                </table>
-                <% } else { %>
-                  <p class="text-lite">This beer hasn't been brewed yet.</p>
-                  <% } %>
-            </div>
           </div>
         </div>
       </div>

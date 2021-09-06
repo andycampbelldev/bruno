@@ -62,6 +62,7 @@ app.get('/beers/:id/edit', async (req, res) => {
 // delete beer
 app.delete('/beers/:id', async (req, res) => {
     const { id } = req.params;
+    //when brew data available, delete any brews related to the deleted Beer.
     await Recipe.deleteMany({beer: id});
     await Beer.findByIdAndDelete(id);
     res.redirect(`/beers`);
@@ -160,6 +161,14 @@ app.put('/beers/:beer/recipes/:recipe', async (req, res) => {
     req.body.ferm = req.body.ferm || [];
     await Recipe.findByIdAndUpdate(req.params.recipe, req.body);
     res.redirect(`/beers/${req.params.beer}/recipes/${req.params.recipe}`);
+})
+
+// delete recipe
+app.delete('/beers/:beer/recipes/:recipe', async (req, res) => {
+    const { recipe } = req.params;
+    //when brew data is available, be sure to delete brew data for the deleted recipe first.
+    await Recipe.findByIdAndDelete(recipe);
+    res.redirect(`/beers`);
 })
 
 // read list of brews for a recipe

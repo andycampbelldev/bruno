@@ -128,6 +128,7 @@ app.post('/beers/:beer/recipes', async (req, res) => {
     const recipe = new Recipe(req.body);
     recipe.beer = beer._id;
     recipe.version = version;
+    recipe.created = new Date;
     await recipe.save();
     beer.recipes.push(recipe._id);
     beer.nextVersion += 1;
@@ -152,14 +153,16 @@ app.get('/beers/:beer/recipes/:recipe/edit', async (req, res) => {
 
 // update recipe
 app.put('/beers/:beer/recipes/:recipe', async (req, res) => {
+    const recipe = req.body;
     // ensure any arrays not included in the form are saved as empty arrays
-    req.body.recipeNotes = req.body.recipeNotes || [];
-    req.body.malts = req.body.malts || [];
-    req.body.hops = req.body.hops || [];
-    req.body.mashSched = req.body.mashSched || [];
-    req.body.finings = req.body.finings || [];
-    req.body.ferm = req.body.ferm || [];
-    await Recipe.findByIdAndUpdate(req.params.recipe, req.body);
+    recipe.recipeNotes = recipe.recipeNotes || [];
+    recipe.malts = recipe.malts || [];
+    recipe.hops = recipe.hops || [];
+    recipe.mashSched = recipe.mashSched || [];
+    recipe.finings = recipe.finings || [];
+    recipe.ferm = recipe.ferm || [];
+    recipe.lastModified = new Date;
+    await Recipe.findByIdAndUpdate(req.params.recipe, recipe);
     res.redirect(`/beers/${req.params.beer}/recipes/${req.params.recipe}`);
 })
 

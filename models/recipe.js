@@ -5,10 +5,7 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Beer"
     },
-    created: {
-        type: Date, 
-        default: new Date
-    },
+    created: Date,
     lastBrewed: Date,
     lastModified: Date,
     parent: {

@@ -18,8 +18,6 @@ db.once('open', () => {
 const random = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async (n) => {
-    await Beer.deleteMany({});
-    await Brewhouse.deleteMany({});
     
     for (let i = 0; i < n; i++) {
         const beer = new Beer({
@@ -29,40 +27,10 @@ const seedDB = async (n) => {
         })
         await beer.save();
     }
-    const brewhouse5 = new Brewhouse({
-        name: '5 Gallon Batch',
-        description: 'Use SS BME Kettle for boil. Bayou Classic for heat source.',
-        boilOffRate: 4, // litres per hour
-        grainAbsorptionRate: 1.02, //litres per kg
-        mashOutTargetTemp: 77, //celsius
-        spargeWaterTemp: 77, //celsius
-        kettleLoss: 4, //litres
-        mashHeatLoss: 1, //degrees celsius per hour
-        mashOutWaterTemp: 100, //celsius
-        grainSpecificHeat: 0.41, //use metric value of 0.41
-        conversionPercent: 80,
-        gristRatio: 3
-    })
-    await brewhouse5.save();
-
-    const brewhouse2 = new Brewhouse({
-        name: '2.5 Gallon Batch',
-        description: 'Use SS BME Kettle for boil. Boil inside on stove.',
-        boilOffRate: 3, // litres per hour
-        grainAbsorptionRate: 1.02, //litres per kg
-        mashOutTargetTemp: 77, //celsius
-        spargeWaterTemp: 77, //celsius
-        kettleLoss: 3, //litres
-        mashHeatLoss: 1, //degrees celsius per hour
-        mashOutWaterTemp: 100, //celsius
-        grainSpecificHeat: 0.41, //use metric value of 0.41
-        conversionPercent: 80,
-        gristRatio: 3
-    })
-
-    await brewhouse2.save();
 }
 
-seedDB(10).then(() => {
+//loop over each beer in the database and create a recipe for each. Use a brewhouse.
+
+seedDB(3).then(() => {
     db.close();
 })

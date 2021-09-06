@@ -5,6 +5,7 @@ An Express.js web app for brewers to develop and organize beer recipes, includin
 ## Contents
 - [Schema](#schema)
 - [Recipe Calculations and Formulas](#recipe-calculations-and-formulas)
+- [Dates](#dates)
 
 ## Schema
 Brewing related data in BRUNO is organized as follows:
@@ -57,3 +58,6 @@ The calculations are complex given the interdependency between different Recipe 
 |Malt Color Units|(Lovibond x 8.3454) x Malt Quantity x Batch Size|- Malt Color Units for each Malt <br>- To convert Lovibond to a value that is compatible with Malt Quantity in Kilograms and Batch Size in Litres, multiply Lovibond by 8.3454 <br>- Malt Quantity expressed in Kilograms <br>- Batch Size expressed in Litres|
 |Standard Research Measure (Color)|(Malt MCU ^ 0.6859) x 1.4922|- This is the Morey formula <br>- To calculate the total SRM for the whole grain bill, apply this formula to the sum of all Malt MCU values (do not add individual Malt SRM values)|
 |Alpha Acid Units|Hop Quantity x Hop Alpha Acid %|- This formula is typically used with Hop Quantity expressed in ounces, however it's fine to use with Hop Quantity expressed in grams. Alpha Acid Units are typically used to adjust Hop Quantity when the Alpha Acid % is different from the Alpha Acid % stated on the Recipe|
+
+## Dates
+Dates are used in the context of tracking when recipes were created and last modified, and will also be used in future functionality involving brew timelines and monitoring. Dates are stored in the database in UTC and converted to the user's locale in EJS templates.

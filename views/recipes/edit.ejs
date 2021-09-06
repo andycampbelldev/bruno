@@ -144,7 +144,7 @@
                             <option id="brewhouse-placeholder"value="" <%= !recipe.water.brewhouse ? 'selected disabled' : '' %>>Select a brewhouse</option>
                             <% if(brewhouses.length > 0) { %> 
                               <% for(let brewhouse of brewhouses) { %> 
-                              <option value="<%= brewhouse._id %>" <%= (recipe.water.brewhouse._id.toString() == brewhouse._id.toString()) ? 'selected' : '' %>><%= brewhouse.name %></option>
+                              <option value="<%= brewhouse._id %>" <%= ((recipe.water.brewhouse && recipe.water.brewhouse._id.toString() == brewhouse._id.toString())) ? 'selected' : '' %>><%= brewhouse.name %></option>
                               <% } %>
                             <% } %>
                           </select>

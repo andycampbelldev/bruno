@@ -37,11 +37,11 @@
               </div>
             </div>
             
-            <!-- General -->
             <div class="card mb-2">
               <div class="card-body">
                 <div class="form-row my-2">
                   <div class="col">
+                    <!-- Description and Recipe Notes -->
                     <p class="text-lite">
                       <%= recipe.description %>
                       <ul class="text-lite">
@@ -52,22 +52,24 @@
                         <% } %>
                       </ul>
                     </p>
-                    <!-- Malts & Hops -->
+                    <hr>
+                    
+                    <!-- Malts, Hops, Yeast, Water -->
                     <div class="form-row my-2">
-                      <div class="col-md-6">
+                      <div class="col-lg-3 col-md-6">
                         <h6>Malts</h6>
                         <% if(recipe.malts.length > 0) { %> 
                           <ul class="text-lite">
                             <% for(let malt of recipe.malts) { %> 
                             <li><%= malt.name %> x <%= malt.qty %> kg</li>
                             <% } %> 
+                            <li class="bold"><%= recipe.maltTotals.srm %> SRM </li>
                           </ul>
                         <% } else { %> 
                         <p class="text-lite">No malts added yet.</p>
                         <% } %>
-                        <p class="text-lite"><%= recipe.maltTotals.srm %> SRM </p>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-lg-3 col-md-6">
                         <h6>Hops, Herbs, Spices</h6>
                         <% if(recipe.hops.length > 0) { %> 
                           <ul class="text-lite">
@@ -79,40 +81,25 @@
                         <p class="text-lite">No hops added yet.</p>
                         <% } %> 
                       </div>
-                    </div>
-                    <!-- Yeast & Water -->
-                    <div class="form-row my-2">
-                      <div class="col-md-6">
+                      <div class="col-lg-3 col-md-6">
                         <h6>Yeast</h6>
                         <% if(recipe.yeast.lab && recipe.yeast.strain) { %> 
-                          <p class="text-lite">
-                            <%= recipe.yeast.lab %> <%= recipe.yeast.strain %> x <%= recipe.yeast.qty %> <%= recipe.yeast.state ? `(${recipe.yeast.state})` : '' %>
-                          </p>
-                          <% if(recipe.yeast.starter) { %> 
-                            <span class="d-block text-lite mb-0">Starter/Rehydration:</span> 
-                            <ul class="text-lite">
-                              <% let starterStepsArr = recipe.yeast.starterNotes.split('\r\n\r\n'); %>
-                              <% for(let step of starterStepsArr) { %>
-                                <li><%= step %></li>
-                              <% } %> 
-                            </ul>
-                          <% } %> 
+                          <ul class="text-lite">
+                            <li>
+                              <%= recipe.yeast.lab %> <%= recipe.yeast.strain %> x <%= recipe.yeast.qty %> <%= recipe.yeast.state ? `(${recipe.yeast.state})` : '' %>
+                            </li>
+                          </ul>
                         <% } else { %> 
                           <p class="text-lite">
                             No Yeast added yet.
                           </p>
                         <% } %> 
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-lg-3 col-md-6">
                         <h6>Water</h6>
-                        <p class="text-lite">
-                          <%= recipe.water.brewhouse ? `Values below based on ${recipe.water.brewhouse.name} brewhouse and defaults.` : 'No brewhouse settings used. Edit Recipe to view all water-related inputs.' %>
-                        </p>
-                        <p class="text-lite">
-                          <%= recipe.water.source ? `Water sourced from ${recipe.water.source}. ` : '' %><%= recipe.water.adjustments && recipe.water.adjustmentNotes ? `Adjustments required: ${recipe.water.adjustmentNotes}.` : '' %>  
-                        </p>
-                        <span class="d-block text-lite mb-0">Volumes:</span>
                         <ul class="text-lite">
+                          <li><%= recipe.water.source ? `Water sourced from ${recipe.water.source}. ` : '' %></li>
+                          <li><%= recipe.water.adjustments && recipe.water.adjustmentNotes ? `Adjustments required: ${recipe.water.adjustmentNotes}.` : '' %></li>
                           <li>Strike Water: <%= recipe.water.strikeVolume %> L</li>
                           <% if(recipe.water.mashOut) { %> 
                             <li>Mash Out Water: <%=recipe.water.mashOutVolume %> L @ <%= recipe.water.mashOutWaterTemp %> C</li>
@@ -121,9 +108,26 @@
                         </ul>
                       </div>
                     </div>
+                    <hr>
+
+                    <% if(recipe.yeast.lab && recipe.yeast.strain && recipe.yeast.starter) { %> 
+                      <div class="form-row my-2">
+                        <div class="col-md-12">
+                          <h6>Yeast Starter/Rehydration</h6>
+                          <ul class="text-lite">
+                            <% let starterStepsArr = recipe.yeast.starterNotes.split('\r\n\r\n'); %>
+                            <% for(let step of starterStepsArr) { %>
+                              <li><%= step %></li>
+                            <% } %> 
+                          </ul>
+                        </div>
+                      </div>
+                      <hr>
+                    <% } %> 
+                    
                     <!-- Mash & Boil-->
                     <div class="form-row my-2">
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <h6>Mash</h6>
                         <% if(recipe.mashSched.length > 0) { %>
                           <ul class="text-lite">
@@ -140,7 +144,11 @@
                           </ul>
                         <% } %>
                       </div>
-                      <div class="col-md-6">
+                    </div>
+                    <hr>
+                    
+                    <div class="form-row my-2">
+                      <div class="col-md-12">
                         <h6>Boil</h6>
                         <ul class="text-lite">
                           <li>Boil for <%= recipe.water.boilMinutes %> minutes</li>
@@ -149,9 +157,11 @@
                         </ul>
                       </div>
                     </div>
+                    <hr>
+
                     <!-- Finings & Fermentation -->
                     <div class="form-row my-2">
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <h6>Finings</h6>
                         <% if(recipe.finings.length > 0) { %> 
                           <ul class="text-lite">
@@ -163,7 +173,11 @@
                           <p class="text-lite">No finings.</p>
                         <% } %> 
                       </div>
-                      <div class="col-md-6">
+                    </div>
+                    <hr>
+
+                    <div class="form-row my-2">
+                      <div class="col-md-12">
                         <h6>Fermentation</h6>
                         <ul class="text-lite">
                           <% for(let stage of recipe.ferm) { %> 

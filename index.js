@@ -124,13 +124,13 @@ app.get('/beers/:beer/recipes/new', async (req, res) => {
 // create new recipe
 app.post('/beers/:beer/recipes', async (req, res) => {
     const beer = await Beer.findById(req.params.beer);
-    //determine the version number of the recipe. For now, this is basically a sequence number. This logic will need to change when the ability to copy a recipe is introduced.
-    const version = beer.recipes.length + 1;
+    const version = beer.nextVersion
     const recipe = new Recipe(req.body);
     recipe.beer = beer._id;
     recipe.version = version;
     await recipe.save();
     beer.recipes.push(recipe._id);
+    beer.nextVersion += 1;
     await beer.save();
     res.redirect(`/beers/${beer._id}/recipes/${recipe._id}`);
 })
@@ -165,9 +165,12 @@ app.put('/beers/:beer/recipes/:recipe', async (req, res) => {
 
 // delete recipe
 app.delete('/beers/:beer/recipes/:recipe', async (req, res) => {
-    const { recipe } = req.params;
+    const beer = await Beer.findById(req.params.beer);
+    const recipe = await Recipe.findById(req.params.recipe);
     //when brew data is available, be sure to delete brew data for the deleted recipe first.
-    await Recipe.findByIdAndDelete(recipe);
+    await Recipe.findByIdAndDelete(req.params.recipe);
+    beer.deletedVersions.push(recipe.version);
+    await beer.save();
     res.redirect(`/beers`);
 })
 

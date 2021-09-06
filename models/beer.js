@@ -11,7 +11,9 @@ const beerSchema = new mongoose.Schema({
     brews: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Brew"
-    }]
+    }],
+    nextVersion: { type: Number, default: 1 },
+    deletedVersions: [Number]
 })
 
 module.exports = mongoose.model('Beer', beerSchema);

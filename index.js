@@ -62,6 +62,7 @@ app.get('/beers/:id/edit', async (req, res) => {
 // delete beer
 app.delete('/beers/:id', async (req, res) => {
     const { id } = req.params;
+    await Recipe.deleteMany({beer: id});
     await Beer.findByIdAndDelete(id);
     res.redirect(`/beers`);
 })

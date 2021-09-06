@@ -132,9 +132,9 @@
                               <li><%= step.restType %>: <%= step.minutes %> minutes @ <%= step.temp %> C</li>
                             <% } %>
                             <% if(recipe.water.mashOut) { %>
-                              <li>Mash Out: <%=recipe.water.mashOutVolume %> L @ <%= recipe.water.mashOutWaterTemp %> C to raise mash temperature to <%= recipe.water.brewhouse.mashOutTargetTemp %> C</li>
+                              <li>Mash Out: <%=recipe.water.mashOutVolume %> L @ <%= recipe.water.mashOutWaterTemp %> C to raise mash temperature to <%= recipe.water.mashOutTargetTemp %> C</li>
                             <% } %>
-                            <li><%= recipe.mash.spargeMethod %> Sparge: <%= recipe.water.spargeWaterVolume %> L @ <%= recipe.water.brewhouse.spargeWaterTemp %> C</li>
+                            <li><%= recipe.mash.spargeMethod %> Sparge: <%= recipe.water.spargeWaterVolume %> L @ <%= recipe.water.spargeWaterTemp %> C</li>
                             <li>Pre-Boil Volume: <%= recipe.water.preBoilVolume %> L</li>
                             <li>Pre-Boil Gravity: ~<%= recipe.expectedPreBoilGravity.toFixed(3) %>, assuming conversion of ~<%= recipe.water.conversionPercent %>%</li>
                           </ul>

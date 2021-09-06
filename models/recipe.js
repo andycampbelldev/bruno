@@ -104,6 +104,7 @@ const recipeSchema = new mongoose.Schema({
         postBoilVolume: Number,
         source: String,
         spargeWaterVolume: Number,
+        spargeWaterTemp: Number,
         strikeVolume: Number,
         totalMashWaterVolume: Number
     },

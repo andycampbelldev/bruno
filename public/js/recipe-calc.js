@@ -163,6 +163,7 @@ class Recipe {
       updateValue('#gristRatio', data ? data.gristRatio : 0);
       updateValue('#mashOutTargetTemp', data ? data.mashOutTargetTemp : 0);
       updateValue('#mashOutWaterTemp', data ? data.mashOutWaterTemp : 0);
+      updateValue('#spargeWaterTemp', data ? data.spargeWaterTemp : 0);
       updateValue('#mashHeatLoss', data ? data.mashHeatLoss : 0);
       updateValue('#grainSpecificHeat', data ? data.grainSpecificHeat : 0);
       updateValue('#malts-conversionPercent', data ? data.conversionPercent : 0);

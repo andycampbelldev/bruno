@@ -1,48 +1,59 @@
 <%- include('../partials/header') -%>
-    <div class="row">
-        <div class="col-md-12 px-2 px-md-0">
-            <div class="card">
-                <div class="card-body">
-                    <form action="/beers" method="POST">
-                        <div class="float-right">
-                            <button class="btn btn-sm btn-outline-success">Save</button>
-                        </div>
-                        <h4>New Beer</h4>
-                        <p class="text-lite">
-                            Add a beer, then create a recipe to brew it.
-                        </p>
-                        <div class="form-row mt-2 mb-2">
-                            <div class="col-sm-12">
-                                <div class="form-group row mb-1">
-                                    <label for="beerName" class="col-sm-12 recipe-label">Name</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" id="beerName" class="form-control form-control-sm bottom-border" name="beer[name]">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group row mb-1">
-                                    <label for="beerStyle" class="col-sm-12 recipe-label">Style</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" id="beerStyle" class="form-control form-control-sm bottom-border" name="beer[style]">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div class="form-group row mb-1">
-                                    <label for="beerDesc" class="col-sm-12 recipe-label">Description</label>
-                                    <div class="col-sm-12">
-                                        <textarea id="beerDesc" class="form-control form-control-sm bottom-border"
-                                            name="beer[description]" rows="3"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<form action="/beers" method="POST">
+  <div class="row mb-2">
+    <div class="col-md-12 px-2 px-md-0">
+      <div class="d-flex justify-content-between flex-title-row mb-1">
+        <div>
+          <h3 class="d-inline-block mb-0">
+            New Beer
+          </h3>
         </div>
+        <button class="btn btn-sm btn-outline-success d-block">Save</button>
+      </div>
     </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12 px-2 px-md-0">
+      <div class="card">
+        <div class="card-body">
+          <p class="text-lite">
+            Add a beer, then create a recipe to brew it.
+          </p>
+          <div class="form-row mt-2 mb-2">
+            <div class="col-sm-12">
+              <div class="form-group row mb-1">
+                <label for="beerName" class="col-sm-12 recipe-label">Name</label>
+                <div class="col-sm-12">
+                  <input type="text" id="beerName" class="form-control form-control-sm bottom-border"
+                    name="beer[name]">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group row mb-1">
+                <label for="beerStyle" class="col-sm-12 recipe-label">Style</label>
+                <div class="col-sm-12">
+                  <input type="text" id="beerStyle" class="form-control form-control-sm bottom-border"
+                    name="beer[style]">
+                </div>
+              </div>
+            </div>
 
-    <%- include('../partials/footer') -%>
+            <div class="col-sm-12">
+              <div class="form-group row mb-1">
+                <label for="beerDesc" class="col-sm-12 recipe-label">Description</label>
+                <div class="col-sm-12">
+                  <textarea id="beerDesc" class="form-control form-control-sm bottom-border" name="beer[description]"
+                    rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+  <%- include('../partials/footer') -%>

@@ -47,6 +47,11 @@ app.post('/beers', async (req, res) => {
     res.redirect('/beers');
 })
 
+// new beer form
+app.get('/beers/new', async (req, res) => {
+    res.render('beers/new', {scripts: []});
+})
+
 // show beer
 app.get('/beers/:id', async (req, res) => {
     const beer = await Beer.findById(req.params.id).populate('recipes');
@@ -56,7 +61,7 @@ app.get('/beers/:id', async (req, res) => {
 // edit beer
 app.put('/beers/:id', async (req, res) => {
     await Beer.findByIdAndUpdate(req.params.id, req.body.beer);
-    res.redirect('/beers');
+    res.redirect(`/beers/${req.params.id}`);
 })
 
 // edit beer form
@@ -72,11 +77,6 @@ app.delete('/beers/:id', async (req, res) => {
     await Recipe.deleteMany({beer: id});
     await Beer.findByIdAndDelete(id);
     res.redirect(`/beers`);
-})
-
-// new beer form
-app.get('/beers/new', async (req, res) => {
-    res.render('beers/new', {scripts: []});
 })
 
 // index for brewhouse
@@ -180,7 +180,7 @@ app.delete('/beers/:beer/recipes/:recipe', async (req, res) => {
     await Recipe.findByIdAndDelete(req.params.recipe);
     beer.deletedVersions.push(recipe.version);
     await beer.save();
-    res.redirect(`/beers`);
+    res.redirect(`/beers/${beer._id}`);
 })
 
 // read list of brews for a recipe

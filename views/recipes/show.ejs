@@ -1,11 +1,17 @@
 <%- include('../partials/header') -%>
       
-    <!-- <form action="/beers/<%= beer._id %>/recipes" method="POST"> -->
       <div class="row mb-2">
         <div class="col-md-12 px-2 px-md-0">
-          <a role="button" class="btn btn-sm btn-outline-warning d-block float-right" href="/beers/<%= beer._id %>/recipes/<%= recipe._id %>/edit">Edit</a>
-          <h3 class="d-inline-block mb-0"><i id="srmDisplay" class="fas fa-circle mr-2"></i><%= beer.name %></h3><span class="pl-1 d-block d-md-inline"><%= beer.style %></span>
-          <span class="pl-1 d-block text-lite italic">Version <%= recipe.version %>, created <%= recipe.created.toLocaleDateString() %></span>
+          <div class="d-flex justify-content-between flex-title-row mb-1">
+            <div>
+              <h3 class="d-inline-block mb-0">
+                <i id="srmDisplay" class="fas fa-circle mr-2"></i><%= beer.name %>
+              </h3>
+              <span class="pl-0 d-block pl-md-1 d-md-inline"><%= beer.style %></span>
+              <span class="d-block text-lite italic">Version <%= recipe.version %>, created <%= recipe.created.toLocaleDateString() %></span>
+            </div>
+            <a role="button" class="btn btn-sm btn-outline-warning d-block" href="/beers/<%= beer._id %>/recipes/<%= recipe._id %>/edit">Edit</a>
+          </div>
         </div>
       </div>
       

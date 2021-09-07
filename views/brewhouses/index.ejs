@@ -1,9 +1,16 @@
 <%- include('../partials/header') -%>
-<div class="float-right">
-  <a href="brewhouses/new" class="btn btn-outline-success btn-sm mb-1"
-  role="button">New Brewhouse</a>
-</div>
-<h3>Brewhouses</h3>
+
+  <div class="row mb-2">
+    <div class="col-md-12 px-2 px-md-0">
+      <div class="d-flex justify-content-between flex-title-row mb-1">
+        <h3 class="d-inline-block mb-0">
+          Brewhouses
+        </h3>
+        <a href="brewhouses/new" class="btn btn-outline-success btn-sm mb-1" role="button">New Brewhouse</a>
+      </div>
+    </div>
+  </div>
+
   <div class="row justify-content-center mb-2">
     <% for(let brewhouse of brewhouses) { %>
       <div class="col-12 mb-2 px-2">

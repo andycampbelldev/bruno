@@ -25,9 +25,6 @@ const Recipe = require('./models/recipe');
 const Brew = require('./models/brew');
 const Brewhouse = require('./models/brewhouse');
 
-// temp sample data from js file -- remove this soon
-const { beers, brews, recipes, notes } = require('./data');
-
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
 app.use(express.static(path.join(__dirname, '/public')));
